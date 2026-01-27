@@ -33,6 +33,20 @@ const withBaseUrl = (url) => {
   return `${base}${url.startsWith('/') ? '' : '/'}${url}`;
 };
 
+const stripLeadingSlash = (url) => url.replace(/^\/+/, '');
+
+const toRootRelative = (url) => {
+  if (!url) return '';
+  if (/^https?:\/\//.test(url)) return url;
+  return stripLeadingSlash(url);
+};
+
+const toProjectRelative = (url) => {
+  if (!url) return '';
+  if (/^https?:\/\//.test(url)) return url;
+  return `../../${stripLeadingSlash(url)}`;
+};
+
 const renderTemplate = (template, replacements) => {
   let output = template;
   Object.entries(replacements).forEach(([key, value]) => {
@@ -59,9 +73,9 @@ const buildProjectCards = () =>
       const colSpanMobile = Math.min(colSpan, 4);
 
       return `
-        <a class="card bento-card" href="/projects/${project.slug}/" style="--col-span:${colSpan}; --row-span:${rowSpan}; --col-span-tablet:${colSpanTablet}; --col-span-mobile:${colSpanMobile};">
+        <a class="card bento-card" href="projects/${project.slug}/" style="--col-span:${colSpan}; --row-span:${rowSpan}; --col-span-tablet:${colSpanTablet}; --col-span-mobile:${colSpanMobile};">
           <div class="media-frame" style="--media-aspect: 4 / 3;">
-            <img src="${project.heroImage}" alt="${escapeHtml(project.title)} preview" loading="lazy" />
+            <img src="${toRootRelative(project.heroImage)}" alt="${escapeHtml(project.title)} preview" loading="lazy" />
           </div>
           <div class="tag-row">${tags}</div>
           <h3 class="card-title">${escapeHtml(project.title)}</h3>
@@ -71,6 +85,44 @@ const buildProjectCards = () =>
       `;
     })
     .join('');
+
+const buildProfileCard = () => {
+  const { profile } = site;
+  if (!profile) return '';
+  const detailItems = [
+    profile.role,
+    profile.experience,
+    profile.location,
+    profile.company
+  ].filter(Boolean);
+
+  const detailList = detailItems.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+
+  const websiteUrl = profile.websiteUrl || '';
+  const websiteLabel = profile.websiteLabel || websiteUrl;
+  const websiteLink = websiteUrl
+    ? `<a class="profile-link" href="${websiteUrl}" target="_blank" rel="noreferrer">
+        <span class="profile-link-icon">🔗</span>
+        <span>${escapeHtml(websiteLabel)}</span>
+      </a>`
+    : '';
+
+  return `
+    <div class="card profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar" aria-hidden="true">${escapeHtml(profile.avatar || '🐰')}</div>
+        <div>
+          <p class="profile-name">${escapeHtml(profile.name)}</p>
+          <p class="profile-role">${escapeHtml(profile.title)}</p>
+        </div>
+      </div>
+      <ul class="profile-details">
+        ${detailList}
+      </ul>
+      ${websiteLink}
+    </div>
+  `;
+};
 
 const buildIndexJsonLd = () => {
   const base = site.canonicalBase.replace(/\/$/, '');
@@ -103,6 +155,7 @@ const indexHtml = renderTemplate(indexTemplate, {
   OG_URL: `${site.canonicalBase.replace(/\/$/, '')}/`,
   SITE_TITLE: escapeHtml(site.title),
   SITE_DESCRIPTION: escapeHtml(site.description),
+  PROFILE_CARD: buildProfileCard(),
   PROJECT_CARDS: buildProjectCards(),
   JSON_LD: buildIndexJsonLd()
 });
@@ -121,7 +174,7 @@ const buildFacts = (facts) =>
     )
     .join('');
 
-const buildScreens = (screens) =>
+const buildScreens = (screens, transformSrc = (src) => src) =>
   screens
     .map((screen, index) => {
       const isLarge = index === 0;
@@ -130,7 +183,7 @@ const buildScreens = (screens) =>
       return `
         <div class="card screen-card ${isLarge ? 'large' : ''}" style="--media-fit:${fit};">
           <div class="media-frame" style="--media-aspect: ${aspect};">
-            <img src="${screen.src}" alt="${escapeHtml(screen.alt)}" loading="lazy" />
+            <img src="${transformSrc(screen.src)}" alt="${escapeHtml(screen.alt)}" loading="lazy" />
           </div>
           ${screen.caption ? `<p class="caption">${escapeHtml(screen.caption)}</p>` : ''}
         </div>
@@ -207,8 +260,8 @@ const buildPrevNext = (project) => {
   const next = sortedProjects[currentIndex + 1];
   return `
     <div class="nav-links">
-      ${prev ? `<a href="/projects/${prev.slug}/">← ${escapeHtml(prev.title)}</a>` : '<span></span>'}
-      ${next ? `<a href="/projects/${next.slug}/">${escapeHtml(next.title)} →</a>` : '<span></span>'}
+      ${prev ? `<a href="../${prev.slug}/">← ${escapeHtml(prev.title)}</a>` : '<span></span>'}
+      ${next ? `<a href="../${next.slug}/">${escapeHtml(next.title)} →</a>` : '<span></span>'}
     </div>
   `;
 };
@@ -241,12 +294,12 @@ const buildProjectPage = (project) => {
     TOPBAR_CTA: topbarCta,
     PROJECT_TITLE: escapeHtml(project.title),
     PROJECT_SUMMARY: escapeHtml(project.summary),
-    HERO_IMAGE: project.heroImage,
+    HERO_IMAGE: toProjectRelative(project.heroImage),
     HERO_ASPECT: project.screens?.[0]?.aspect || '4/3',
     HERO_CTA: heroCtas,
     PROJECT_TAGS: tags,
     FACT_CARDS: buildFacts(project.facts),
-    SCREEN_CARDS: buildScreens(project.screens),
+    SCREEN_CARDS: buildScreens(project.screens, toProjectRelative),
     CONTRIB_LIST: buildContrib(project.contrib),
     DESIGN_NOTES_SECTION: buildDesignNotes(project.designNotes),
     LINKS_SECTION: buildLinks(project.links),
