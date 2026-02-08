@@ -3,7 +3,7 @@
     "title": "Chi Shi — UI Portfolio",
     "description": "UI/UX design and interface systems focused on product clarity, motion, and scalable components.",
     "canonicalBase": "https://example.com",
-    "ogImageDefault": "/assets/img/og-default.svg"
+    "ogImageDefault": "assets/img/og-default.svg"
   },
   "projects": [
     {
@@ -12,7 +12,7 @@
       "summary": "A modular design system for a multi-product fintech suite with color-adaptive components.",
       "featured": true,
       "order": 1,
-      "heroImage": "/assets/img/aurora-hero.svg",
+      "heroImage": "assets/img/aurora-hero.svg",
       "tags": ["Design System", "Fintech", "UI"],
       "colSpan": 6,
       "rowSpan": 2,
@@ -28,21 +28,21 @@
       ],
       "screens": [
         {
-          "src": "/assets/img/aurora-screen-01.svg",
+          "src": "assets/img/aurora-screen-01.svg",
           "alt": "Aurora dashboard overview",
           "caption": "Adaptive dashboard layout",
           "aspect": "16/9",
           "fit": "cover"
         },
         {
-          "src": "/assets/img/aurora-screen-02.svg",
+          "src": "assets/img/aurora-screen-02.svg",
           "alt": "Aurora cards and widgets",
           "caption": "Unified card modules",
           "aspect": "4/3",
           "fit": "cover"
         },
         {
-          "src": "/assets/img/aurora-screen-03.svg",
+          "src": "assets/img/aurora-screen-03.svg",
           "alt": "Aurora flow builder",
           "caption": "Flow builder UX",
           "aspect": "4/3",
@@ -72,7 +72,7 @@
       "summary": "Retail experience redesign focused on speed, trust, and a visual catalog story.",
       "featured": true,
       "order": 2,
-      "heroImage": "/assets/img/lumen-hero.svg",
+      "heroImage": "assets/img/lumen-hero.svg",
       "tags": ["E-commerce", "Redesign", "UX"],
       "colSpan": 3,
       "rowSpan": 2,
@@ -86,21 +86,21 @@
       ],
       "screens": [
         {
-          "src": "/assets/img/lumen-screen-01.svg",
+          "src": "assets/img/lumen-screen-01.svg",
           "alt": "Lumen product grid",
           "caption": "Editorial product grid",
           "aspect": "16/9",
           "fit": "cover"
         },
         {
-          "src": "/assets/img/lumen-screen-02.svg",
+          "src": "assets/img/lumen-screen-02.svg",
           "alt": "Lumen product detail",
           "caption": "Clean PDP layout",
           "aspect": "4/3",
           "fit": "cover"
         },
         {
-          "src": "/assets/img/lumen-screen-03.svg",
+          "src": "assets/img/lumen-screen-03.svg",
           "alt": "Lumen checkout",
           "caption": "Fast checkout flow",
           "aspect": "4/3",
@@ -127,7 +127,7 @@
       "summary": "A data storytelling dashboard for SaaS founders with quick insight snapshots.",
       "featured": false,
       "order": 3,
-      "heroImage": "/assets/img/echo-hero.svg",
+      "heroImage": "assets/img/echo-hero.svg",
       "tags": ["SaaS", "Dashboard", "Data Viz"],
       "colSpan": 3,
       "rowSpan": 1,
@@ -142,14 +142,14 @@
       ],
       "screens": [
         {
-          "src": "/assets/img/echo-screen-01.svg",
+          "src": "assets/img/echo-screen-01.svg",
           "alt": "Echo analytics overview",
           "caption": "Snapshot overview",
           "aspect": "16/9",
           "fit": "cover"
         },
         {
-          "src": "/assets/img/echo-screen-02.svg",
+          "src": "assets/img/echo-screen-02.svg",
           "alt": "Echo analytics trends",
           "caption": "Trend monitoring",
           "aspect": "4/3",

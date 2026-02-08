@@ -131,13 +131,11 @@ h2 {
   border: var(--border-thin);
   border-radius: var(--radius-card);
   padding: var(--space-5);
-  box-shadow: var(--shadow-subtle);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
 }
 
 .bento-card {
@@ -382,7 +380,7 @@ h2 {
   }
 
   .bento-card {
-    grid-column: span var(--col-span-mobile, 4);
+    grid-column: span 4;
   }
 
   .fact-card,
