@@ -17,14 +17,32 @@
       "colSpan": 6,
       "rowSpan": 2,
       "ctas": [
-        { "label": "Case Study PDF", "url": "https://example.com/case-study" },
-        { "label": "Prototype", "url": "https://example.com/prototype" }
+        {
+          "label": "Case Study PDF",
+          "url": "https://example.com/case-study"
+        },
+        {
+          "label": "Prototype",
+          "url": "https://example.com/prototype"
+        }
       ],
       "facts": [
-        { "label": "Role", "value": "Lead UI/UX" },
-        { "label": "Platform", "value": "Web + iOS" },
-        { "label": "Year", "value": "2024" },
-        { "label": "Highlight", "value": "Component scale x3" }
+        {
+          "label": "Role",
+          "value": "Lead UI/UX"
+        },
+        {
+          "label": "Platform",
+          "value": "Web + iOS"
+        },
+        {
+          "label": "Year",
+          "value": "2024"
+        },
+        {
+          "label": "Highlight",
+          "value": "Component scale x3"
+        }
       ],
       "screens": [
         {
@@ -63,7 +81,11 @@
         }
       ],
       "links": [
-        { "label": "Design System Doc", "url": "https://example.com/system", "note": "Public overview" }
+        {
+          "label": "Design System Doc",
+          "url": "https://example.com/system",
+          "note": "Public overview"
+        }
       ]
     },
     {
@@ -77,12 +99,24 @@
       "colSpan": 3,
       "rowSpan": 2,
       "ctas": [
-        { "label": "Live Preview", "url": "https://example.com/lumen" }
+        {
+          "label": "Live Preview",
+          "url": "https://example.com/lumen"
+        }
       ],
       "facts": [
-        { "label": "Role", "value": "Product Designer" },
-        { "label": "Platform", "value": "Web" },
-        { "label": "Year", "value": "2023" }
+        {
+          "label": "Role",
+          "value": "Product Designer"
+        },
+        {
+          "label": "Platform",
+          "value": "Web"
+        },
+        {
+          "label": "Year",
+          "value": "2023"
+        }
       ],
       "screens": [
         {
@@ -132,13 +166,28 @@
       "colSpan": 3,
       "rowSpan": 1,
       "ctas": [
-        { "label": "Interactive Demo", "url": "https://example.com/echo" }
+        {
+          "label": "Interactive Demo",
+          "url": "https://example.com/echo"
+        }
       ],
       "facts": [
-        { "label": "Role", "value": "UI Designer" },
-        { "label": "Platform", "value": "Web App" },
-        { "label": "Year", "value": "2022" },
-        { "label": "Highlight", "value": "Insight speed +45%" }
+        {
+          "label": "Role",
+          "value": "UI Designer"
+        },
+        {
+          "label": "Platform",
+          "value": "Web App"
+        },
+        {
+          "label": "Year",
+          "value": "2022"
+        },
+        {
+          "label": "Highlight",
+          "value": "Insight speed +45%"
+        }
       ],
       "screens": [
         {

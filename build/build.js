@@ -86,6 +86,44 @@ const buildProjectCards = () =>
     })
     .join('');
 
+const buildProfileCard = () => {
+  const { profile } = site;
+  if (!profile) return '';
+  const detailItems = [
+    profile.role,
+    profile.experience,
+    profile.location,
+    profile.company
+  ].filter(Boolean);
+
+  const detailList = detailItems.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+
+  const websiteUrl = profile.websiteUrl || '';
+  const websiteLabel = profile.websiteLabel || websiteUrl;
+  const websiteLink = websiteUrl
+    ? `<a class="profile-link" href="${websiteUrl}" target="_blank" rel="noreferrer">
+        <span class="profile-link-icon">🔗</span>
+        <span>${escapeHtml(websiteLabel)}</span>
+      </a>`
+    : '';
+
+  return `
+    <div class="card profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar" aria-hidden="true">${escapeHtml(profile.avatar || '🐰')}</div>
+        <div>
+          <p class="profile-name">${escapeHtml(profile.name)}</p>
+          <p class="profile-role">${escapeHtml(profile.title)}</p>
+        </div>
+      </div>
+      <ul class="profile-details">
+        ${detailList}
+      </ul>
+      ${websiteLink}
+    </div>
+  `;
+};
+
 const buildIndexJsonLd = () => {
   const base = site.canonicalBase.replace(/\/$/, '');
   const data = [
@@ -117,6 +155,7 @@ const indexHtml = renderTemplate(indexTemplate, {
   OG_URL: `${site.canonicalBase.replace(/\/$/, '')}/`,
   SITE_TITLE: escapeHtml(site.title),
   SITE_DESCRIPTION: escapeHtml(site.description),
+  PROFILE_CARD: buildProfileCard(),
   PROJECT_CARDS: buildProjectCards(),
   JSON_LD: buildIndexJsonLd()
 });

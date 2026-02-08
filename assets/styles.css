@@ -108,6 +108,65 @@ h2 {
   color: var(--color-muted);
 }
 
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: var(--border-thin);
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  background: var(--color-bg);
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.profile-role {
+  margin: 0;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.profile-details {
+  margin: 0;
+  padding-left: var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+  color: var(--color-muted);
+}
+
+.profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-thin);
+  border-radius: 999px;
+  font-weight: 600;
+  color: var(--color-ink);
+  background: var(--color-surface);
+}
+
+.profile-link-icon {
+  font-size: 1rem;
+}
+
 .theme-toggle {
   border: var(--border-thin);
   background: var(--color-surface);
