@@ -3,18 +3,7 @@
     "title": "Chi Shi — UI Portfolio",
     "description": "UI/UX design and interface systems focused on product clarity, motion, and scalable components.",
     "canonicalBase": "https://example.com",
-    "ogImageDefault": "assets/img/og-default.svg",
-    "profile": {
-      "name": "Chi Shi",
-      "title": "UI/UX Designer / Developer",
-      "role": "Product + Interface Design",
-      "experience": "10+ years building design systems",
-      "location": "Tokyo",
-      "company": "Freelance",
-      "websiteUrl": "https://example.com",
-      "websiteLabel": "https://example.com",
-      "avatar": "🐰"
-    }
+    "ogImageDefault": "assets/img/og-default.svg"
   },
   "projects": [
     {
@@ -24,11 +13,7 @@
       "featured": true,
       "order": 1,
       "heroImage": "assets/img/aurora-hero.svg",
-      "tags": [
-        "Design System",
-        "Fintech",
-        "UI"
-      ],
+      "tags": ["Design System", "Fintech", "UI"],
       "colSpan": 6,
       "rowSpan": 2,
       "ctas": [
@@ -110,11 +95,7 @@
       "featured": true,
       "order": 2,
       "heroImage": "assets/img/lumen-hero.svg",
-      "tags": [
-        "E-commerce",
-        "Redesign",
-        "UX"
-      ],
+      "tags": ["E-commerce", "Redesign", "UX"],
       "colSpan": 3,
       "rowSpan": 2,
       "ctas": [
@@ -181,11 +162,7 @@
       "featured": false,
       "order": 3,
       "heroImage": "assets/img/echo-hero.svg",
-      "tags": [
-        "SaaS",
-        "Dashboard",
-        "Data Viz"
-      ],
+      "tags": ["SaaS", "Dashboard", "Data Viz"],
       "colSpan": 3,
       "rowSpan": 1,
       "ctas": [
