@@ -3,117 +3,131 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Yahoo! JAPAN News UI (Dummy 3) | Takanori Hirohashi Portfolio</title>
+    <title>Yahoo!乗換案内 | Takanori Hirohashi Portfolio</title>
     <meta name="description" content="Yahoo! JAPAN向けダミーカード 3。表示検証用のプレースホルダーです。" />
     <link rel="canonical" href="https://portfolio.example.com/projects/yahoo-japan-news-experience-v3/" />
 
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Yahoo! JAPAN News UI (Dummy 3)" />
+    <meta property="og:title" content="Yahoo!乗換案内" />
     <meta property="og:description" content="Yahoo! JAPAN向けダミーカード 3。表示検証用のプレースホルダーです。" />
-    <meta property="og:image" content="https://portfolio.example.com/assets/img/trainlogapp-hero.svg" />
+    <meta property="og:image" content="https://portfolio.example.com/assets/img/transit-001-hero.png" />
     <meta property="og:url" content="https://portfolio.example.com/projects/yahoo-japan-news-experience-v3/" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Yahoo! JAPAN News UI (Dummy 3)" />
+    <meta name="twitter:title" content="Yahoo!乗換案内" />
     <meta name="twitter:description" content="Yahoo! JAPAN向けダミーカード 3。表示検証用のプレースホルダーです。" />
-    <meta name="twitter:image" content="https://portfolio.example.com/assets/img/trainlogapp-hero.svg" />
+    <meta name="twitter:image" content="https://portfolio.example.com/assets/img/transit-001-hero.png" />
 
     <link rel="stylesheet" href="/assets/styles.css" />
     <script defer src="/assets/app.js"></script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://portfolio.example.com/about"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://portfolio.example.com/"},{"@type":"CreativeWork","name":"Yahoo! JAPAN News UI (Dummy 3)","description":"Yahoo! JAPAN向けダミーカード 3。表示検証用のプレースホルダーです。","image":"https://portfolio.example.com/assets/img/trainlogapp-hero.svg","url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v3/","keywords":"Dummy, Media","creator":{"@type":"Person","name":"Takanori Hirohashi"}}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://portfolio.example.com/about"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://portfolio.example.com/"},{"@type":"CreativeWork","name":"Yahoo!乗換案内","description":"Yahoo! JAPAN向けダミーカード 3。表示検証用のプレースホルダーです。","image":"https://portfolio.example.com/assets/img/transit-001-hero.png","url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v3/","keywords":"Dummy, Media","creator":{"@type":"Person","name":"Takanori Hirohashi"}}]}</script>
   </head>
   <body>
-    <div class="site-shell site-shell--project">
-      <header class="topbar card">
-        <a class="inline-link" href="/">Back to home</a>
-        <a class="button button--ghost" href="https://example.com/yahoo-japan-news-experience/v3" target="_blank" rel="noreferrer noopener">Preview</a>
+    <div class="site-header-shell">
+      <header class="site-header">
+        <a class="site-header__home" href="/">Home</a>
+        <nav class="site-header__nav" aria-label="Primary">
+          <a href="/projects/">Work</a>
+          <a href="/#profile">Profile</a>
+          <button class="theme-toggle site-header__theme-toggle" type="button" data-theme-toggle aria-label="ダークモードに切り替え">
+            <span data-theme-icon aria-hidden="true">☾</span>
+          </button>
+        </nav>
       </header>
-
-      <main class="project-layout">
-        <section class="hero card">
-          <div class="hero-copy">
-            <p class="eyebrow">Project</p>
-            <h1>Yahoo! JAPAN News UI (Dummy 3)</h1>
-            <p class="lead">Yahoo! JAPAN向けダミーカード 3。表示検証用のプレースホルダーです。</p>
-            <div class="chip-row"><span class="chip">Dummy</span><span class="chip">Media</span></div>
-            <div class="cta-row"><a class="button" href="https://example.com/yahoo-japan-news-experience/v3" target="_blank" rel="noreferrer noopener">Preview</a></div>
-          </div>
-          <figure class="hero-media">
-            <img src="/assets/img/trainlogapp-hero.svg" alt="Yahoo! JAPAN News UI (Dummy 3) hero image" loading="eager" decoding="async" />
+    </div>
+    <div class="site-shell site-shell--project">
+      <main class="project-layout project-layout--detail">
+        <section class="card project-main">
+          <figure class="project-main-media">
+            <img src="/assets/img/transit-001-hero.png" alt="Yahoo!乗換案内 hero image" loading="eager" decoding="async" />
           </figure>
         </section>
 
-        <section>
-          <h2 class="section-title">Facts</h2>
-          <div class="facts-grid"><article class="card fact-card">
-  <dl>
-    <dt>Role</dt>
-    <dd>Product Designer</dd>
-  </dl>
-</article>
-<article class="card fact-card">
-  <dl>
-    <dt>Platform</dt>
-    <dd>Mobile Web</dd>
-  </dl>
-</article>
-<article class="card fact-card">
-  <dl>
-    <dt>Year</dt>
-    <dd>2026</dd>
-  </dl>
-</article></div>
+        <section class="card detail-module" aria-labelledby="detail-module-title">
+          <h1 id="detail-module-title" class="detail-module__title">新機能「トレインキャスト」</h1>
+          <dl class="detail-module__list">
+            <div class="detail-module__row detail-module__row--meta">
+              <div class="detail-module__meta-item">
+                <dt>Service</dt>
+                <dd><ul class="detail-meta-list">
+  <li>Yahoo!乗換案内</li>
+</ul></dd>
+              </div>
+              <div class="detail-module__meta-item">
+                <dt>Role</dt>
+                <dd><ul class="detail-meta-list">
+  <li>Product Designer</li>
+</ul></dd>
+              </div>
+              <div class="detail-module__meta-item">
+                <dt>Date</dt>
+                <dd><ul class="detail-meta-list">
+  <li>2026/02</li>
+</ul></dd>
+              </div>
+              <div class="detail-module__meta-item">
+                <dt>Platform</dt>
+                <dd><ul class="detail-meta-list">
+  <li>Mobile Web</li>
+</ul></dd>
+              </div>
+            </div>
+          </dl>
         </section>
 
-        <section>
-          <h2 class="section-title">Screens</h2>
-          <div class="screens-layout">
-            <article class="card screen">
-  <figure class="screen-media" style="--aspect:16 / 9;--fit:cover;">
-    <img src="/assets/img/trainlogapp-screen-1.svg" alt="Yahoo dummy screen 1" loading="lazy" decoding="async" />
-  </figure>
-  <p class="screen-caption">ダミーのメイン画面</p>
+        <section class="description-section" aria-labelledby="description-section-title">
+          <h2 class="section-title" id="description-section-title">説明</h2>
+          <div class="description-flow">
+            <article class="description-item description-item--with-media">
+<div class="description-item__copy">
+  <h3 class="description-subtitle">概要</h3>
+  <p class="description-body">Yahoo! JAPAN向けダミーカード 3。表示検証用のプレースホルダーです。</p>
+</div>
+<figure class="description-item__media">
+  <img src="/assets/img/trainlogapp-screen-1.svg" alt="Yahoo dummy screen 1" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:cover;" />
+</figure>
 </article>
-            <div class="screens-grid"><article class="card screen">
-  <figure class="screen-media" style="--aspect:4 / 3;--fit:cover;">
-    <img src="/assets/img/trainlogapp-screen-2.svg" alt="Yahoo dummy screen 2" loading="lazy" decoding="async" />
-  </figure>
-  <p class="screen-caption">ダミーのサブ画面A</p>
+<article class="description-item description-item--with-media description-item--reverse">
+<figure class="description-item__media">
+  <img src="/assets/img/trainlogapp-screen-2.svg" alt="Yahoo dummy screen 2" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
+</figure>
+<div class="description-item__copy">
+  <h3 class="description-subtitle">背景</h3>
+  <ul class="description-list">
+  <li>ダミー仮説に基づき情報設計を整理</li>
+  <li>一覧カードの視線誘導を検証</li>
+</ul>
+</div>
 </article>
-<article class="card screen">
-  <figure class="screen-media" style="--aspect:4 / 3;--fit:contain;">
-    <img src="/assets/img/trainlogapp-screen-3.svg" alt="Yahoo dummy screen 3" loading="lazy" decoding="async" />
-  </figure>
-  <p class="screen-caption">ダミーのサブ画面B</p>
-</article></div>
+<article class="description-item description-item--with-media">
+<div class="description-item__copy">
+  <h3 class="description-subtitle">体験設計</h3>
+  <ul class="description-list">
+  <li>詳細ページの見出し構成を調整</li>
+  <li>CTA配置の整合性を確認</li>
+</ul>
+</div>
+<figure class="description-item__media">
+  <img src="/assets/img/trainlogapp-screen-3.svg" alt="Yahoo dummy screen 3" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:contain;" />
+</figure>
+</article>
+<article class="description-item">
+<div class="description-item__copy">
+  <h3 class="description-subtitle">デザインアプローチ</h3>
+  <ul class="description-list">
+  <li>一覧カードの視線誘導を検証</li>
+  <li>詳細ページの見出し構成を調整</li>
+  <li>CTA配置の整合性を確認</li>
+</ul>
+</div>
+</article>
+<article class="description-item">
+<div class="description-item__copy">
+  <h3 class="description-subtitle">効果</h3>
+  <p class="description-body">検証メモ</p>
+</div>
+</article>
           </div>
         </section>
-
-        <section class="card stack-list">
-          <h2 class="section-title">What I did</h2>
-          <ul><li>ダミー仮説に基づき情報設計を整理</li>
-<li>一覧カードの視線誘導を検証</li>
-<li>詳細ページの見出し構成を調整</li>
-<li>CTA配置の整合性を確認</li>
-<li>生成HTMLの出力をチェック</li></ul>
-        </section>
-
-        
-
-        <section>
-  <h2 class="section-title">Links</h2>
-  <div class="links-grid">
-    <article class="card link-card">
-      <a class="inline-link" href="https://example.com/yahoo-japan-news-experience/memo/v3" target="_blank" rel="noreferrer noopener">Dummy Memo</a>
-      <p>検証メモ</p>
-    </article>
-  </div>
-</section>
-
-        <nav class="card project-nav" aria-label="Project navigation">
-          <span class="project-nav__slot"><a href="/projects/yahoo-japan-news-experience-v2/">← Yahoo! JAPAN News UI (Dummy 2)</a></span>
-<span class="project-nav__slot"><a href="/">Back</a></span>
-<span class="project-nav__slot"><a href="/projects/yahoo-japan-news-experience-v4/">Yahoo! JAPAN News UI (Dummy 4) →</a></span>
-        </nav>
       </main>
     </div>
   </body>

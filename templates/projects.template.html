@@ -34,37 +34,17 @@
         </nav>
       </header>
     </div>
-    <div class="site-shell">
-      <header class="masthead" id="profile">
-        <div class="masthead-profile">
-          <img
-            class="profile-avatar"
-            src="{{PROFILE_IMAGE}}"
-            alt="{{PERSON_NAME}} profile image"
-            width="180"
-            height="180"
-            loading="eager"
-            decoding="async"
-          />
-          <h1>{{PERSON_NAME}}</h1>
-          {{PERSON_SUBNAME}}
-          <ul class="lead-list">
-            {{SITE_LEAD_BULLETS}}
-          </ul>
-        </div>
-      </header>
-
-      <main>
-        <section class="sns-links" aria-label="SNS links">
-          <div class="sns-grid">
-            {{SNS_CARDS}}
-          </div>
+    <div class="site-shell site-shell--project">
+      <main class="project-layout projects-index-layout">
+        <section class="card projects-index-intro">
+          <p class="eyebrow">All Works</p>
+          <h1>{{LIST_TITLE}}</h1>
+          <p class="lead">{{LIST_DESCRIPTION}}</p>
         </section>
 
-        <div class="project-sections" id="works">
+        <div class="project-sections">
           {{PROJECT_SECTIONS}}
         </div>
-        {{MORE_WORKS_SECTION}}
       </main>
 
       <footer class="site-footer">

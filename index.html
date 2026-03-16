@@ -22,12 +22,24 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://portfolio.example.com/about"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://portfolio.example.com/"}]}</script>
   </head>
   <body>
+    <div class="site-header-shell">
+      <header class="site-header">
+        <a class="site-header__home" href="/">Home</a>
+        <nav class="site-header__nav" aria-label="Primary">
+          <a href="/projects/">Work</a>
+          <a href="/#profile">Profile</a>
+          <button class="theme-toggle site-header__theme-toggle" type="button" data-theme-toggle aria-label="ダークモードに切り替え">
+            <span data-theme-icon aria-hidden="true">☾</span>
+          </button>
+        </nav>
+      </header>
+    </div>
     <div class="site-shell">
-      <header class="card masthead">
+      <header class="masthead" id="profile">
         <div class="masthead-profile">
           <img
             class="profile-avatar"
-            src="/assets/img/profile-avatar.svg"
+            src="/assets/img/profile-avatar.png"
             alt="Takanori Hirohashi profile image"
             width="180"
             height="180"
@@ -35,61 +47,66 @@
             decoding="async"
           />
           <h1>Takanori Hirohashi</h1>
-          <p class="lead">UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。</p>
+          <p class="masthead-subname">Chashi</p>
+          <ul class="lead-list">
+            <li>💡 Software Designer</li>
+<li>💡 User Interface</li>
+<li>💡 Information Architecture</li>
+<li>💡 iOS &amp; Android &amp; Web</li>
+<li>🇯🇵 Japan</li>
+<li>💻 LY Corporation</li>
+          </ul>
         </div>
       </header>
 
       <main>
-        <div class="project-sections">
+        <section class="sns-links" aria-label="SNS links">
+          <div class="sns-grid">
+            <a class="card sns-card clothoid-corner" href="https://dribbble.com/chashi" style="--sns-bg:#ea4c89;--sns-fg:#ffffff;" target="_blank" rel="noreferrer noopener">
+  <span class="sns-card__icon" aria-hidden="true">
+    <img src="/assets/img/sns-dribbble.png" alt="" loading="lazy" decoding="async" />
+  </span>
+  <span class="sns-card__meta">
+    <span class="sns-card__name">Dribbble</span>
+    <span class="sns-card__account">chashi</span>
+  </span>
+</a>
+<a class="card sns-card clothoid-corner" href="https://note.com/chashi" style="--sns-bg:#41c9b4;--sns-fg:#ffffff;" target="_blank" rel="noreferrer noopener">
+  <span class="sns-card__icon" aria-hidden="true">
+    <img src="/assets/img/sns-note.png" alt="" loading="lazy" decoding="async" />
+  </span>
+  <span class="sns-card__meta">
+    <span class="sns-card__name">Note</span>
+    <span class="sns-card__account">chashi</span>
+  </span>
+</a>
+<a class="card sns-card clothoid-corner" href="https://x.com/t_chashi" style="--sns-bg:#111111;--sns-fg:#ffffff;" target="_blank" rel="noreferrer noopener">
+  <span class="sns-card__icon" aria-hidden="true">
+    <img src="/assets/img/sns-x.png" alt="" loading="lazy" decoding="async" />
+  </span>
+  <span class="sns-card__meta">
+    <span class="sns-card__name">X</span>
+    <span class="sns-card__account">@t_chashi</span>
+  </span>
+</a>
+          </div>
+        </section>
+
+        <div class="project-sections" id="works">
           <section class="project-section" aria-labelledby="project-section-1-ly-corporation">
   <h2 class="project-section__title" id="project-section-1-ly-corporation">LY Corporation</h2>
   <div class="bento-grid" aria-label="LY Corporation projects">
-<a class="card bento-card" href="/projects/ly-corporation-brand-portal-v1/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
+<a class="card bento-card clothoid-corner" href="/projects/ly-corporation-brand-portal-v1/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
   <div class="bento-card__body">
     <span class="bento-card__service" aria-hidden="true">
       <img src="/assets/img/icon-web-design.svg" alt="" loading="lazy" decoding="async" />
     </span>
-    <h2 class="bento-card__title">LY Brand Portal (Dummy 1)</h2>
-    <p class="bento-card__summary">LY Corporation向けダミーカード 1。表示検証用のプレースホルダーです。</p>
+    <h2 class="bento-card__title">Maply</h2>
+    <p class="bento-card__date">2026/02</p>
+    <p class="bento-card__subtitle">AIを活用した次世代地図アプリをリリース</p>
   </div>
   <figure class="bento-card__media">
-    <img src="/assets/img/web-redesign-2025-hero.svg" alt="LY Brand Portal (Dummy 1) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
-<a class="card bento-card" href="/projects/ly-corporation-brand-portal-v2/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-web-design.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">LY Brand Portal (Dummy 2)</h2>
-    <p class="bento-card__summary">LY Corporation向けダミーカード 2。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/web-redesign-2025-hero.svg" alt="LY Brand Portal (Dummy 2) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
-<a class="card bento-card" href="/projects/ly-corporation-brand-portal-v3/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-web-design.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">LY Brand Portal (Dummy 3)</h2>
-    <p class="bento-card__summary">LY Corporation向けダミーカード 3。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/web-redesign-2025-hero.svg" alt="LY Brand Portal (Dummy 3) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
-<a class="card bento-card" href="/projects/ly-corporation-brand-portal-v4/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-web-design.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">LY Brand Portal (Dummy 4)</h2>
-    <p class="bento-card__summary">LY Corporation向けダミーカード 4。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/web-redesign-2025-hero.svg" alt="LY Brand Portal (Dummy 4) preview" loading="lazy" decoding="async" />
+    <img src="/assets/img/maply-001-hero.png" alt="Maply preview" loading="lazy" decoding="async" />
   </figure>
 </a>
   </div>
@@ -97,52 +114,56 @@
 <section class="project-section" aria-labelledby="project-section-2-yahoo-japan">
   <h2 class="project-section__title" id="project-section-2-yahoo-japan">Yahoo! JAPAN</h2>
   <div class="bento-grid" aria-label="Yahoo! JAPAN projects">
-<a class="card bento-card" href="/projects/yahoo-japan-news-experience-v1/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
+<a class="card bento-card clothoid-corner" href="/projects/yahoo-japan-news-experience-v1/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
   <div class="bento-card__body">
     <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-mobile-ui.svg" alt="" loading="lazy" decoding="async" />
+      <img src="/assets/img/icon-yahoo-carnavi.png" alt="" loading="lazy" decoding="async" />
     </span>
-    <h2 class="bento-card__title">Yahoo! JAPAN News UI (Dummy 1)</h2>
-    <p class="bento-card__summary">Yahoo! JAPAN向けダミーカード 1。表示検証用のプレースホルダーです。</p>
+    <h2 class="bento-card__title">Yahoo!カーナビ</h2>
+    <p class="bento-card__date">2026/02</p>
+    <p class="bento-card__subtitle">ディスプレイオーディオの改善</p>
   </div>
   <figure class="bento-card__media">
-    <img src="/assets/img/trainlogapp-hero.svg" alt="Yahoo! JAPAN News UI (Dummy 1) preview" loading="lazy" decoding="async" />
+    <img src="/assets/img/carnavi-001-hero.png" alt="Yahoo!カーナビ preview" loading="lazy" decoding="async" />
   </figure>
 </a>
-<a class="card bento-card" href="/projects/yahoo-japan-news-experience-v2/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
+<a class="card bento-card clothoid-corner" href="/projects/yahoo-japan-news-experience-v2/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
   <div class="bento-card__body">
     <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-mobile-ui.svg" alt="" loading="lazy" decoding="async" />
+      <img src="/assets/img/icon-yahoo-carnavi.png" alt="" loading="lazy" decoding="async" />
     </span>
-    <h2 class="bento-card__title">Yahoo! JAPAN News UI (Dummy 2)</h2>
-    <p class="bento-card__summary">Yahoo! JAPAN向けダミーカード 2。表示検証用のプレースホルダーです。</p>
+    <h2 class="bento-card__title">Yahoo!カーナビ</h2>
+    <p class="bento-card__date">2026/02</p>
+    <p class="bento-card__subtitle">10周年を説目にデザインリニューアル</p>
   </div>
   <figure class="bento-card__media">
-    <img src="/assets/img/trainlogapp-hero.svg" alt="Yahoo! JAPAN News UI (Dummy 2) preview" loading="lazy" decoding="async" />
+    <img src="/assets/img/carnavi-002-hero.png" alt="Yahoo!カーナビ preview" loading="lazy" decoding="async" />
   </figure>
 </a>
-<a class="card bento-card" href="/projects/yahoo-japan-news-experience-v3/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
+<a class="card bento-card clothoid-corner" href="/projects/yahoo-japan-news-experience-v3/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
   <div class="bento-card__body">
     <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-mobile-ui.svg" alt="" loading="lazy" decoding="async" />
+      <img src="/assets/img/icon-yahoo-transit.png" alt="" loading="lazy" decoding="async" />
     </span>
-    <h2 class="bento-card__title">Yahoo! JAPAN News UI (Dummy 3)</h2>
-    <p class="bento-card__summary">Yahoo! JAPAN向けダミーカード 3。表示検証用のプレースホルダーです。</p>
+    <h2 class="bento-card__title">Yahoo!乗換案内</h2>
+    <p class="bento-card__date">2026/02</p>
+    <p class="bento-card__subtitle">新機能「トレインキャスト」</p>
   </div>
   <figure class="bento-card__media">
-    <img src="/assets/img/trainlogapp-hero.svg" alt="Yahoo! JAPAN News UI (Dummy 3) preview" loading="lazy" decoding="async" />
+    <img src="/assets/img/transit-001-hero.png" alt="Yahoo!乗換案内 preview" loading="lazy" decoding="async" />
   </figure>
 </a>
-<a class="card bento-card" href="/projects/yahoo-japan-news-experience-v4/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
+<a class="card bento-card clothoid-corner" href="/projects/yahoo-japan-news-experience-v4/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
   <div class="bento-card__body">
     <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-mobile-ui.svg" alt="" loading="lazy" decoding="async" />
+      <img src="/assets/img/icon-yahoo-maps.png" alt="" loading="lazy" decoding="async" />
     </span>
-    <h2 class="bento-card__title">Yahoo! JAPAN News UI (Dummy 4)</h2>
-    <p class="bento-card__summary">Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。</p>
+    <h2 class="bento-card__title">Yahoo! Maps</h2>
+    <p class="bento-card__date">2026/02</p>
+    <p class="bento-card__subtitle">オフラインでもハザードマップなどが確認できる「防災モード」</p>
   </div>
   <figure class="bento-card__media">
-    <img src="/assets/img/trainlogapp-hero.svg" alt="Yahoo! JAPAN News UI (Dummy 4) preview" loading="lazy" decoding="async" />
+    <img src="/assets/img/trainlogapp-hero.svg" alt="Yahoo! Maps preview" loading="lazy" decoding="async" />
   </figure>
 </a>
   </div>
@@ -150,163 +171,51 @@
 <section class="project-section" aria-labelledby="project-section-3-others">
   <h2 class="project-section__title" id="project-section-3-others">Others</h2>
   <div class="bento-grid" aria-label="Others projects">
-<a class="card bento-card" href="/projects/others-experiment-lab-v1/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
+<a class="card bento-card clothoid-corner" href="/projects/others-experiment-lab-v1/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
   <div class="bento-card__body">
     <span class="bento-card__service" aria-hidden="true">
       <img src="/assets/img/icon-checkout.svg" alt="" loading="lazy" decoding="async" />
     </span>
     <h2 class="bento-card__title">Others: UI Experiment (Dummy 1)</h2>
-    <p class="bento-card__summary">Others向けダミーカード 1。表示検証用のプレースホルダーです。</p>
+    <p class="bento-card__date">2026/02</p>
+    <p class="bento-card__subtitle">Others / Dummy Subtitle 1</p>
   </div>
   <figure class="bento-card__media">
     <img src="/assets/img/checkout-lab-ui-hero.svg" alt="Others: UI Experiment (Dummy 1) preview" loading="lazy" decoding="async" />
   </figure>
 </a>
-<a class="card bento-card" href="/projects/others-experiment-lab-v2/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
+<a class="card bento-card clothoid-corner" href="/projects/others-experiment-lab-v2/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
   <div class="bento-card__body">
     <span class="bento-card__service" aria-hidden="true">
       <img src="/assets/img/icon-checkout.svg" alt="" loading="lazy" decoding="async" />
     </span>
     <h2 class="bento-card__title">Others: UI Experiment (Dummy 2)</h2>
-    <p class="bento-card__summary">Others向けダミーカード 2。表示検証用のプレースホルダーです。</p>
+    <p class="bento-card__date">2026/02</p>
+    <p class="bento-card__subtitle">Others / Dummy Subtitle 2</p>
   </div>
   <figure class="bento-card__media">
     <img src="/assets/img/checkout-lab-ui-hero.svg" alt="Others: UI Experiment (Dummy 2) preview" loading="lazy" decoding="async" />
   </figure>
 </a>
-<a class="card bento-card" href="/projects/others-experiment-lab-v3/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
+<a class="card bento-card clothoid-corner" href="/projects/others-experiment-lab-v3/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
   <div class="bento-card__body">
     <span class="bento-card__service" aria-hidden="true">
       <img src="/assets/img/icon-checkout.svg" alt="" loading="lazy" decoding="async" />
     </span>
     <h2 class="bento-card__title">Others: UI Experiment (Dummy 3)</h2>
-    <p class="bento-card__summary">Others向けダミーカード 3。表示検証用のプレースホルダーです。</p>
+    <p class="bento-card__date">2026/02</p>
+    <p class="bento-card__subtitle">Others / Dummy Subtitle 3</p>
   </div>
   <figure class="bento-card__media">
     <img src="/assets/img/checkout-lab-ui-hero.svg" alt="Others: UI Experiment (Dummy 3) preview" loading="lazy" decoding="async" />
   </figure>
 </a>
-<a class="card bento-card" href="/projects/others-experiment-lab-v4/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-checkout.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">Others: UI Experiment (Dummy 4)</h2>
-    <p class="bento-card__summary">Others向けダミーカード 4。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/checkout-lab-ui-hero.svg" alt="Others: UI Experiment (Dummy 4) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
-  </div>
-</section>
-<section class="project-section" aria-labelledby="project-section-4-independent-production">
-  <h2 class="project-section__title" id="project-section-4-independent-production">independent production</h2>
-  <div class="bento-grid" aria-label="independent production projects">
-<a class="card bento-card" href="/projects/independent-production-case-v1/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-web-design.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">Independent Production Case (Dummy 1)</h2>
-    <p class="bento-card__summary">independent production向けダミーカード 1。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/og-default.svg" alt="Independent Production Case (Dummy 1) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
-<a class="card bento-card" href="/projects/independent-production-case-v2/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-web-design.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">Independent Production Case (Dummy 2)</h2>
-    <p class="bento-card__summary">independent production向けダミーカード 2。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/og-default.svg" alt="Independent Production Case (Dummy 2) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
-<a class="card bento-card" href="/projects/independent-production-case-v3/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-web-design.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">Independent Production Case (Dummy 3)</h2>
-    <p class="bento-card__summary">independent production向けダミーカード 3。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/og-default.svg" alt="Independent Production Case (Dummy 3) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
-<a class="card bento-card" href="/projects/independent-production-case-v4/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-web-design.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">Independent Production Case (Dummy 4)</h2>
-    <p class="bento-card__summary">independent production向けダミーカード 4。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/og-default.svg" alt="Independent Production Case (Dummy 4) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
-  </div>
-</section>
-<section class="project-section" aria-labelledby="project-section-5-speaking">
-  <h2 class="project-section__title" id="project-section-5-speaking">Speaking</h2>
-  <div class="bento-grid" aria-label="Speaking projects">
-<a class="card bento-card" href="/projects/speaking-session-design-v1/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-mobile-ui.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">Speaking Session Design (Dummy 1)</h2>
-    <p class="bento-card__summary">Speaking向けダミーカード 1。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/trainlogapp-hero.svg" alt="Speaking Session Design (Dummy 1) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
-<a class="card bento-card" href="/projects/speaking-session-design-v2/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-mobile-ui.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">Speaking Session Design (Dummy 2)</h2>
-    <p class="bento-card__summary">Speaking向けダミーカード 2。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/trainlogapp-hero.svg" alt="Speaking Session Design (Dummy 2) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
-<a class="card bento-card" href="/projects/speaking-session-design-v3/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-mobile-ui.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">Speaking Session Design (Dummy 3)</h2>
-    <p class="bento-card__summary">Speaking向けダミーカード 3。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/trainlogapp-hero.svg" alt="Speaking Session Design (Dummy 3) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
-<a class="card bento-card" href="/projects/speaking-session-design-v4/" style="--col:4;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
-  <div class="bento-card__body">
-    <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-mobile-ui.svg" alt="" loading="lazy" decoding="async" />
-    </span>
-    <h2 class="bento-card__title">Speaking Session Design (Dummy 4)</h2>
-    <p class="bento-card__summary">Speaking向けダミーカード 4。表示検証用のプレースホルダーです。</p>
-  </div>
-  <figure class="bento-card__media">
-    <img src="/assets/img/trainlogapp-hero.svg" alt="Speaking Session Design (Dummy 4) preview" loading="lazy" decoding="async" />
-  </figure>
-</a>
   </div>
 </section>
         </div>
+        <section class="more-works" aria-label="Show all works">
+  <a class="button button--ghost more-works__button" href="/projects/">もっと見る</a>
+</section>
       </main>
 
       <footer class="site-footer">

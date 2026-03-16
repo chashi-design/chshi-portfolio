@@ -7,8 +7,18 @@ const ROOT = path.resolve(__dirname, "..");
 const CONTENT_PATH = path.join(ROOT, "content.json");
 const INDEX_TEMPLATE_PATH = path.join(ROOT, "templates", "index.template.html");
 const PROJECT_TEMPLATE_PATH = path.join(ROOT, "templates", "project.template.html");
+const PROJECTS_TEMPLATE_PATH = path.join(ROOT, "templates", "projects.template.html");
 const OUTPUT_INDEX_PATH = path.join(ROOT, "index.html");
 const OUTPUT_PROJECTS_DIR = path.join(ROOT, "projects");
+const OUTPUT_PROJECTS_INDEX_PATH = path.join(OUTPUT_PROJECTS_DIR, "index.html");
+
+const DETAIL_SECTION_CONFIG = [
+  { key: "overview", title: "概要" },
+  { key: "background", title: "背景" },
+  { key: "experienceDesign", title: "体験設計" },
+  { key: "designApproach", title: "デザインアプローチ" },
+  { key: "impact", title: "効果" }
+];
 
 function assert(condition, message) {
   if (!condition) {
@@ -115,6 +125,32 @@ function truncate(text, limit) {
   return `${raw.slice(0, Math.max(0, limit - 1))}…`;
 }
 
+function toYearMonthNumber(value) {
+  const matched = toText(value).match(/^(\d{4})\/(0[1-9]|1[0-2])$/);
+  if (!matched) {
+    return 0;
+  }
+  return Number(matched[1]) * 100 + Number(matched[2]);
+}
+
+function sortByDateDescThenOrderAsc(projects) {
+  return [...projects].sort((a, b) => {
+    const dateDiff = toYearMonthNumber(b.date) - toYearMonthNumber(a.date);
+    if (dateDiff !== 0) {
+      return dateDiff;
+    }
+    return Number(a.order) - Number(b.order);
+  });
+}
+
+function getFeaturedProjects(projects, fallbackCount) {
+  const featured = projects.filter((project) => project.featured === true);
+  if (featured.length > 0) {
+    return [...featured].sort((a, b) => Number(a.order) - Number(b.order));
+  }
+  return projects.slice(0, Math.max(1, fallbackCount));
+}
+
 function validateContent(content) {
   assert(content && typeof content === "object", "content.json must contain an object.");
   assert(content.site && typeof content.site === "object", "site is required.");
@@ -122,6 +158,19 @@ function validateContent(content) {
   const site = content.site;
   ["title", "description", "canonicalBase", "ogImageDefault", "profileImage"].forEach((field) => {
     assert(toText(site[field]).length > 0, `site.${field} is required.`);
+  });
+  assert(Array.isArray(site.leadBullets), "site.leadBullets must be an array.");
+  assert(site.leadBullets.length > 0, "site.leadBullets must contain at least one item.");
+  site.leadBullets.forEach((item, index) => {
+    assert(toText(item).length > 0, `site.leadBullets[${index}] must not be empty.`);
+  });
+  assert(Array.isArray(site.snsLinks), "site.snsLinks must be an array.");
+  assert(site.snsLinks.length > 0, "site.snsLinks must contain at least one item.");
+  site.snsLinks.forEach((item, index) => {
+    assert(item && typeof item === "object", `site.snsLinks[${index}] must be an object.`);
+    ["name", "accountName", "url", "icon", "bgColor"].forEach((field) => {
+      assert(toText(item[field]).length > 0, `site.snsLinks[${index}].${field} is required.`);
+    });
   });
   assert(Array.isArray(site.indexSections), "site.indexSections must be an array.");
   assert(site.indexSections.length > 0, "site.indexSections must contain at least one section.");
@@ -141,9 +190,13 @@ function validateContent(content) {
     const pointer = `projects[${index}]`;
     assert(project && typeof project === "object", `${pointer} must be an object.`);
 
-    ["slug", "title", "summary", "section", "serviceIcon", "heroImage"].forEach((field) => {
+    ["slug", "title", "date", "subtitle", "summary", "section", "serviceIcon", "heroImage"].forEach((field) => {
       assert(toText(project[field]).length > 0, `${pointer}.${field} is required.`);
     });
+    assert(
+      /^\d{4}\/(0[1-9]|1[0-2])$/.test(toText(project.date)),
+      `${pointer}.date must use yyyy/mm format.`
+    );
     assert(
       site.indexSections.includes(project.section),
       `${pointer}.section must be one of site.indexSections.`
@@ -188,6 +241,40 @@ function validateContent(content) {
     if (project.links !== undefined) {
       assert(Array.isArray(project.links), `${pointer}.links must be an array when provided.`);
     }
+
+    if (project.descriptionBlocks !== undefined) {
+      assert(Array.isArray(project.descriptionBlocks), `${pointer}.descriptionBlocks must be an array when provided.`);
+      project.descriptionBlocks.forEach((block, blockIndex) => {
+        const blockPointer = `${pointer}.descriptionBlocks[${blockIndex}]`;
+        assert(block && typeof block === "object", `${blockPointer} must be an object.`);
+        const type = toText(block.type).toLowerCase();
+        assert(type === "image" || type === "text", `${blockPointer}.type must be "image" or "text".`);
+        if (type === "image") {
+          assert(toText(block.src).length > 0, `${blockPointer}.src is required for image blocks.`);
+        }
+        if (type === "text") {
+          assert(toText(block.subtitle).length > 0, `${blockPointer}.subtitle is required for text blocks.`);
+          assert(toText(block.body).length > 0, `${blockPointer}.body is required for text blocks.`);
+        }
+      });
+    }
+
+    if (project.detailSections !== undefined) {
+      assert(project.detailSections && typeof project.detailSections === "object", `${pointer}.detailSections must be an object when provided.`);
+      DETAIL_SECTION_CONFIG.forEach((sectionConfig) => {
+        const sectionValue = project.detailSections[sectionConfig.key];
+        if (sectionValue === undefined) {
+          return;
+        }
+        const sectionPointer = `${pointer}.detailSections.${sectionConfig.key}`;
+        assert(sectionValue && typeof sectionValue === "object", `${sectionPointer} must be an object.`);
+        assert(sectionValue.body !== undefined, `${sectionPointer}.body is required.`);
+        if (sectionValue.image !== undefined) {
+          assert(sectionValue.image && typeof sectionValue.image === "object", `${sectionPointer}.image must be an object.`);
+          assert(toText(sectionValue.image.src).length > 0, `${sectionPointer}.image.src is required.`);
+        }
+      });
+    }
   });
 }
 
@@ -212,15 +299,17 @@ function buildProjectCard(project, context) {
   const projectPath = withBasePath(context.basePath, `/projects/${project.slug}/`);
   const serviceIcon = withBasePath(context.basePath, toText(project.serviceIcon));
   const heroImage = withBasePath(context.basePath, toText(project.heroImage));
+  const date = toText(project.date);
 
   return [
-    `<a class="card bento-card" href="${escapeAttr(projectPath)}" style="${escapeAttr(style)}">`,
+    `<a class="card bento-card clothoid-corner" href="${escapeAttr(projectPath)}" style="${escapeAttr(style)}">`,
     `  <div class="bento-card__body">`,
     `    <span class="bento-card__service" aria-hidden="true">`,
     `      <img src="${escapeAttr(serviceIcon)}" alt="" loading="lazy" decoding="async" />`,
     `    </span>`,
     `    <h2 class="bento-card__title">${escapeHtml(project.title)}</h2>`,
-    `    <p class="bento-card__summary">${escapeHtml(project.summary)}</p>`,
+    `    <p class="bento-card__date">${escapeHtml(date)}</p>`,
+    `    <p class="bento-card__subtitle">${escapeHtml(project.subtitle)}</p>`,
     `  </div>`,
     `  <figure class="bento-card__media">`,
     `    <img src="${escapeAttr(heroImage)}" alt="${escapeAttr(project.title)} preview" loading="lazy" decoding="async" />`,
@@ -254,8 +343,9 @@ function buildProjectSections(projects, context, sectionOrder) {
       if (!items.length) {
         return "";
       }
+      const orderedItems = sortByDateDescThenOrderAsc(items);
       const sectionId = `project-section-${sectionIndex + 1}-${toSectionId(sectionName)}`;
-      const cards = items.map((project) => buildProjectCard(project, context)).join("\n");
+      const cards = orderedItems.map((project) => buildProjectCard(project, context)).join("\n");
 
       return [
         `<section class="project-section" aria-labelledby="${escapeAttr(sectionId)}">`,
@@ -267,6 +357,85 @@ function buildProjectSections(projects, context, sectionOrder) {
       ].join("\n");
     })
     .filter(Boolean)
+    .join("\n");
+}
+
+function buildIndexJsonLd(context, homeCanonical) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        name: context.personName,
+        url: context.personUrl || homeCanonical
+      },
+      {
+        "@type": "WebSite",
+        name: context.siteTitle,
+        description: context.siteDescription,
+        url: homeCanonical
+      }
+    ]
+  };
+}
+
+function buildProjectsIndexJsonLd(context, homeCanonical, projectsCanonical, projects, basePath) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        name: context.personName,
+        url: context.personUrl || homeCanonical
+      },
+      {
+        "@type": "WebSite",
+        name: context.siteTitle,
+        description: context.siteDescription,
+        url: homeCanonical
+      },
+      {
+        "@type": "CollectionPage",
+        name: `${context.siteTitle} All Works`,
+        description: `All portfolio works (${projects.length})`,
+        url: projectsCanonical
+      },
+      {
+        "@type": "ItemList",
+        itemListElement: projects.map((project, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          url: toAbsoluteUrl(context.canonicalBase, withBasePath(basePath, `/projects/${project.slug}/`)),
+          name: toText(project.title)
+        }))
+      }
+    ]
+  };
+}
+
+function buildSnsCards(site, context) {
+  return site.snsLinks
+    .map((item) => {
+      const name = toText(item.name);
+      const accountName = toText(item.accountName);
+      const url = toText(item.url);
+      const icon = withBasePath(context.basePath, toText(item.icon));
+      const bgColor = toText(item.bgColor);
+      const textColor = toText(item.textColor) || "#ffffff";
+      const style = `--sns-bg:${bgColor};--sns-fg:${textColor};`;
+
+      return [
+        `<a class="card sns-card clothoid-corner" href="${escapeAttr(url)}" style="${escapeAttr(style)}"${maybeExternalAttrs(url)}>`,
+        `  <span class="sns-card__icon" aria-hidden="true">`,
+        `    <img src="${escapeAttr(icon)}" alt="" loading="lazy" decoding="async" />`,
+        `  </span>`,
+        `  <span class="sns-card__meta">`,
+        `    <span class="sns-card__name">${escapeHtml(name)}</span>`,
+        `    <span class="sns-card__account">${escapeHtml(accountName)}</span>`,
+        `  </span>`,
+        `</a>`
+      ].join("\n");
+    })
     .join("\n");
 }
 
@@ -304,11 +473,214 @@ function buildScreen(screen, fallbackAlt) {
     .join("\n");
 }
 
+function resolvePlatformLabel(project) {
+  const facts = Array.isArray(project.facts) ? project.facts : [];
+  const platformFact = facts.find((fact) => {
+    const label = toText(fact.label).toLowerCase();
+    return label === "platform" || label === "プラットフォーム";
+  });
+  return platformFact ? platformFact.value : "-";
+}
+
+function resolveRoleLabel(project) {
+  const facts = Array.isArray(project.facts) ? project.facts : [];
+  const roleFact = facts.find((fact) => {
+    const label = toText(fact.label).toLowerCase();
+    return label === "role" || label === "担当";
+  });
+  return roleFact ? roleFact.value : "-";
+}
+
+function resolveServiceLabel(project) {
+  const serviceValue = project && project.service !== undefined ? project.service : project.title;
+  return serviceValue == null ? "-" : serviceValue;
+}
+
+function normalizeMetaItems(value) {
+  if (Array.isArray(value)) {
+    const items = value.map((item) => toText(item)).filter(Boolean);
+    return items.length > 0 ? items : ["-"];
+  }
+
+  const raw = toText(value);
+  if (!raw) {
+    return ["-"];
+  }
+
+  const items = raw
+    .split(/\r?\n+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  return items.length > 0 ? items : ["-"];
+}
+
+function buildDetailMetaList(value) {
+  const items = normalizeMetaItems(value);
+  return [
+    '<ul class="detail-meta-list">',
+    items.map((item) => `  <li>${escapeHtml(item)}</li>`).join("\n"),
+    "</ul>"
+  ].join("\n");
+}
+
+function pickScreen(project, index) {
+  const screens = Array.isArray(project.screens) ? project.screens : [];
+  return screens[index] || null;
+}
+
+function toDescriptionLines(value) {
+  if (Array.isArray(value)) {
+    return value.map((item) => toText(item)).filter(Boolean);
+  }
+
+  const raw = toText(value);
+  if (!raw) {
+    return [];
+  }
+
+  return raw
+    .split(/\r?\n+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function buildDescriptionBodyMarkup(value) {
+  const lines = toDescriptionLines(value);
+  if (lines.length === 0) {
+    return '<p class="description-body">-</p>';
+  }
+  if (lines.length === 1) {
+    return `<p class="description-body">${escapeHtml(lines[0])}</p>`;
+  }
+
+  return [
+    '<ul class="description-list">',
+    lines.map((line) => `  <li>${escapeHtml(line)}</li>`).join("\n"),
+    "</ul>"
+  ].join("\n");
+}
+
+function buildImpactFallback(project) {
+  const linkItems = (Array.isArray(project.links) ? project.links : [])
+    .map((link) => toText(link.note) || toText(link.label))
+    .filter(Boolean);
+
+  if (linkItems.length > 0) {
+    return linkItems;
+  }
+
+  return (Array.isArray(project.contrib) ? project.contrib : []).slice(4);
+}
+
+function normalizeDetailSections(project) {
+  const customSections = project.detailSections && typeof project.detailSections === "object" ? project.detailSections : null;
+  if (customSections) {
+    return DETAIL_SECTION_CONFIG.map((sectionConfig) => {
+      const sectionValue = customSections[sectionConfig.key] || {};
+      const imageValue = sectionValue.image && typeof sectionValue.image === "object" ? sectionValue.image : null;
+
+      return {
+        title: sectionConfig.title,
+        body: sectionValue.body,
+        image: imageValue
+          ? {
+              src: toText(imageValue.src),
+              alt: toText(imageValue.alt),
+              aspect: toText(imageValue.aspect),
+              fit: toText(imageValue.fit)
+            }
+          : null
+      };
+    });
+  }
+
+  const contrib = Array.isArray(project.contrib) ? project.contrib : [];
+  const designNotes = Array.isArray(project.designNotes) ? project.designNotes : [];
+
+  return [
+    {
+      title: "概要",
+      body: project.summary,
+      image: pickScreen(project, 0)
+    },
+    {
+      title: "背景",
+      body: contrib.slice(0, 2),
+      image: pickScreen(project, 1)
+    },
+    {
+      title: "体験設計",
+      body: contrib.slice(2, 4),
+      image: pickScreen(project, 2)
+    },
+    {
+      title: "デザインアプローチ",
+      body:
+        designNotes.length > 0
+          ? designNotes.map((note) => {
+              const heading = toText(note.heading);
+              const body = toText(note.body);
+              return heading && body ? `${heading}: ${body}` : heading || body;
+            }).filter(Boolean)
+          : contrib.slice(1, 4),
+      image: pickScreen(project, 3)
+    },
+    {
+      title: "効果",
+      body: buildImpactFallback(project),
+      image: pickScreen(project, 4)
+    }
+  ];
+}
+
+function buildDescriptionSections(project, context) {
+  return normalizeDetailSections(project)
+    .filter((section) => toDescriptionLines(section.body).length > 0 || (section.image && toText(section.image.src)))
+    .map((section, index) => {
+      const copyMarkup = [
+        '<div class="description-item__copy">',
+        `  <h3 class="description-subtitle">${escapeHtml(section.title)}</h3>`,
+        `  ${buildDescriptionBodyMarkup(section.body)}`,
+        "</div>"
+      ].join("\n");
+
+      const hasImage = section.image && toText(section.image.src);
+      const mediaMarkup = hasImage
+        ? [
+            '<figure class="description-item__media">',
+            `  <img src="${escapeAttr(withBasePath(context.basePath, section.image.src))}" alt="${escapeAttr(toText(section.image.alt) || `${project.title} ${section.title}`)}" loading="lazy" decoding="async" style="--aspect:${escapeAttr(normalizeAspect(section.image.aspect))};--fit:${escapeAttr(toText(section.image.fit) === "contain" ? "contain" : "cover")};" />`,
+            "</figure>"
+          ].join("\n")
+        : "";
+
+      const className = [
+        "description-item",
+        hasImage ? "description-item--with-media" : "",
+        hasImage && index % 2 === 1 ? "description-item--reverse" : ""
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      const content = hasImage && index % 2 === 1 ? [mediaMarkup, copyMarkup] : [copyMarkup, mediaMarkup];
+
+      return [
+        `<article class="${className}">`,
+        content.filter(Boolean).join("\n"),
+        "</article>"
+      ].join("\n");
+    })
+    .join("\n");
+}
+
 function buildProjectJsonLd(project, context) {
   const canonicalPath = withBasePath(context.basePath, `/projects/${project.slug}/`);
   const canonicalUrl = toAbsoluteUrl(context.canonicalBase, canonicalPath);
   const imageUrl = toAbsoluteUrl(context.canonicalBase, withBasePath(context.basePath, project.heroImage));
-  const platform = (project.facts || []).find((item) => toText(item.label).toLowerCase() === "platform");
+  const platform = (project.facts || []).find((item) => {
+    const label = toText(item.label).toLowerCase();
+    return label === "platform" || label === "プラットフォーム";
+  });
   const projectType = /app/i.test(`${project.title} ${project.tags.join(" ")}`) ? "SoftwareApplication" : "CreativeWork";
 
   const work = {
@@ -425,33 +797,16 @@ function buildPagination(projects, index, context) {
 }
 
 function buildProjectPage(project, index, projects, template, context) {
-  const homePath = withBasePath(context.basePath, "/");
   const projectPath = withBasePath(context.basePath, `/projects/${project.slug}/`);
+  const homePath = withBasePath(context.basePath, "/");
+  const projectsPath = withBasePath(context.basePath, "/projects/");
+  const profilePath = `${homePath}#profile`;
   const canonicalUrl = toAbsoluteUrl(context.canonicalBase, projectPath);
   const ogImageUrl = toAbsoluteUrl(context.canonicalBase, withBasePath(context.basePath, project.heroImage));
-
-  const primaryCta = project.ctas[0] ? buildCtaLink(project.ctas[0], "button button--ghost") : "";
-  const heroCtas = project.ctas
-    .map((cta, ctaIndex) => buildCtaLink(cta, ctaIndex === 0 ? "button" : "button button--ghost"))
-    .join("\n");
-
-  const tags = project.tags.map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("");
-  const facts = buildFactCards(project);
-
-  const screensWithBasePath = project.screens.map((screen) => ({
-    ...screen,
-    src: withBasePath(context.basePath, screen.src)
-  }));
-
-  const [firstScreen, ...otherScreens] = screensWithBasePath;
-  const primaryScreen = buildScreen(firstScreen, `${project.title} screen`);
-  const secondaryScreens = otherScreens
-    .map((screen) => buildScreen(screen, `${project.title} screen`))
-    .join("\n");
-
-  const contribList = project.contrib.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n");
-  const optionalSections = buildOptionalSections(project);
-  const pagination = buildPagination(projects, index, context);
+  const serviceValue = resolveServiceLabel(project);
+  const platformValue = resolvePlatformLabel(project);
+  const roleValue = resolveRoleLabel(project);
+  const descriptionSections = buildDescriptionSections(project, context);
 
   const pageTitle = `${project.title} | ${context.siteTitle}`;
   const metaDescription = truncate(project.summary, 160);
@@ -467,20 +822,18 @@ function buildProjectPage(project, index, projects, template, context) {
     ASSET_PREFIX: context.basePath,
     JSON_LD: safeJsonLd(buildProjectJsonLd(project, context)),
     HOME_URL: escapeAttr(homePath),
-    TOPBAR_CTA: primaryCta,
+    WORK_URL: escapeAttr(projectsPath),
+    PROFILE_URL: escapeAttr(profilePath),
     PROJECT_TITLE: escapeHtml(project.title),
+    PROJECT_SUBTITLE: escapeHtml(project.subtitle),
+    PROJECT_SERVICE: buildDetailMetaList(serviceValue),
+    PROJECT_DATE: buildDetailMetaList(project.date),
     PROJECT_SUMMARY: escapeHtml(project.summary),
-    PROJECT_TAGS: tags,
-    HERO_CTAS: heroCtas,
+    PROJECT_PLATFORM: buildDetailMetaList(platformValue),
+    PROJECT_ROLE: buildDetailMetaList(roleValue),
     HERO_IMAGE: escapeAttr(withBasePath(context.basePath, project.heroImage)),
     HERO_ALT: escapeAttr(`${project.title} hero image`),
-    FACT_CARDS: facts,
-    PRIMARY_SCREEN: primaryScreen,
-    SECONDARY_SCREENS: secondaryScreens,
-    CONTRIB_LIST: contribList,
-    DESIGN_NOTES_SECTION: optionalSections.designNotesSection,
-    LINKS_SECTION: optionalSections.linksSection,
-    PAGINATION: pagination
+    DESCRIPTION_SECTIONS: descriptionSections
   });
 }
 
@@ -497,58 +850,94 @@ function buildSite() {
     siteTitle: toText(site.title),
     siteDescription: toText(site.description),
     personName: toText(site.personName) || toText(site.title),
+    personSubName: toText(site.personSubName),
     personUrl: toText(site.personUrl)
   };
 
   const projects = [...content.projects].sort((a, b) => Number(a.order) - Number(b.order));
+  const featuredProjects = getFeaturedProjects(projects, 8);
   const sectionOrder = site.indexSections.map((sectionName) => toText(sectionName));
 
   const indexTemplate = readTemplate(INDEX_TEMPLATE_PATH);
   const projectTemplate = readTemplate(PROJECT_TEMPLATE_PATH);
+  const projectsTemplate = readTemplate(PROJECTS_TEMPLATE_PATH);
 
-  const projectSections = buildProjectSections(projects, context, sectionOrder);
+  const featuredProjectSections = buildProjectSections(featuredProjects, context, sectionOrder);
+  const allProjectSections = buildProjectSections(projects, context, sectionOrder);
+  const snsCards = buildSnsCards(site, context);
+  const siteLeadBullets = site.leadBullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n");
   const homePath = withBasePath(basePath, "/");
+  const projectsPath = withBasePath(basePath, "/projects/");
+  const profilePath = `${homePath}#profile`;
   const homeCanonical = toAbsoluteUrl(canonicalBase, homePath);
+  const projectsCanonical = toAbsoluteUrl(canonicalBase, projectsPath);
   const defaultOgImage = toAbsoluteUrl(canonicalBase, withBasePath(basePath, site.ogImageDefault));
+  const homeMetaDescription = truncate(context.siteDescription, 160);
+  const projectsMetaDescription = truncate(`All works by ${context.personName}.`, 160);
+  const showMoreWorks = projects.length > featuredProjects.length;
+  const moreWorksSection = showMoreWorks
+    ? [
+        '<section class="more-works" aria-label="Show all works">',
+        `  <a class="button button--ghost more-works__button" href="${escapeAttr(projectsPath)}">もっと見る</a>`,
+        "</section>"
+      ].join("\n")
+    : "";
 
-  const indexJsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        name: context.personName,
-        url: context.personUrl || homeCanonical
-      },
-      {
-        "@type": "WebSite",
-        name: context.siteTitle,
-        description: context.siteDescription,
-        url: homeCanonical
-      }
-    ]
-  };
+  const indexJsonLd = buildIndexJsonLd(context, homeCanonical);
+  const projectsJsonLd = buildProjectsIndexJsonLd(context, homeCanonical, projectsCanonical, projects, basePath);
+
+  const personSubNameMarkup = context.personSubName
+    ? `<p class="masthead-subname">${escapeHtml(context.personSubName)}</p>`
+    : "";
 
   const indexHtml = renderTemplate(indexTemplate, {
     PAGE_TITLE: escapeHtml(context.siteTitle),
-    META_DESCRIPTION: escapeAttr(truncate(context.siteDescription, 160)),
+    META_DESCRIPTION: escapeAttr(homeMetaDescription),
     CANONICAL_URL: escapeAttr(homeCanonical),
     OG_TITLE: escapeAttr(context.siteTitle),
-    OG_DESCRIPTION: escapeAttr(truncate(context.siteDescription, 160)),
+    OG_DESCRIPTION: escapeAttr(homeMetaDescription),
     OG_IMAGE: escapeAttr(defaultOgImage),
     OG_URL: escapeAttr(homeCanonical),
     ASSET_PREFIX: basePath,
     JSON_LD: safeJsonLd(indexJsonLd),
+    HOME_URL: escapeAttr(homePath),
+    WORK_URL: escapeAttr(projectsPath),
+    PROFILE_URL: escapeAttr(profilePath),
     SITE_TITLE: escapeHtml(context.siteTitle),
     PERSON_NAME: escapeHtml(context.personName),
+    PERSON_SUBNAME: personSubNameMarkup,
     PROFILE_IMAGE: escapeAttr(withBasePath(basePath, site.profileImage)),
     SITE_DESCRIPTION: escapeHtml(context.siteDescription),
-    PROJECT_SECTIONS: projectSections
+    SITE_LEAD_BULLETS: siteLeadBullets,
+    SNS_CARDS: snsCards,
+    PROJECT_SECTIONS: featuredProjectSections,
+    MORE_WORKS_SECTION: moreWorksSection
+  });
+
+  const projectsTitle = `All Works | ${context.siteTitle}`;
+  const projectsHtml = renderTemplate(projectsTemplate, {
+    PAGE_TITLE: escapeHtml(projectsTitle),
+    META_DESCRIPTION: escapeAttr(projectsMetaDescription),
+    CANONICAL_URL: escapeAttr(projectsCanonical),
+    OG_TITLE: escapeAttr(projectsTitle),
+    OG_DESCRIPTION: escapeAttr(projectsMetaDescription),
+    OG_IMAGE: escapeAttr(defaultOgImage),
+    OG_URL: escapeAttr(projectsCanonical),
+    ASSET_PREFIX: basePath,
+    JSON_LD: safeJsonLd(projectsJsonLd),
+    HOME_URL: escapeAttr(homePath),
+    WORK_URL: escapeAttr(projectsPath),
+    PROFILE_URL: escapeAttr(profilePath),
+    LIST_TITLE: escapeHtml("All Works"),
+    LIST_DESCRIPTION: escapeHtml(`全${projects.length}件の作品を一覧で掲載しています。`),
+    PROJECT_SECTIONS: allProjectSections
   });
 
   fs.writeFileSync(OUTPUT_INDEX_PATH, indexHtml, "utf8");
 
   fs.rmSync(OUTPUT_PROJECTS_DIR, { recursive: true, force: true });
   fs.mkdirSync(OUTPUT_PROJECTS_DIR, { recursive: true });
+  fs.writeFileSync(OUTPUT_PROJECTS_INDEX_PATH, projectsHtml, "utf8");
 
   projects.forEach((project, index) => {
     const pageHtml = buildProjectPage(project, index, projects, projectTemplate, context);
@@ -559,6 +948,7 @@ function buildSite() {
 
   console.log(`Built ${projects.length} projects.`);
   console.log(`- ${path.relative(ROOT, OUTPUT_INDEX_PATH)}`);
+  console.log(`- ${path.relative(ROOT, OUTPUT_PROJECTS_INDEX_PATH)}`);
   projects.forEach((project) => {
     console.log(`- projects/${project.slug}/index.html`);
   });

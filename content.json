@@ -2,9 +2,17 @@
   "site": {
     "title": "Takanori Hirohashi Portfolio",
     "description": "UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。",
+    "leadBullets": [
+      "💡 Software Designer",
+      "💡 User Interface",
+      "💡 Information Architecture",
+      "💡 iOS & Android & Web",
+      "🇯🇵 Japan",
+      "💻 LY Corporation"
+    ],
     "canonicalBase": "https://portfolio.example.com",
     "ogImageDefault": "/assets/img/og-default.svg",
-    "profileImage": "/assets/img/profile-avatar.svg",
+    "profileImage": "/assets/img/profile-avatar.png",
     "indexSections": [
       "LY Corporation",
       "Yahoo! JAPAN",
@@ -14,12 +22,42 @@
     ],
     "basePath": "",
     "personName": "Takanori Hirohashi",
-    "personUrl": "https://portfolio.example.com/about"
+    "personSubName": "Chashi",
+    "personUrl": "https://portfolio.example.com/about",
+    "snsLinks": [
+      {
+        "name": "Dribbble",
+        "accountName": "chashi",
+        "url": "https://dribbble.com/chashi",
+        "icon": "/assets/img/sns-dribbble.png",
+        "bgColor": "#ea4c89",
+        "textColor": "#ffffff"
+      },
+      {
+        "name": "Note",
+        "accountName": "chashi",
+        "url": "https://note.com/chashi",
+        "icon": "/assets/img/sns-note.png",
+        "bgColor": "#41c9b4",
+        "textColor": "#ffffff"
+      },
+      {
+        "name": "X",
+        "accountName": "@t_chashi",
+        "url": "https://x.com/t_chashi",
+        "icon": "/assets/img/sns-x.png",
+        "bgColor": "#111111",
+        "textColor": "#ffffff"
+      }
+    ]
   },
   "projects": [
     {
       "slug": "ly-corporation-brand-portal-v1",
-      "title": "LY Brand Portal (Dummy 1)",
+      "serviceIcon": "/assets/img/icon-web-design.svg",
+      "title": "Maply",
+      "date": "2026/02",
+      "subtitle": "AIを活用した次世代地図アプリをリリース",
       "summary": "LY Corporation向けダミーカード 1。表示検証用のプレースホルダーです。",
       "section": "LY Corporation",
       "featured": false,
@@ -32,8 +70,7 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-web-design.svg",
-      "heroImage": "/assets/img/web-redesign-2025-hero.svg",
+      "heroImage": "/assets/img/maply-001-hero.png",
       "tags": [
         "Dummy",
         "Corporate"
@@ -103,263 +140,11 @@
       ]
     },
     {
-      "slug": "ly-corporation-brand-portal-v2",
-      "title": "LY Brand Portal (Dummy 2)",
-      "summary": "LY Corporation向けダミーカード 2。表示検証用のプレースホルダーです。",
-      "section": "LY Corporation",
-      "featured": false,
-      "order": 2,
-      "bento": {
-        "colSpan": 6,
-        "rowSpan": 1,
-        "colSpanTablet": 4,
-        "rowSpanTablet": 1,
-        "colSpanMobile": 4,
-        "rowSpanMobile": 1
-      },
-      "serviceIcon": "/assets/img/icon-web-design.svg",
-      "heroImage": "/assets/img/web-redesign-2025-hero.svg",
-      "tags": [
-        "Dummy",
-        "Corporate"
-      ],
-      "ctas": [
-        {
-          "label": "Preview",
-          "url": "https://example.com/ly-corporation-brand-portal/v2"
-        }
-      ],
-      "facts": [
-        {
-          "label": "Role",
-          "value": "UI Designer"
-        },
-        {
-          "label": "Platform",
-          "value": "Web"
-        },
-        {
-          "label": "Year",
-          "value": "2026"
-        }
-      ],
-      "screens": [
-        {
-          "src": "/assets/img/web-redesign-2025-screen-1.svg",
-          "alt": "LY dummy screen 1",
-          "caption": "ダミーのメイン画面",
-          "aspect": "16 / 9",
-          "fit": "cover"
-        },
-        {
-          "src": "/assets/img/web-redesign-2025-screen-2.svg",
-          "alt": "LY dummy screen 2",
-          "caption": "ダミーのサブ画面A",
-          "aspect": "4 / 3",
-          "fit": "cover"
-        },
-        {
-          "src": "/assets/img/web-redesign-2025-screen-3.svg",
-          "alt": "LY dummy screen 3",
-          "caption": "ダミーのサブ画面B",
-          "aspect": "4 / 3",
-          "fit": "cover"
-        }
-      ],
-      "contrib": [
-        "ダミー要件を前提にページ構成を定義",
-        "カードUIの表示バランスを検証",
-        "一覧と詳細の遷移導線を確認",
-        "レスポンシブ時の崩れをチェック",
-        "OGP/SEOメタの出力を確認"
-      ],
-      "designNotes": [
-        {
-          "heading": "Dummy Note",
-          "body": "このページはレイアウト検証目的のダミーコンテンツです。"
-        }
-      ],
-      "links": [
-        {
-          "label": "Dummy Spec",
-          "url": "https://example.com/ly-corporation-brand-portal/spec/v2",
-          "note": "仮仕様書"
-        }
-      ]
-    },
-    {
-      "slug": "ly-corporation-brand-portal-v3",
-      "title": "LY Brand Portal (Dummy 3)",
-      "summary": "LY Corporation向けダミーカード 3。表示検証用のプレースホルダーです。",
-      "section": "LY Corporation",
-      "featured": false,
-      "order": 3,
-      "bento": {
-        "colSpan": 6,
-        "rowSpan": 1,
-        "colSpanTablet": 4,
-        "rowSpanTablet": 1,
-        "colSpanMobile": 4,
-        "rowSpanMobile": 1
-      },
-      "serviceIcon": "/assets/img/icon-web-design.svg",
-      "heroImage": "/assets/img/web-redesign-2025-hero.svg",
-      "tags": [
-        "Dummy",
-        "Corporate"
-      ],
-      "ctas": [
-        {
-          "label": "Preview",
-          "url": "https://example.com/ly-corporation-brand-portal/v3"
-        }
-      ],
-      "facts": [
-        {
-          "label": "Role",
-          "value": "UI Designer"
-        },
-        {
-          "label": "Platform",
-          "value": "Web"
-        },
-        {
-          "label": "Year",
-          "value": "2026"
-        }
-      ],
-      "screens": [
-        {
-          "src": "/assets/img/web-redesign-2025-screen-1.svg",
-          "alt": "LY dummy screen 1",
-          "caption": "ダミーのメイン画面",
-          "aspect": "16 / 9",
-          "fit": "cover"
-        },
-        {
-          "src": "/assets/img/web-redesign-2025-screen-2.svg",
-          "alt": "LY dummy screen 2",
-          "caption": "ダミーのサブ画面A",
-          "aspect": "4 / 3",
-          "fit": "cover"
-        },
-        {
-          "src": "/assets/img/web-redesign-2025-screen-3.svg",
-          "alt": "LY dummy screen 3",
-          "caption": "ダミーのサブ画面B",
-          "aspect": "4 / 3",
-          "fit": "cover"
-        }
-      ],
-      "contrib": [
-        "ダミー要件を前提にページ構成を定義",
-        "カードUIの表示バランスを検証",
-        "一覧と詳細の遷移導線を確認",
-        "レスポンシブ時の崩れをチェック",
-        "OGP/SEOメタの出力を確認"
-      ],
-      "designNotes": [
-        {
-          "heading": "Dummy Note",
-          "body": "このページはレイアウト検証目的のダミーコンテンツです。"
-        }
-      ],
-      "links": [
-        {
-          "label": "Dummy Spec",
-          "url": "https://example.com/ly-corporation-brand-portal/spec/v3",
-          "note": "仮仕様書"
-        }
-      ]
-    },
-    {
-      "slug": "ly-corporation-brand-portal-v4",
-      "title": "LY Brand Portal (Dummy 4)",
-      "summary": "LY Corporation向けダミーカード 4。表示検証用のプレースホルダーです。",
-      "section": "LY Corporation",
-      "featured": false,
-      "order": 4,
-      "bento": {
-        "colSpan": 6,
-        "rowSpan": 1,
-        "colSpanTablet": 4,
-        "rowSpanTablet": 1,
-        "colSpanMobile": 4,
-        "rowSpanMobile": 1
-      },
-      "serviceIcon": "/assets/img/icon-web-design.svg",
-      "heroImage": "/assets/img/web-redesign-2025-hero.svg",
-      "tags": [
-        "Dummy",
-        "Corporate"
-      ],
-      "ctas": [
-        {
-          "label": "Preview",
-          "url": "https://example.com/ly-corporation-brand-portal/v4"
-        }
-      ],
-      "facts": [
-        {
-          "label": "Role",
-          "value": "UI Designer"
-        },
-        {
-          "label": "Platform",
-          "value": "Web"
-        },
-        {
-          "label": "Year",
-          "value": "2026"
-        }
-      ],
-      "screens": [
-        {
-          "src": "/assets/img/web-redesign-2025-screen-1.svg",
-          "alt": "LY dummy screen 1",
-          "caption": "ダミーのメイン画面",
-          "aspect": "16 / 9",
-          "fit": "cover"
-        },
-        {
-          "src": "/assets/img/web-redesign-2025-screen-2.svg",
-          "alt": "LY dummy screen 2",
-          "caption": "ダミーのサブ画面A",
-          "aspect": "4 / 3",
-          "fit": "cover"
-        },
-        {
-          "src": "/assets/img/web-redesign-2025-screen-3.svg",
-          "alt": "LY dummy screen 3",
-          "caption": "ダミーのサブ画面B",
-          "aspect": "4 / 3",
-          "fit": "cover"
-        }
-      ],
-      "contrib": [
-        "ダミー要件を前提にページ構成を定義",
-        "カードUIの表示バランスを検証",
-        "一覧と詳細の遷移導線を確認",
-        "レスポンシブ時の崩れをチェック",
-        "OGP/SEOメタの出力を確認"
-      ],
-      "designNotes": [
-        {
-          "heading": "Dummy Note",
-          "body": "このページはレイアウト検証目的のダミーコンテンツです。"
-        }
-      ],
-      "links": [
-        {
-          "label": "Dummy Spec",
-          "url": "https://example.com/ly-corporation-brand-portal/spec/v4",
-          "note": "仮仕様書"
-        }
-      ]
-    },
-    {
       "slug": "yahoo-japan-news-experience-v1",
-      "title": "Yahoo! JAPAN News UI (Dummy 1)",
+      "serviceIcon": "/assets/img/icon-yahoo-carnavi.png",
+      "title": "Yahoo!カーナビ",
+      "date": "2026/02",
+      "subtitle": "ディスプレイオーディオの改善",
       "summary": "Yahoo! JAPAN向けダミーカード 1。表示検証用のプレースホルダーです。",
       "section": "Yahoo! JAPAN",
       "featured": false,
@@ -372,8 +157,7 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
-      "heroImage": "/assets/img/trainlogapp-hero.svg",
+      "heroImage": "/assets/img/carnavi-001-hero.png",
       "tags": [
         "Dummy",
         "Media"
@@ -438,7 +222,10 @@
     },
     {
       "slug": "yahoo-japan-news-experience-v2",
-      "title": "Yahoo! JAPAN News UI (Dummy 2)",
+      "serviceIcon": "/assets/img/icon-yahoo-carnavi.png",
+      "title": "Yahoo!カーナビ",
+      "date": "2026/02",
+      "subtitle": "10周年を説目にデザインリニューアル",
       "summary": "Yahoo! JAPAN向けダミーカード 2。表示検証用のプレースホルダーです。",
       "section": "Yahoo! JAPAN",
       "featured": false,
@@ -451,8 +238,7 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
-      "heroImage": "/assets/img/trainlogapp-hero.svg",
+      "heroImage": "/assets/img/carnavi-002-hero.png",
       "tags": [
         "Dummy",
         "Media"
@@ -517,7 +303,10 @@
     },
     {
       "slug": "yahoo-japan-news-experience-v3",
-      "title": "Yahoo! JAPAN News UI (Dummy 3)",
+      "serviceIcon": "/assets/img/icon-yahoo-transit.png",
+      "title": "Yahoo!乗換案内",
+      "date": "2026/02",
+      "subtitle": "新機能「トレインキャスト」",
       "summary": "Yahoo! JAPAN向けダミーカード 3。表示検証用のプレースホルダーです。",
       "section": "Yahoo! JAPAN",
       "featured": false,
@@ -530,8 +319,7 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
-      "heroImage": "/assets/img/trainlogapp-hero.svg",
+      "heroImage": "/assets/img/transit-001-hero.png",
       "tags": [
         "Dummy",
         "Media"
@@ -596,7 +384,10 @@
     },
     {
       "slug": "yahoo-japan-news-experience-v4",
-      "title": "Yahoo! JAPAN News UI (Dummy 4)",
+      "serviceIcon": "/assets/img/icon-yahoo-maps.png",
+      "title": "Yahoo! Maps",
+      "date": "2026/02",
+      "subtitle": " オフラインでもハザードマップなどが確認できる「防災モード」",
       "summary": "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。",
       "section": "Yahoo! JAPAN",
       "featured": false,
@@ -609,7 +400,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
       "heroImage": "/assets/img/trainlogapp-hero.svg",
       "tags": [
         "Dummy",
@@ -675,7 +465,10 @@
     },
     {
       "slug": "others-experiment-lab-v1",
+      "serviceIcon": "/assets/img/icon-checkout.svg",
       "title": "Others: UI Experiment (Dummy 1)",
+      "date": "2026/02",
+      "subtitle": "Others / Dummy Subtitle 1",
       "summary": "Others向けダミーカード 1。表示検証用のプレースホルダーです。",
       "section": "Others",
       "featured": false,
@@ -688,7 +481,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-checkout.svg",
       "heroImage": "/assets/img/checkout-lab-ui-hero.svg",
       "tags": [
         "Dummy",
@@ -747,7 +539,10 @@
     },
     {
       "slug": "others-experiment-lab-v2",
+      "serviceIcon": "/assets/img/icon-checkout.svg",
       "title": "Others: UI Experiment (Dummy 2)",
+      "date": "2026/02",
+      "subtitle": "Others / Dummy Subtitle 2",
       "summary": "Others向けダミーカード 2。表示検証用のプレースホルダーです。",
       "section": "Others",
       "featured": false,
@@ -760,7 +555,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-checkout.svg",
       "heroImage": "/assets/img/checkout-lab-ui-hero.svg",
       "tags": [
         "Dummy",
@@ -819,7 +613,10 @@
     },
     {
       "slug": "others-experiment-lab-v3",
+      "serviceIcon": "/assets/img/icon-checkout.svg",
       "title": "Others: UI Experiment (Dummy 3)",
+      "date": "2026/02",
+      "subtitle": "Others / Dummy Subtitle 3",
       "summary": "Others向けダミーカード 3。表示検証用のプレースホルダーです。",
       "section": "Others",
       "featured": false,
@@ -832,7 +629,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-checkout.svg",
       "heroImage": "/assets/img/checkout-lab-ui-hero.svg",
       "tags": [
         "Dummy",
@@ -891,7 +687,10 @@
     },
     {
       "slug": "others-experiment-lab-v4",
+      "serviceIcon": "/assets/img/icon-checkout.svg",
       "title": "Others: UI Experiment (Dummy 4)",
+      "date": "2026/02",
+      "subtitle": "Others / Dummy Subtitle 4",
       "summary": "Others向けダミーカード 4。表示検証用のプレースホルダーです。",
       "section": "Others",
       "featured": false,
@@ -904,7 +703,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-checkout.svg",
       "heroImage": "/assets/img/checkout-lab-ui-hero.svg",
       "tags": [
         "Dummy",
@@ -963,7 +761,10 @@
     },
     {
       "slug": "independent-production-case-v1",
+      "serviceIcon": "/assets/img/icon-web-design.svg",
       "title": "Independent Production Case (Dummy 1)",
+      "date": "2026/02",
+      "subtitle": "independent production / Dummy Subtitle 1",
       "summary": "independent production向けダミーカード 1。表示検証用のプレースホルダーです。",
       "section": "independent production",
       "featured": false,
@@ -976,7 +777,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-web-design.svg",
       "heroImage": "/assets/img/og-default.svg",
       "tags": [
         "Dummy",
@@ -1035,7 +835,10 @@
     },
     {
       "slug": "independent-production-case-v2",
+      "serviceIcon": "/assets/img/icon-web-design.svg",
       "title": "Independent Production Case (Dummy 2)",
+      "date": "2026/02",
+      "subtitle": "independent production / Dummy Subtitle 2",
       "summary": "independent production向けダミーカード 2。表示検証用のプレースホルダーです。",
       "section": "independent production",
       "featured": false,
@@ -1048,7 +851,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-web-design.svg",
       "heroImage": "/assets/img/og-default.svg",
       "tags": [
         "Dummy",
@@ -1107,7 +909,10 @@
     },
     {
       "slug": "independent-production-case-v3",
+      "serviceIcon": "/assets/img/icon-web-design.svg",
       "title": "Independent Production Case (Dummy 3)",
+      "date": "2026/02",
+      "subtitle": "independent production / Dummy Subtitle 3",
       "summary": "independent production向けダミーカード 3。表示検証用のプレースホルダーです。",
       "section": "independent production",
       "featured": false,
@@ -1120,7 +925,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-web-design.svg",
       "heroImage": "/assets/img/og-default.svg",
       "tags": [
         "Dummy",
@@ -1179,7 +983,10 @@
     },
     {
       "slug": "independent-production-case-v4",
+      "serviceIcon": "/assets/img/icon-web-design.svg",
       "title": "Independent Production Case (Dummy 4)",
+      "date": "2026/02",
+      "subtitle": "independent production / Dummy Subtitle 4",
       "summary": "independent production向けダミーカード 4。表示検証用のプレースホルダーです。",
       "section": "independent production",
       "featured": false,
@@ -1192,7 +999,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-web-design.svg",
       "heroImage": "/assets/img/og-default.svg",
       "tags": [
         "Dummy",
@@ -1251,7 +1057,10 @@
     },
     {
       "slug": "speaking-session-design-v1",
+      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
       "title": "Speaking Session Design (Dummy 1)",
+      "date": "2026/02",
+      "subtitle": "Speaking / Dummy Subtitle 1",
       "summary": "Speaking向けダミーカード 1。表示検証用のプレースホルダーです。",
       "section": "Speaking",
       "featured": false,
@@ -1264,7 +1073,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
       "heroImage": "/assets/img/trainlogapp-hero.svg",
       "tags": [
         "Dummy",
@@ -1323,7 +1131,10 @@
     },
     {
       "slug": "speaking-session-design-v2",
+      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
       "title": "Speaking Session Design (Dummy 2)",
+      "date": "2026/02",
+      "subtitle": "Speaking / Dummy Subtitle 2",
       "summary": "Speaking向けダミーカード 2。表示検証用のプレースホルダーです。",
       "section": "Speaking",
       "featured": false,
@@ -1336,7 +1147,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
       "heroImage": "/assets/img/trainlogapp-hero.svg",
       "tags": [
         "Dummy",
@@ -1395,7 +1205,10 @@
     },
     {
       "slug": "speaking-session-design-v3",
+      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
       "title": "Speaking Session Design (Dummy 3)",
+      "date": "2026/02",
+      "subtitle": "Speaking / Dummy Subtitle 3",
       "summary": "Speaking向けダミーカード 3。表示検証用のプレースホルダーです。",
       "section": "Speaking",
       "featured": false,
@@ -1408,7 +1221,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
       "heroImage": "/assets/img/trainlogapp-hero.svg",
       "tags": [
         "Dummy",
@@ -1467,7 +1279,10 @@
     },
     {
       "slug": "speaking-session-design-v4",
+      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
       "title": "Speaking Session Design (Dummy 4)",
+      "date": "2026/02",
+      "subtitle": "Speaking / Dummy Subtitle 4",
       "summary": "Speaking向けダミーカード 4。表示検証用のプレースホルダーです。",
       "section": "Speaking",
       "featured": false,
@@ -1480,7 +1295,6 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "serviceIcon": "/assets/img/icon-mobile-ui.svg",
       "heroImage": "/assets/img/trainlogapp-hero.svg",
       "tags": [
         "Dummy",
@@ -1534,6 +1348,573 @@
           "label": "Dummy Slide",
           "url": "https://example.com/speaking-session-design/slide/v4",
           "note": "仮スライド"
+        }
+      ]
+    },
+    {
+      "slug": "yahoo-japan-news-experience-v5",
+      "serviceIcon": "/assets/img/icon-yahoo-maps.png",
+      "title": "Yahoo! Maps",
+      "date": "2026/02",
+      "subtitle": " 地図で調べた場所やルートなどを複数のタブで表示できる「タブ機能」",
+      "summary": "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。",
+      "section": "Yahoo! JAPAN",
+      "featured": false,
+      "order": 21,
+      "bento": {
+        "colSpan": 6,
+        "rowSpan": 1,
+        "colSpanTablet": 4,
+        "rowSpanTablet": 1,
+        "colSpanMobile": 4,
+        "rowSpanMobile": 1
+      },
+      "heroImage": "/assets/img/trainlogapp-hero.svg",
+      "tags": [
+        "Dummy",
+        "Media"
+      ],
+      "ctas": [
+        {
+          "label": "Preview",
+          "url": "https://example.com/yahoo-japan-news-experience/v4"
+        }
+      ],
+      "facts": [
+        {
+          "label": "Role",
+          "value": "Product Designer"
+        },
+        {
+          "label": "Platform",
+          "value": "Mobile Web"
+        },
+        {
+          "label": "Year",
+          "value": "2026"
+        }
+      ],
+      "screens": [
+        {
+          "src": "/assets/img/trainlogapp-screen-1.svg",
+          "alt": "Yahoo dummy screen 1",
+          "caption": "ダミーのメイン画面",
+          "aspect": "16 / 9",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-2.svg",
+          "alt": "Yahoo dummy screen 2",
+          "caption": "ダミーのサブ画面A",
+          "aspect": "4 / 3",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-3.svg",
+          "alt": "Yahoo dummy screen 3",
+          "caption": "ダミーのサブ画面B",
+          "aspect": "4 / 3",
+          "fit": "contain"
+        }
+      ],
+      "contrib": [
+        "ダミー仮説に基づき情報設計を整理",
+        "一覧カードの視線誘導を検証",
+        "詳細ページの見出し構成を調整",
+        "CTA配置の整合性を確認",
+        "生成HTMLの出力をチェック"
+      ],
+      "links": [
+        {
+          "label": "Dummy Memo",
+          "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
+          "note": "検証メモ"
+        }
+      ]
+    },
+    {
+      "slug": "yahoo-japan-news-experience-v6",
+      "serviceIcon": "/assets/img/icon-yahoo-maps.png",
+      "title": "Yahoo! Maps",
+      "date": "2026/02",
+      "subtitle": " テーママップの使い勝手を向上させるためのデザイン改善",
+      "summary": "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。",
+      "section": "Yahoo! JAPAN",
+      "featured": false,
+      "order": 22,
+      "bento": {
+        "colSpan": 6,
+        "rowSpan": 1,
+        "colSpanTablet": 4,
+        "rowSpanTablet": 1,
+        "colSpanMobile": 4,
+        "rowSpanMobile": 1
+      },
+      "heroImage": "/assets/img/trainlogapp-hero.svg",
+      "tags": [
+        "Dummy",
+        "Media"
+      ],
+      "ctas": [
+        {
+          "label": "Preview",
+          "url": "https://example.com/yahoo-japan-news-experience/v4"
+        }
+      ],
+      "facts": [
+        {
+          "label": "Role",
+          "value": "Product Designer"
+        },
+        {
+          "label": "Platform",
+          "value": "Mobile Web"
+        },
+        {
+          "label": "Year",
+          "value": "2026"
+        }
+      ],
+      "screens": [
+        {
+          "src": "/assets/img/trainlogapp-screen-1.svg",
+          "alt": "Yahoo dummy screen 1",
+          "caption": "ダミーのメイン画面",
+          "aspect": "16 / 9",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-2.svg",
+          "alt": "Yahoo dummy screen 2",
+          "caption": "ダミーのサブ画面A",
+          "aspect": "4 / 3",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-3.svg",
+          "alt": "Yahoo dummy screen 3",
+          "caption": "ダミーのサブ画面B",
+          "aspect": "4 / 3",
+          "fit": "contain"
+        }
+      ],
+      "contrib": [
+        "ダミー仮説に基づき情報設計を整理",
+        "一覧カードの視線誘導を検証",
+        "詳細ページの見出し構成を調整",
+        "CTA配置の整合性を確認",
+        "生成HTMLの出力をチェック"
+      ],
+      "links": [
+        {
+          "label": "Dummy Memo",
+          "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
+          "note": "検証メモ"
+        }
+      ]
+    },
+    {
+      "slug": "yahoo-japan-news-experience-v7",
+      "serviceIcon": "/assets/img/icon-yahoo-maps.png",
+      "title": "Yahoo! Maps",
+      "date": "2018/03",
+      "subtitle": "現実世界とアプリの世界を一つにする「ARモード」",
+      "summary": "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。",
+      "section": "Yahoo! JAPAN",
+      "featured": false,
+      "order": 23,
+      "bento": {
+        "colSpan": 6,
+        "rowSpan": 1,
+        "colSpanTablet": 4,
+        "rowSpanTablet": 1,
+        "colSpanMobile": 4,
+        "rowSpanMobile": 1
+      },
+      "heroImage": "/assets/img/trainlogapp-hero.svg",
+      "tags": [
+        "Dummy",
+        "Media"
+      ],
+      "ctas": [
+        {
+          "label": "Preview",
+          "url": "https://example.com/yahoo-japan-news-experience/v4"
+        }
+      ],
+      "facts": [
+        {
+          "label": "Role",
+          "value": "Product Designer"
+        },
+        {
+          "label": "Platform",
+          "value": "Mobile Web"
+        },
+        {
+          "label": "Year",
+          "value": "2026"
+        }
+      ],
+      "screens": [
+        {
+          "src": "/assets/img/trainlogapp-screen-1.svg",
+          "alt": "Yahoo dummy screen 1",
+          "caption": "ダミーのメイン画面",
+          "aspect": "16 / 9",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-2.svg",
+          "alt": "Yahoo dummy screen 2",
+          "caption": "ダミーのサブ画面A",
+          "aspect": "4 / 3",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-3.svg",
+          "alt": "Yahoo dummy screen 3",
+          "caption": "ダミーのサブ画面B",
+          "aspect": "4 / 3",
+          "fit": "contain"
+        }
+      ],
+      "contrib": [
+        "ダミー仮説に基づき情報設計を整理",
+        "一覧カードの視線誘導を検証",
+        "詳細ページの見出し構成を調整",
+        "CTA配置の整合性を確認",
+        "生成HTMLの出力をチェック"
+      ],
+      "links": [
+        {
+          "label": "Dummy Memo",
+          "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
+          "note": "検証メモ"
+        }
+      ]
+    },
+    {
+      "slug": "yahoo-japan-news-experience-v11",
+      "serviceIcon": "/assets/img/icon-yahoo-carnavi.png",
+      "title": "Yahoo!カーナビ",
+      "date": "2024/12",
+      "subtitle": "Mapbox を活用した「イルミネーションモード」",
+      "summary": "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。",
+      "section": "Yahoo! JAPAN",
+      "featured": false,
+      "order": 24,
+      "bento": {
+        "colSpan": 6,
+        "rowSpan": 1,
+        "colSpanTablet": 4,
+        "rowSpanTablet": 1,
+        "colSpanMobile": 4,
+        "rowSpanMobile": 1
+      },
+      "heroImage": "/assets/img/trainlogapp-hero.svg",
+      "tags": [
+        "Dummy",
+        "Media"
+      ],
+      "ctas": [
+        {
+          "label": "Preview",
+          "url": "https://example.com/yahoo-japan-news-experience/v4"
+        }
+      ],
+      "facts": [
+        {
+          "label": "Role",
+          "value": "Product Designer"
+        },
+        {
+          "label": "Platform",
+          "value": "Mobile Web"
+        },
+        {
+          "label": "Year",
+          "value": "2026"
+        }
+      ],
+      "screens": [
+        {
+          "src": "/assets/img/trainlogapp-screen-1.svg",
+          "alt": "Yahoo dummy screen 1",
+          "caption": "ダミーのメイン画面",
+          "aspect": "16 / 9",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-2.svg",
+          "alt": "Yahoo dummy screen 2",
+          "caption": "ダミーのサブ画面A",
+          "aspect": "4 / 3",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-3.svg",
+          "alt": "Yahoo dummy screen 3",
+          "caption": "ダミーのサブ画面B",
+          "aspect": "4 / 3",
+          "fit": "contain"
+        }
+      ],
+      "contrib": [
+        "ダミー仮説に基づき情報設計を整理",
+        "一覧カードの視線誘導を検証",
+        "詳細ページの見出し構成を調整",
+        "CTA配置の整合性を確認",
+        "生成HTMLの出力をチェック"
+      ],
+      "links": [
+        {
+          "label": "Dummy Memo",
+          "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
+          "note": "検証メモ"
+        }
+      ]
+    },
+      {
+      "slug": "yahoo-japan-news-experience-v9",
+      "serviceIcon": "/assets/img/icon-yahoo-carnavi.png",
+      "title": "Yahoo!カーナビ",
+      "date": "2024/12",
+      "subtitle": "メニュー画面の刷新",
+      "summary": "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。",
+      "section": "Yahoo! JAPAN",
+      "featured": false,
+      "order": 25,
+      "bento": {
+        "colSpan": 6,
+        "rowSpan": 1,
+        "colSpanTablet": 4,
+        "rowSpanTablet": 1,
+        "colSpanMobile": 4,
+        "rowSpanMobile": 1
+      },
+      "heroImage": "/assets/img/trainlogapp-hero.svg",
+      "tags": [
+        "Dummy",
+        "Media"
+      ],
+      "ctas": [
+        {
+          "label": "Preview",
+          "url": "https://example.com/yahoo-japan-news-experience/v4"
+        }
+      ],
+      "facts": [
+        {
+          "label": "Role",
+          "value": "Product Designer"
+        },
+        {
+          "label": "Platform",
+          "value": "Mobile Web"
+        },
+        {
+          "label": "Year",
+          "value": "2026"
+        }
+      ],
+      "screens": [
+        {
+          "src": "/assets/img/trainlogapp-screen-1.svg",
+          "alt": "Yahoo dummy screen 1",
+          "caption": "ダミーのメイン画面",
+          "aspect": "16 / 9",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-2.svg",
+          "alt": "Yahoo dummy screen 2",
+          "caption": "ダミーのサブ画面A",
+          "aspect": "4 / 3",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-3.svg",
+          "alt": "Yahoo dummy screen 3",
+          "caption": "ダミーのサブ画面B",
+          "aspect": "4 / 3",
+          "fit": "contain"
+        }
+      ],
+      "contrib": [
+        "ダミー仮説に基づき情報設計を整理",
+        "一覧カードの視線誘導を検証",
+        "詳細ページの見出し構成を調整",
+        "CTA配置の整合性を確認",
+        "生成HTMLの出力をチェック"
+      ],
+      "links": [
+        {
+          "label": "Dummy Memo",
+          "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
+          "note": "検証メモ"
+        }
+      ]
+    },
+    {
+      "slug": "yahoo-japan-news-experience-v8",
+      "serviceIcon": "/assets/img/icon-yahoo-carnavi.png",
+      "title": "Yahoo!カーナビ",
+      "date": "2024/12",
+      "subtitle": "ルート選択画面の改善",
+      "summary": "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。",
+      "section": "Yahoo! JAPAN",
+      "featured": false,
+      "order": 26,
+      "bento": {
+        "colSpan": 6,
+        "rowSpan": 1,
+        "colSpanTablet": 4,
+        "rowSpanTablet": 1,
+        "colSpanMobile": 4,
+        "rowSpanMobile": 1
+      },
+      "heroImage": "/assets/img/trainlogapp-hero.svg",
+      "tags": [
+        "Dummy",
+        "Media"
+      ],
+      "ctas": [
+        {
+          "label": "Preview",
+          "url": "https://example.com/yahoo-japan-news-experience/v4"
+        }
+      ],
+      "facts": [
+        {
+          "label": "Role",
+          "value": "Product Designer"
+        },
+        {
+          "label": "Platform",
+          "value": "Mobile Web"
+        },
+        {
+          "label": "Year",
+          "value": "2026"
+        }
+      ],
+      "screens": [
+        {
+          "src": "/assets/img/trainlogapp-screen-1.svg",
+          "alt": "Yahoo dummy screen 1",
+          "caption": "ダミーのメイン画面",
+          "aspect": "16 / 9",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-2.svg",
+          "alt": "Yahoo dummy screen 2",
+          "caption": "ダミーのサブ画面A",
+          "aspect": "4 / 3",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-3.svg",
+          "alt": "Yahoo dummy screen 3",
+          "caption": "ダミーのサブ画面B",
+          "aspect": "4 / 3",
+          "fit": "contain"
+        }
+      ],
+      "contrib": [
+        "ダミー仮説に基づき情報設計を整理",
+        "一覧カードの視線誘導を検証",
+        "詳細ページの見出し構成を調整",
+        "CTA配置の整合性を確認",
+        "生成HTMLの出力をチェック"
+      ],
+      "links": [
+        {
+          "label": "Dummy Memo",
+          "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
+          "note": "検証メモ"
+        }
+      ]
+    },
+    {
+      "slug": "yahoo-japan-news-experience-v10",
+      "serviceIcon": "/assets/img/icon-yahoo-carnavi.png",
+      "title": "Yahoo!カーナビ",
+      "date": "2024/12",
+      "subtitle": "ナビ中に音楽操作を可能に",
+      "summary": "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。",
+      "section": "Yahoo! JAPAN",
+      "featured": false,
+      "order": 27,
+      "bento": {
+        "colSpan": 6,
+        "rowSpan": 1,
+        "colSpanTablet": 4,
+        "rowSpanTablet": 1,
+        "colSpanMobile": 4,
+        "rowSpanMobile": 1
+      },
+      "heroImage": "/assets/img/trainlogapp-hero.svg",
+      "tags": [
+        "Dummy",
+        "Media"
+      ],
+      "ctas": [
+        {
+          "label": "Preview",
+          "url": "https://example.com/yahoo-japan-news-experience/v4"
+        }
+      ],
+      "facts": [
+        {
+          "label": "Role",
+          "value": "Product Designer"
+        },
+        {
+          "label": "Platform",
+          "value": "Mobile Web"
+        },
+        {
+          "label": "Year",
+          "value": "2026"
+        }
+      ],
+      "screens": [
+        {
+          "src": "/assets/img/trainlogapp-screen-1.svg",
+          "alt": "Yahoo dummy screen 1",
+          "caption": "ダミーのメイン画面",
+          "aspect": "16 / 9",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-2.svg",
+          "alt": "Yahoo dummy screen 2",
+          "caption": "ダミーのサブ画面A",
+          "aspect": "4 / 3",
+          "fit": "cover"
+        },
+        {
+          "src": "/assets/img/trainlogapp-screen-3.svg",
+          "alt": "Yahoo dummy screen 3",
+          "caption": "ダミーのサブ画面B",
+          "aspect": "4 / 3",
+          "fit": "contain"
+        }
+      ],
+      "contrib": [
+        "ダミー仮説に基づき情報設計を整理",
+        "一覧カードの視線誘導を検証",
+        "詳細ページの見出し構成を調整",
+        "CTA配置の整合性を確認",
+        "生成HTMLの出力をチェック"
+      ],
+      "links": [
+        {
+          "label": "Dummy Memo",
+          "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
+          "note": "検証メモ"
         }
       ]
     }

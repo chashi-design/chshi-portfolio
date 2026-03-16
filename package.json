@@ -1,0 +1,7 @@
+{
+  "name": "chshi-portfolio",
+  "private": true,
+  "scripts": {
+    "build": "node build/build.js"
+  }
+}
