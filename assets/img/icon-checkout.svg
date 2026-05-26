@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Checkout icon</title>
+  <circle cx="22" cy="50" r="5" fill="#2f4460"/>
+  <circle cx="46" cy="50" r="5" fill="#2f4460"/>
+  <path d="M10 14h8l4 24h27l5-16H24" fill="none" stroke="#2f4460" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
