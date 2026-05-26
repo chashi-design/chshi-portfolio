@@ -14,6 +14,8 @@ const OUTPUT_PROJECTS_DIR = path.join(ROOT, "projects");
 const OUTPUT_PROJECTS_INDEX_PATH = path.join(OUTPUT_PROJECTS_DIR, "index.html");
 const OUTPUT_PROFILE_DIR = path.join(ROOT, "profile");
 const OUTPUT_PROFILE_INDEX_PATH = path.join(OUTPUT_PROFILE_DIR, "index.html");
+const BUILD_DIR = path.join(ROOT, "build");
+const WATCH_TARGETS = [CONTENT_PATH, path.join(ROOT, "templates"), path.join(ROOT, "assets"), BUILD_DIR];
 
 const DETAIL_SECTION_CONFIG = [
   { key: "overview", title: "概要" },
@@ -1008,7 +1010,8 @@ function buildProfileSpeakingItems(projects, context) {
     .join("\n");
 }
 
-function buildSite() {
+function buildSite(options = {}) {
+  const logger = options.logger || console;
   const content = readJson(CONTENT_PATH);
   validateContent(content);
 
@@ -1154,18 +1157,36 @@ function buildSite() {
     fs.writeFileSync(path.join(outputDir, "index.html"), pageHtml, "utf8");
   });
 
-  console.log(`Built ${projects.length} projects.`);
-  console.log(`- ${path.relative(ROOT, OUTPUT_INDEX_PATH)}`);
-  console.log(`- ${path.relative(ROOT, OUTPUT_PROFILE_INDEX_PATH)}`);
-  console.log(`- ${path.relative(ROOT, OUTPUT_PROJECTS_INDEX_PATH)}`);
+  logger.log(`Built ${projects.length} projects.`);
+  logger.log(`- ${path.relative(ROOT, OUTPUT_INDEX_PATH)}`);
+  logger.log(`- ${path.relative(ROOT, OUTPUT_PROFILE_INDEX_PATH)}`);
+  logger.log(`- ${path.relative(ROOT, OUTPUT_PROJECTS_INDEX_PATH)}`);
   projects.forEach((project) => {
-    console.log(`- projects/${project.slug}/index.html`);
+    logger.log(`- projects/${project.slug}/index.html`);
   });
+
+  return {
+    projectCount: projects.length,
+    outputs: [
+      OUTPUT_INDEX_PATH,
+      OUTPUT_PROFILE_INDEX_PATH,
+      OUTPUT_PROJECTS_INDEX_PATH,
+      ...projects.map((project) => path.join(OUTPUT_PROJECTS_DIR, project.slug, "index.html"))
+    ]
+  };
 }
 
-try {
-  buildSite();
-} catch (error) {
-  console.error("Build failed:", error.message);
-  process.exitCode = 1;
+if (require.main === module) {
+  try {
+    buildSite();
+  } catch (error) {
+    console.error("Build failed:", error.message);
+    process.exitCode = 1;
+  }
 }
+
+module.exports = {
+  ROOT,
+  WATCH_TARGETS,
+  buildSite
+};
