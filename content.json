@@ -22,8 +22,37 @@
     ],
     "basePath": "",
     "personName": "Takanori Hirohashi",
-    "personSubName": "Chashi",
-    "personUrl": "https://portfolio.example.com/about",
+    "personUrl": "https://portfolio.example.com/profile/",
+    "profile": {
+      "description": "UI/UXデザインとフロントエンド実装を横断し、情報設計から体験設計、インターフェースの仕上げまで一貫して扱うデザイナー。Web / iOS / Android を対象に、サービスの芯が伝わる体験設計と、運用しやすい実装の両立を重視しています。",
+      "skills": [
+        "UIデザイン",
+        "UXデザイン",
+        "情報設計",
+        "プロトタイピング",
+        "フロントエンド実装",
+        "iOS / Android / Web"
+      ],
+      "likes": [
+        "hoge",
+        "hoge",
+        "hoge"
+      ],
+      "career": [
+        {
+          "period": "2023 - 現在",
+          "title": " LINEヤフー株式会社 デザイナー"
+        },
+        {
+          "period": "2017 - 2023",
+          "title": "ヤフー株式会社 デザイナー"
+        },
+        {
+          "period": "2013 - 2017",
+          "title": "芝浦工業大学 デザイン工学部"
+        }
+      ]
+    },
     "snsLinks": [
       {
         "name": "Dribbble",

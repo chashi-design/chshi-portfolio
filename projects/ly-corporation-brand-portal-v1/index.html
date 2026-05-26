@@ -19,7 +19,7 @@
 
     <link rel="stylesheet" href="/assets/styles.css" />
     <script defer src="/assets/app.js"></script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://portfolio.example.com/about"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://portfolio.example.com/"},{"@type":"CreativeWork","name":"Maply","description":"LY Corporation向けダミーカード 1。表示検証用のプレースホルダーです。","image":"https://portfolio.example.com/assets/img/maply-001-hero.png","url":"https://portfolio.example.com/projects/ly-corporation-brand-portal-v1/","keywords":"Dummy, Corporate","creator":{"@type":"Person","name":"Takanori Hirohashi"}}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://portfolio.example.com/profile/"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://portfolio.example.com/"},{"@type":"CreativeWork","name":"Maply","description":"LY Corporation向けダミーカード 1。表示検証用のプレースホルダーです。","image":"https://portfolio.example.com/assets/img/maply-001-hero.png","url":"https://portfolio.example.com/projects/ly-corporation-brand-portal-v1/","keywords":"Dummy, Corporate","creator":{"@type":"Person","name":"Takanori Hirohashi"}}]}</script>
   </head>
   <body>
     <div class="site-header-shell">
@@ -27,7 +27,7 @@
         <a class="site-header__home" href="/">Home</a>
         <nav class="site-header__nav" aria-label="Primary">
           <a href="/projects/">Work</a>
-          <a href="/#profile">Profile</a>
+          <a href="/profile/">About</a>
           <button class="theme-toggle site-header__theme-toggle" type="button" data-theme-toggle aria-label="ダークモードに切り替え">
             <span data-theme-icon aria-hidden="true">☾</span>
           </button>
@@ -74,52 +74,63 @@
           </dl>
         </section>
 
-        <section class="description-section" aria-labelledby="description-section-title">
-          <h2 class="section-title" id="description-section-title">説明</h2>
+        <section class="description-section" aria-label="Project detail sections">
           <div class="description-flow">
-            <article class="description-item description-item--with-media">
+            <article class="description-item">
 <div class="description-item__copy">
-  <h3 class="description-subtitle">概要</h3>
+  <h2 class="description-subtitle">概要</h2>
+  <div class="description-body-group">
   <p class="description-body">LY Corporation向けダミーカード 1。表示検証用のプレースホルダーです。</p>
 </div>
-<figure class="description-item__media">
-  <img src="/assets/img/web-redesign-2025-screen-1.svg" alt="LY dummy screen 1" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:cover;" />
-</figure>
-</article>
-<article class="description-item description-item--with-media description-item--reverse">
-<figure class="description-item__media">
-  <img src="/assets/img/web-redesign-2025-screen-2.svg" alt="LY dummy screen 2" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
-</figure>
-<div class="description-item__copy">
-  <h3 class="description-subtitle">背景</h3>
-  <ul class="description-list">
-  <li>ダミー要件を前提にページ構成を定義</li>
-  <li>カードUIの表示バランスを検証</li>
-</ul>
 </div>
-</article>
-<article class="description-item description-item--with-media">
-<div class="description-item__copy">
-  <h3 class="description-subtitle">体験設計</h3>
-  <ul class="description-list">
-  <li>一覧と詳細の遷移導線を確認</li>
-  <li>レスポンシブ時の崩れをチェック</li>
-</ul>
+<div class="description-item__media-group">
+  <figure class="description-item__media">
+    <img src="/assets/img/web-redesign-2025-screen-1.svg" alt="LY dummy screen 1" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:cover;" />
+  </figure>
 </div>
-<figure class="description-item__media">
-  <img src="/assets/img/web-redesign-2025-screen-3.svg" alt="LY dummy screen 3" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
-</figure>
 </article>
 <article class="description-item">
 <div class="description-item__copy">
-  <h3 class="description-subtitle">デザインアプローチ</h3>
+  <h2 class="description-subtitle">背景</h2>
+  <div class="description-body-group">
+  <p class="description-body">ダミー要件を前提にページ構成を定義</p>
+  <p class="description-body">カードUIの表示バランスを検証</p>
+</div>
+</div>
+<div class="description-item__media-group">
+  <figure class="description-item__media">
+    <img src="/assets/img/web-redesign-2025-screen-2.svg" alt="LY dummy screen 2" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
+  </figure>
+</div>
+</article>
+<article class="description-item">
+<div class="description-item__copy">
+  <h2 class="description-subtitle">体験設計</h2>
+  <div class="description-body-group">
+  <p class="description-body">一覧と詳細の遷移導線を確認</p>
+  <p class="description-body">レスポンシブ時の崩れをチェック</p>
+</div>
+</div>
+<div class="description-item__media-group">
+  <figure class="description-item__media">
+    <img src="/assets/img/web-redesign-2025-screen-3.svg" alt="LY dummy screen 3" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
+  </figure>
+</div>
+</article>
+<article class="description-item">
+<div class="description-item__copy">
+  <h2 class="description-subtitle">デザインアプローチ</h2>
+  <div class="description-body-group">
   <p class="description-body">Dummy Note: このページはレイアウト検証目的のダミーコンテンツです。</p>
 </div>
+</div>
 </article>
 <article class="description-item">
 <div class="description-item__copy">
-  <h3 class="description-subtitle">効果</h3>
+  <h2 class="description-subtitle">効果</h2>
+  <div class="description-body-group">
   <p class="description-body">仮仕様書</p>
+</div>
 </div>
 </article>
           </div>

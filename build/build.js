@@ -8,9 +8,12 @@ const CONTENT_PATH = path.join(ROOT, "content.json");
 const INDEX_TEMPLATE_PATH = path.join(ROOT, "templates", "index.template.html");
 const PROJECT_TEMPLATE_PATH = path.join(ROOT, "templates", "project.template.html");
 const PROJECTS_TEMPLATE_PATH = path.join(ROOT, "templates", "projects.template.html");
+const PROFILE_TEMPLATE_PATH = path.join(ROOT, "templates", "profile.template.html");
 const OUTPUT_INDEX_PATH = path.join(ROOT, "index.html");
 const OUTPUT_PROJECTS_DIR = path.join(ROOT, "projects");
 const OUTPUT_PROJECTS_INDEX_PATH = path.join(OUTPUT_PROJECTS_DIR, "index.html");
+const OUTPUT_PROFILE_DIR = path.join(ROOT, "profile");
+const OUTPUT_PROFILE_INDEX_PATH = path.join(OUTPUT_PROFILE_DIR, "index.html");
 
 const DETAIL_SECTION_CONFIG = [
   { key: "overview", title: "概要" },
@@ -159,6 +162,27 @@ function validateContent(content) {
   ["title", "description", "canonicalBase", "ogImageDefault", "profileImage"].forEach((field) => {
     assert(toText(site[field]).length > 0, `site.${field} is required.`);
   });
+  assert(site.profile && typeof site.profile === "object", "site.profile is required.");
+  assert(toDescriptionLines(site.profile.description).length > 0, "site.profile.description is required.");
+  if (site.profile.skills !== undefined) {
+    assert(Array.isArray(site.profile.skills), "site.profile.skills must be an array.");
+    site.profile.skills.forEach((item, index) => {
+      assert(toText(item).length > 0, `site.profile.skills[${index}] must not be empty.`);
+    });
+  }
+  if (site.profile.likes !== undefined) {
+    assert(Array.isArray(site.profile.likes), "site.profile.likes must be an array.");
+    site.profile.likes.forEach((item, index) => {
+      assert(toText(item).length > 0, `site.profile.likes[${index}] must not be empty.`);
+    });
+  }
+  assert(Array.isArray(site.profile.career), "site.profile.career must be an array.");
+  assert(site.profile.career.length > 0, "site.profile.career must contain at least one item.");
+  site.profile.career.forEach((item, index) => {
+    assert(item && typeof item === "object", `site.profile.career[${index}] must be an object.`);
+    assert(toText(item.period).length > 0, `site.profile.career[${index}].period is required.`);
+    assert(toText(item.title).length > 0, `site.profile.career[${index}].title is required.`);
+  });
   assert(Array.isArray(site.leadBullets), "site.leadBullets must be an array.");
   assert(site.leadBullets.length > 0, "site.leadBullets must contain at least one item.");
   site.leadBullets.forEach((item, index) => {
@@ -228,11 +252,17 @@ function validateContent(content) {
     assert(Array.isArray(project.facts), `${pointer}.facts must be an array.`);
     assert(project.facts.length >= 2 && project.facts.length <= 4, `${pointer}.facts must contain 2 to 4 items.`);
 
+    const hasCustomDetailSections = project.detailSections !== undefined;
+
     assert(Array.isArray(project.screens), `${pointer}.screens must be an array.`);
-    assert(project.screens.length >= 1, `${pointer}.screens must contain at least one item.`);
+    if (!hasCustomDetailSections) {
+      assert(project.screens.length >= 1, `${pointer}.screens must contain at least one item.`);
+    }
 
     assert(Array.isArray(project.contrib), `${pointer}.contrib must be an array.`);
-    assert(project.contrib.length >= 5 && project.contrib.length <= 8, `${pointer}.contrib should contain 5 to 8 items.`);
+    if (!hasCustomDetailSections) {
+      assert(project.contrib.length >= 5 && project.contrib.length <= 8, `${pointer}.contrib should contain 5 to 8 items.`);
+    }
 
     if (project.designNotes !== undefined) {
       assert(Array.isArray(project.designNotes), `${pointer}.designNotes must be an array when provided.`);
@@ -260,20 +290,50 @@ function validateContent(content) {
     }
 
     if (project.detailSections !== undefined) {
-      assert(project.detailSections && typeof project.detailSections === "object", `${pointer}.detailSections must be an object when provided.`);
-      DETAIL_SECTION_CONFIG.forEach((sectionConfig) => {
-        const sectionValue = project.detailSections[sectionConfig.key];
-        if (sectionValue === undefined) {
-          return;
-        }
-        const sectionPointer = `${pointer}.detailSections.${sectionConfig.key}`;
-        assert(sectionValue && typeof sectionValue === "object", `${sectionPointer} must be an object.`);
-        assert(sectionValue.body !== undefined, `${sectionPointer}.body is required.`);
-        if (sectionValue.image !== undefined) {
-          assert(sectionValue.image && typeof sectionValue.image === "object", `${sectionPointer}.image must be an object.`);
-          assert(toText(sectionValue.image.src).length > 0, `${sectionPointer}.image.src is required.`);
-        }
-      });
+      if (Array.isArray(project.detailSections)) {
+        project.detailSections.forEach((section, sectionIndex) => {
+          const sectionPointer = `${pointer}.detailSections[${sectionIndex}]`;
+          assert(section && typeof section === "object", `${sectionPointer} must be an object.`);
+          assert(toText(section.heading).length > 0, `${sectionPointer}.heading is required.`);
+
+          const images = section.images !== undefined ? section.images : section.image !== undefined ? [section.image] : [];
+          const hasBody = section.body !== undefined && (Array.isArray(section.body) ? section.body.length > 0 : toText(section.body).length > 0);
+          assert(hasBody || images.length > 0, `${sectionPointer} requires body or images.`);
+
+          if (section.images !== undefined) {
+            assert(Array.isArray(section.images), `${sectionPointer}.images must be an array when provided.`);
+          }
+
+          images.forEach((image, imageIndex) => {
+            const imagePointer = `${sectionPointer}.images[${imageIndex}]`;
+            assert(image && typeof image === "object", `${imagePointer} must be an object.`);
+            assert(toText(image.src).length > 0, `${imagePointer}.src is required.`);
+          });
+        });
+      } else {
+        assert(project.detailSections && typeof project.detailSections === "object", `${pointer}.detailSections must be an object when provided.`);
+        DETAIL_SECTION_CONFIG.forEach((sectionConfig) => {
+          const sectionValue = project.detailSections[sectionConfig.key];
+          if (sectionValue === undefined) {
+            return;
+          }
+          const sectionPointer = `${pointer}.detailSections.${sectionConfig.key}`;
+          assert(sectionValue && typeof sectionValue === "object", `${sectionPointer} must be an object.`);
+          assert(sectionValue.body !== undefined, `${sectionPointer}.body is required.`);
+          if (sectionValue.image !== undefined) {
+            assert(sectionValue.image && typeof sectionValue.image === "object", `${sectionPointer}.image must be an object.`);
+            assert(toText(sectionValue.image.src).length > 0, `${sectionPointer}.image.src is required.`);
+          }
+          if (sectionValue.images !== undefined) {
+            assert(Array.isArray(sectionValue.images), `${sectionPointer}.images must be an array when provided.`);
+            sectionValue.images.forEach((image, imageIndex) => {
+              const imagePointer = `${sectionPointer}.images[${imageIndex}]`;
+              assert(image && typeof image === "object", `${imagePointer} must be an object.`);
+              assert(toText(image.src).length > 0, `${imagePointer}.src is required.`);
+            });
+          }
+        });
+      }
     }
   });
 }
@@ -413,6 +473,46 @@ function buildProjectsIndexJsonLd(context, homeCanonical, projectsCanonical, pro
   };
 }
 
+function buildProfileJsonLd(context, homeCanonical, profileCanonical, site, basePath) {
+  const profileDescription = toDescriptionLines(site.profile.description).join(" ");
+  const sameAs = Array.isArray(site.snsLinks)
+    ? site.snsLinks
+        .map((item) => toText(item.url))
+        .filter((url) => /^https?:\/\//i.test(url))
+    : [];
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        name: context.personName,
+        alternateName: context.personSubName || undefined,
+        description: profileDescription,
+        url: profileCanonical,
+        image: toAbsoluteUrl(context.canonicalBase, withBasePath(basePath, site.profileImage)),
+        sameAs
+      },
+      {
+        "@type": "WebSite",
+        name: context.siteTitle,
+        description: context.siteDescription,
+        url: homeCanonical
+      },
+      {
+        "@type": "AboutPage",
+        name: `${context.personName} Profile`,
+        description: truncate(profileDescription, 160),
+        url: profileCanonical,
+        about: {
+          "@type": "Person",
+          name: context.personName
+        }
+      }
+    ]
+  };
+}
+
 function buildSnsCards(site, context) {
   return site.snsLinks
     .map((item) => {
@@ -529,6 +629,29 @@ function pickScreen(project, index) {
   return screens[index] || null;
 }
 
+function normalizeSectionImage(image) {
+  return {
+    src: toText(image.src),
+    alt: toText(image.alt),
+    aspect: toText(image.aspect),
+    fit: toText(image.fit)
+  };
+}
+
+function normalizeSectionImages(value) {
+  if (Array.isArray(value)) {
+    return value
+      .filter((image) => image && toText(image.src).length > 0)
+      .map((image) => normalizeSectionImage(image));
+  }
+
+  if (value && typeof value === "object" && toText(value.src).length > 0) {
+    return [normalizeSectionImage(value)];
+  }
+
+  return [];
+}
+
 function toDescriptionLines(value) {
   if (Array.isArray(value)) {
     return value.map((item) => toText(item)).filter(Boolean);
@@ -548,16 +671,13 @@ function toDescriptionLines(value) {
 function buildDescriptionBodyMarkup(value) {
   const lines = toDescriptionLines(value);
   if (lines.length === 0) {
-    return '<p class="description-body">-</p>';
-  }
-  if (lines.length === 1) {
-    return `<p class="description-body">${escapeHtml(lines[0])}</p>`;
+    return '<div class="description-body-group"><p class="description-body">-</p></div>';
   }
 
   return [
-    '<ul class="description-list">',
-    lines.map((line) => `  <li>${escapeHtml(line)}</li>`).join("\n"),
-    "</ul>"
+    '<div class="description-body-group">',
+    lines.map((line) => `  <p class="description-body">${escapeHtml(line)}</p>`).join("\n"),
+    "</div>"
   ].join("\n");
 }
 
@@ -574,23 +694,23 @@ function buildImpactFallback(project) {
 }
 
 function normalizeDetailSections(project) {
+  if (Array.isArray(project.detailSections)) {
+    return project.detailSections.map((section, index) => ({
+      title: toText(section.heading) || `Section ${index + 1}`,
+      body: section.body,
+      images: normalizeSectionImages(section.images !== undefined ? section.images : section.image)
+    }));
+  }
+
   const customSections = project.detailSections && typeof project.detailSections === "object" ? project.detailSections : null;
   if (customSections) {
     return DETAIL_SECTION_CONFIG.map((sectionConfig) => {
       const sectionValue = customSections[sectionConfig.key] || {};
-      const imageValue = sectionValue.image && typeof sectionValue.image === "object" ? sectionValue.image : null;
 
       return {
-        title: sectionConfig.title,
+        title: toText(sectionValue.heading) || sectionConfig.title,
         body: sectionValue.body,
-        image: imageValue
-          ? {
-              src: toText(imageValue.src),
-              alt: toText(imageValue.alt),
-              aspect: toText(imageValue.aspect),
-              fit: toText(imageValue.fit)
-            }
-          : null
+        images: normalizeSectionImages(sectionValue.images !== undefined ? sectionValue.images : sectionValue.image)
       };
     });
   }
@@ -602,17 +722,17 @@ function normalizeDetailSections(project) {
     {
       title: "概要",
       body: project.summary,
-      image: pickScreen(project, 0)
+      images: normalizeSectionImages(pickScreen(project, 0))
     },
     {
       title: "背景",
       body: contrib.slice(0, 2),
-      image: pickScreen(project, 1)
+      images: normalizeSectionImages(pickScreen(project, 1))
     },
     {
       title: "体験設計",
       body: contrib.slice(2, 4),
-      image: pickScreen(project, 2)
+      images: normalizeSectionImages(pickScreen(project, 2))
     },
     {
       title: "デザインアプローチ",
@@ -624,49 +744,47 @@ function normalizeDetailSections(project) {
               return heading && body ? `${heading}: ${body}` : heading || body;
             }).filter(Boolean)
           : contrib.slice(1, 4),
-      image: pickScreen(project, 3)
+      images: normalizeSectionImages(pickScreen(project, 3))
     },
     {
       title: "効果",
       body: buildImpactFallback(project),
-      image: pickScreen(project, 4)
+      images: normalizeSectionImages(pickScreen(project, 4))
     }
   ];
 }
 
 function buildDescriptionSections(project, context) {
   return normalizeDetailSections(project)
-    .filter((section) => toDescriptionLines(section.body).length > 0 || (section.image && toText(section.image.src)))
+    .filter((section) => toDescriptionLines(section.body).length > 0 || (Array.isArray(section.images) && section.images.length > 0))
     .map((section, index) => {
       const copyMarkup = [
         '<div class="description-item__copy">',
-        `  <h3 class="description-subtitle">${escapeHtml(section.title)}</h3>`,
+        `  <h2 class="description-subtitle">${escapeHtml(section.title)}</h2>`,
         `  ${buildDescriptionBodyMarkup(section.body)}`,
         "</div>"
       ].join("\n");
 
-      const hasImage = section.image && toText(section.image.src);
-      const mediaMarkup = hasImage
+      const images = Array.isArray(section.images) ? section.images : [];
+      const mediaMarkup = images.length
         ? [
-            '<figure class="description-item__media">',
-            `  <img src="${escapeAttr(withBasePath(context.basePath, section.image.src))}" alt="${escapeAttr(toText(section.image.alt) || `${project.title} ${section.title}`)}" loading="lazy" decoding="async" style="--aspect:${escapeAttr(normalizeAspect(section.image.aspect))};--fit:${escapeAttr(toText(section.image.fit) === "contain" ? "contain" : "cover")};" />`,
-            "</figure>"
+            '<div class="description-item__media-group">',
+            images
+              .map((image, imageIndex) => {
+                return [
+                  '  <figure class="description-item__media">',
+                  `    <img src="${escapeAttr(withBasePath(context.basePath, image.src))}" alt="${escapeAttr(toText(image.alt) || `${project.title} ${section.title} ${imageIndex + 1}`)}" loading="lazy" decoding="async" style="--aspect:${escapeAttr(normalizeAspect(image.aspect))};--fit:${escapeAttr(toText(image.fit) === "contain" ? "contain" : "cover")};" />`,
+                  "  </figure>"
+                ].join("\n");
+              })
+              .join("\n"),
+            "</div>"
           ].join("\n")
         : "";
 
-      const className = [
-        "description-item",
-        hasImage ? "description-item--with-media" : "",
-        hasImage && index % 2 === 1 ? "description-item--reverse" : ""
-      ]
-        .filter(Boolean)
-        .join(" ");
-
-      const content = hasImage && index % 2 === 1 ? [mediaMarkup, copyMarkup] : [copyMarkup, mediaMarkup];
-
       return [
-        `<article class="${className}">`,
-        content.filter(Boolean).join("\n"),
+        '<article class="description-item">',
+        [copyMarkup, mediaMarkup].filter(Boolean).join("\n"),
         "</article>"
       ].join("\n");
     })
@@ -800,7 +918,7 @@ function buildProjectPage(project, index, projects, template, context) {
   const projectPath = withBasePath(context.basePath, `/projects/${project.slug}/`);
   const homePath = withBasePath(context.basePath, "/");
   const projectsPath = withBasePath(context.basePath, "/projects/");
-  const profilePath = `${homePath}#profile`;
+  const profilePath = withBasePath(context.basePath, "/profile/");
   const canonicalUrl = toAbsoluteUrl(context.canonicalBase, projectPath);
   const ogImageUrl = toAbsoluteUrl(context.canonicalBase, withBasePath(context.basePath, project.heroImage));
   const serviceValue = resolveServiceLabel(project);
@@ -837,6 +955,59 @@ function buildProjectPage(project, index, projects, template, context) {
   });
 }
 
+function buildProfileDescriptionMarkup(value) {
+  const paragraphs = toDescriptionLines(value);
+  if (paragraphs.length === 0) {
+    return '<p class="profile-description__body">-</p>';
+  }
+
+  return paragraphs.map((paragraph) => `<p class="profile-description__body">${escapeHtml(paragraph)}</p>`).join("\n");
+}
+
+function buildCareerItems(careerItems) {
+  return careerItems
+    .map((item) => {
+      return [
+        '<article class="career-item">',
+        `  <p class="career-item__period">${escapeHtml(item.period)}</p>`,
+        `  <p class="career-item__title">${escapeHtml(item.title)}</p>`,
+        "</article>"
+      ].join("\n");
+    })
+    .join("\n");
+}
+
+function buildProfileInlineText(items) {
+  const normalized = Array.isArray(items) ? items.map((item) => toText(item)).filter(Boolean) : [];
+  const text = normalized.length > 0 ? normalized.join(" / ") : "-";
+  return `<p class="profile-inline-text">${escapeHtml(text)}</p>`;
+}
+
+function buildProfileSpeakingItems(projects, context) {
+  const items = sortByDateDescThenOrderAsc(
+    projects.filter((project) => toText(project.section) === "Speaking")
+  );
+
+  if (items.length === 0) {
+    return '<p class="profile-empty">-</p>';
+  }
+
+  return items
+    .map((project) => {
+      const href = withBasePath(context.basePath, `/projects/${project.slug}/`);
+      return [
+        '<article class="profile-link-item">',
+        `  <p class="profile-link-item__label">${escapeHtml(project.date)}</p>`,
+        '  <div class="profile-link-item__body">',
+        `    <a class="inline-link" href="${escapeAttr(href)}">${escapeHtml(project.title)}</a>`,
+        `    <p class="profile-link-item__note">${escapeHtml(project.subtitle)}</p>`,
+        "  </div>",
+        "</article>"
+      ].join("\n");
+    })
+    .join("\n");
+}
+
 function buildSite() {
   const content = readJson(CONTENT_PATH);
   validateContent(content);
@@ -861,6 +1032,7 @@ function buildSite() {
   const indexTemplate = readTemplate(INDEX_TEMPLATE_PATH);
   const projectTemplate = readTemplate(PROJECT_TEMPLATE_PATH);
   const projectsTemplate = readTemplate(PROJECTS_TEMPLATE_PATH);
+  const profileTemplate = readTemplate(PROFILE_TEMPLATE_PATH);
 
   const featuredProjectSections = buildProjectSections(featuredProjects, context, sectionOrder);
   const allProjectSections = buildProjectSections(projects, context, sectionOrder);
@@ -868,12 +1040,15 @@ function buildSite() {
   const siteLeadBullets = site.leadBullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n");
   const homePath = withBasePath(basePath, "/");
   const projectsPath = withBasePath(basePath, "/projects/");
-  const profilePath = `${homePath}#profile`;
+  const profilePath = withBasePath(basePath, "/profile/");
   const homeCanonical = toAbsoluteUrl(canonicalBase, homePath);
   const projectsCanonical = toAbsoluteUrl(canonicalBase, projectsPath);
+  const profileCanonical = toAbsoluteUrl(canonicalBase, profilePath);
+  const profileDescription = toDescriptionLines(site.profile.description).join(" ");
   const defaultOgImage = toAbsoluteUrl(canonicalBase, withBasePath(basePath, site.ogImageDefault));
   const homeMetaDescription = truncate(context.siteDescription, 160);
   const projectsMetaDescription = truncate(`All works by ${context.personName}.`, 160);
+  const profileMetaDescription = truncate(profileDescription, 160);
   const showMoreWorks = projects.length > featuredProjects.length;
   const moreWorksSection = showMoreWorks
     ? [
@@ -885,6 +1060,7 @@ function buildSite() {
 
   const indexJsonLd = buildIndexJsonLd(context, homeCanonical);
   const projectsJsonLd = buildProjectsIndexJsonLd(context, homeCanonical, projectsCanonical, projects, basePath);
+  const profileJsonLd = buildProfileJsonLd(context, homeCanonical, profileCanonical, site, basePath);
 
   const personSubNameMarkup = context.personSubName
     ? `<p class="masthead-subname">${escapeHtml(context.personSubName)}</p>`
@@ -933,11 +1109,43 @@ function buildSite() {
     PROJECT_SECTIONS: allProjectSections
   });
 
+  const profileTitle = `Profile | ${context.siteTitle}`;
+  const profileSkills = buildProfileInlineText(site.profile.skills);
+  const profileLikes = buildProfileInlineText(site.profile.likes);
+  const profileSpeakingItems = buildProfileSpeakingItems(projects, context);
+  const profileHtml = renderTemplate(profileTemplate, {
+    PAGE_TITLE: escapeHtml(profileTitle),
+    META_DESCRIPTION: escapeAttr(profileMetaDescription),
+    CANONICAL_URL: escapeAttr(profileCanonical),
+    OG_TITLE: escapeAttr(profileTitle),
+    OG_DESCRIPTION: escapeAttr(profileMetaDescription),
+    OG_IMAGE: escapeAttr(toAbsoluteUrl(canonicalBase, withBasePath(basePath, site.profileImage))),
+    OG_URL: escapeAttr(profileCanonical),
+    ASSET_PREFIX: basePath,
+    JSON_LD: safeJsonLd(profileJsonLd),
+    HOME_URL: escapeAttr(homePath),
+    WORK_URL: escapeAttr(projectsPath),
+    PROFILE_URL: escapeAttr(profilePath),
+    PERSON_NAME: escapeHtml(context.personName),
+    PERSON_SUBNAME: personSubNameMarkup,
+    PROFILE_IMAGE: escapeAttr(withBasePath(basePath, site.profileImage)),
+    PROFILE_DESCRIPTION: buildProfileDescriptionMarkup(site.profile.description),
+    CAREER_ITEMS: buildCareerItems(site.profile.career),
+    PROFILE_SKILLS: profileSkills,
+    PROFILE_LIKES: profileLikes,
+    SPEAKING_ITEMS: profileSpeakingItems,
+    PROFILE_SNS_CARDS: snsCards
+  });
+
   fs.writeFileSync(OUTPUT_INDEX_PATH, indexHtml, "utf8");
 
   fs.rmSync(OUTPUT_PROJECTS_DIR, { recursive: true, force: true });
   fs.mkdirSync(OUTPUT_PROJECTS_DIR, { recursive: true });
   fs.writeFileSync(OUTPUT_PROJECTS_INDEX_PATH, projectsHtml, "utf8");
+
+  fs.rmSync(OUTPUT_PROFILE_DIR, { recursive: true, force: true });
+  fs.mkdirSync(OUTPUT_PROFILE_DIR, { recursive: true });
+  fs.writeFileSync(OUTPUT_PROFILE_INDEX_PATH, profileHtml, "utf8");
 
   projects.forEach((project, index) => {
     const pageHtml = buildProjectPage(project, index, projects, projectTemplate, context);
@@ -948,6 +1156,7 @@ function buildSite() {
 
   console.log(`Built ${projects.length} projects.`);
   console.log(`- ${path.relative(ROOT, OUTPUT_INDEX_PATH)}`);
+  console.log(`- ${path.relative(ROOT, OUTPUT_PROFILE_INDEX_PATH)}`);
   console.log(`- ${path.relative(ROOT, OUTPUT_PROJECTS_INDEX_PATH)}`);
   projects.forEach((project) => {
     console.log(`- projects/${project.slug}/index.html`);

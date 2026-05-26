@@ -675,20 +675,22 @@ h3 {
 }
 
 .detail-module__row--meta {
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: var(--space-4);
+  grid-template-columns: 1fr;
+  gap: var(--space-1);
   align-items: start;
 }
 
 .detail-module__meta-item {
   display: grid;
-  gap: var(--space-2);
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: center;
   min-width: 0;
 }
 
 .detail-module__row dt {
   margin: 0;
-  font-size: 0.78rem;
+  width: 88px;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--color-muted);
@@ -701,7 +703,8 @@ h3 {
 
 .detail-meta-list {
   margin: 0;
-  padding-left: 1.1rem;
+  padding: 0;
+  list-style: none;
   display: grid;
   gap: var(--space-2);
 }
@@ -734,6 +737,11 @@ h3 {
   align-content: start;
 }
 
+.description-item__media-group {
+  display: grid;
+  gap: clamp(16px, 2.4vw, 24px);
+}
+
 .description-item__media {
   margin: 0;
   overflow: hidden;
@@ -745,19 +753,6 @@ h3 {
   display: block;
   object-fit: var(--fit, cover);
   aspect-ratio: var(--aspect, 16 / 10);
-}
-
-.description-list {
-  margin: 0;
-  padding-left: 1.1rem;
-  display: grid;
-  gap: var(--space-2);
-  color: var(--color-muted);
-}
-
-.description-list li {
-  margin: 0;
-  line-height: 1.9;
 }
 
 .description-block {
@@ -794,10 +789,15 @@ h3 {
   font-size: clamp(1rem, 2.1vw, 1.2rem);
 }
 
+.description-body-group {
+  display: grid;
+  gap: var(--space-1);
+}
+
 .description-body {
   margin: 0;
   color: var(--color-muted);
-  line-height: 1.95;
+  line-height: 1.6;
   white-space: pre-line;
 }
 
@@ -979,6 +979,123 @@ h3 {
   padding: clamp(16px, 3vw, 24px);
 }
 
+.profile-layout {
+  width: min(100%, 750px);
+  margin-inline: auto;
+  display: grid;
+  gap: var(--space-20);
+}
+
+.profile-section {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.profile-section__body {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+
+.profile-page-title {
+  margin: 0;
+  font-size: clamp(1.2rem, 3.0vw, 1.75rem);
+  line-height: 1.2;
+}
+
+.profile-page-copy {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.profile-description {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.profile-description__body {
+  margin: 0;
+  line-height: 1.8;
+}
+
+.profile-inline-text {
+  margin: 0;
+  line-height: 1.8;
+  color: var(--color-muted);
+}
+
+.profile-section__title {
+  margin: 0;
+  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+  line-height: 1.2;
+}
+
+.career-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.profile-link-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.career-item {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.profile-link-item {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.career-item__period,
+.career-item__title,
+.profile-link-item__label,
+.profile-link-item__note {
+  margin: 0;
+}
+
+.career-item__period {
+  color: var(--color-muted);
+  letter-spacing: 0.02em;
+}
+
+.career-item__title {
+  line-height: 1.6;
+}
+
+.profile-link-item__label {
+  color: var(--color-muted);
+  letter-spacing: 0.02em;
+}
+
+.profile-link-item__body {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.profile-link-item__note {
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.profile-empty {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.profile-sns-links {
+  margin-bottom: 0;
+}
+
 .site-footer {
   margin-top: var(--space-8);
   color: var(--color-muted);
@@ -997,11 +1114,6 @@ h3 {
 @media (min-width: 720px) {
   .description-flow {
     gap: clamp(40px, 4vw, 64px);
-  }
-
-  .description-item--with-media {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    align-items: start;
   }
 
   .hero {
@@ -1117,6 +1229,17 @@ h3 {
   .site-shell:not(.site-shell--project) .bento-card {
     grid-column: span 1;
     grid-row: span 1;
+  }
+
+  .career-item {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    align-items: start;
+  }
+
+  .profile-link-item {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
   }
 }
 
