@@ -298,9 +298,14 @@ function validateContent(content) {
           assert(section && typeof section === "object", `${sectionPointer} must be an object.`);
           assert(toText(section.heading).length > 0, `${sectionPointer}.heading is required.`);
 
+          if (section.blocks !== undefined) {
+            validateDetailContentBlocks(section.blocks, sectionPointer);
+          }
+
           const images = section.images !== undefined ? section.images : section.image !== undefined ? [section.image] : [];
-          const hasBody = section.body !== undefined && (Array.isArray(section.body) ? section.body.length > 0 : toText(section.body).length > 0);
-          assert(hasBody || images.length > 0, `${sectionPointer} requires body or images.`);
+          const hasBody = toDescriptionLines(section.body).length > 0;
+          const hasBlocks = Array.isArray(section.blocks) && section.blocks.length > 0;
+          assert(hasBlocks || hasBody || images.length > 0, `${sectionPointer} requires body, images, or blocks.`);
 
           if (section.images !== undefined) {
             assert(Array.isArray(section.images), `${sectionPointer}.images must be an array when provided.`);
@@ -321,7 +326,13 @@ function validateContent(content) {
           }
           const sectionPointer = `${pointer}.detailSections.${sectionConfig.key}`;
           assert(sectionValue && typeof sectionValue === "object", `${sectionPointer} must be an object.`);
-          assert(sectionValue.body !== undefined, `${sectionPointer}.body is required.`);
+          if (sectionValue.blocks !== undefined) {
+            validateDetailContentBlocks(sectionValue.blocks, sectionPointer);
+          }
+          const hasBody = toDescriptionLines(sectionValue.body).length > 0;
+          const images = sectionValue.images !== undefined ? sectionValue.images : sectionValue.image !== undefined ? [sectionValue.image] : [];
+          const hasBlocks = Array.isArray(sectionValue.blocks) && sectionValue.blocks.length > 0;
+          assert(hasBlocks || hasBody || images.length > 0, `${sectionPointer} requires body, images, or blocks.`);
           if (sectionValue.image !== undefined) {
             assert(sectionValue.image && typeof sectionValue.image === "object", `${sectionPointer}.image must be an object.`);
             assert(toText(sectionValue.image.src).length > 0, `${sectionPointer}.image.src is required.`);
@@ -635,6 +646,7 @@ function normalizeSectionImage(image) {
   return {
     src: toText(image.src),
     alt: toText(image.alt),
+    caption: toText(image.caption),
     aspect: toText(image.aspect),
     fit: toText(image.fit)
   };
@@ -652,6 +664,43 @@ function normalizeSectionImages(value) {
   }
 
   return [];
+}
+
+function validateDetailContentBlocks(blocks, pointer) {
+  assert(Array.isArray(blocks), `${pointer}.blocks must be an array when provided.`);
+
+  blocks.forEach((block, blockIndex) => {
+    const blockPointer = `${pointer}.blocks[${blockIndex}]`;
+    assert(block && typeof block === "object", `${blockPointer} must be an object.`);
+
+    const type = toText(block.type).toLowerCase();
+    assert(type === "image" || type === "text", `${blockPointer}.type must be "image" or "text".`);
+
+    if (type === "image") {
+      assert(toText(block.src).length > 0, `${blockPointer}.src is required for image blocks.`);
+    }
+
+    if (type === "text") {
+      assert(toDescriptionLines(block.body).length > 0, `${blockPointer}.body is required for text blocks.`);
+    }
+  });
+}
+
+function normalizeDetailBlock(block) {
+  const type = toText(block.type).toLowerCase();
+
+  if (type === "image") {
+    return {
+      type: "image",
+      image: normalizeSectionImage(block)
+    };
+  }
+
+  return {
+    type: "text",
+    title: toText(block.heading) || toText(block.subtitle),
+    body: block.body
+  };
 }
 
 function toDescriptionLines(value) {
@@ -695,12 +744,35 @@ function buildImpactFallback(project) {
   return (Array.isArray(project.contrib) ? project.contrib : []).slice(4);
 }
 
+function normalizeSectionBlocks(section) {
+  if (Array.isArray(section.blocks) && section.blocks.length > 0) {
+    return section.blocks.map((block) => normalizeDetailBlock(block));
+  }
+
+  const blocks = [];
+
+  if (toDescriptionLines(section.body).length > 0) {
+    blocks.push({
+      type: "text",
+      body: section.body
+    });
+  }
+
+  normalizeSectionImages(section.images !== undefined ? section.images : section.image).forEach((image) => {
+    blocks.push({
+      type: "image",
+      image
+    });
+  });
+
+  return blocks;
+}
+
 function normalizeDetailSections(project) {
   if (Array.isArray(project.detailSections)) {
     return project.detailSections.map((section, index) => ({
       title: toText(section.heading) || `Section ${index + 1}`,
-      body: section.body,
-      images: normalizeSectionImages(section.images !== undefined ? section.images : section.image)
+      blocks: normalizeSectionBlocks(section)
     }));
   }
 
@@ -711,8 +783,7 @@ function normalizeDetailSections(project) {
 
       return {
         title: toText(sectionValue.heading) || sectionConfig.title,
-        body: sectionValue.body,
-        images: normalizeSectionImages(sectionValue.images !== undefined ? sectionValue.images : sectionValue.image)
+        blocks: normalizeSectionBlocks(sectionValue)
       };
     });
   }
@@ -723,70 +794,89 @@ function normalizeDetailSections(project) {
   return [
     {
       title: "概要",
-      body: project.summary,
-      images: normalizeSectionImages(pickScreen(project, 0))
+      blocks: normalizeSectionBlocks({
+        body: project.summary,
+        image: pickScreen(project, 0)
+      })
     },
     {
       title: "背景",
-      body: contrib.slice(0, 2),
-      images: normalizeSectionImages(pickScreen(project, 1))
+      blocks: normalizeSectionBlocks({
+        body: contrib.slice(0, 2),
+        image: pickScreen(project, 1)
+      })
     },
     {
       title: "体験設計",
-      body: contrib.slice(2, 4),
-      images: normalizeSectionImages(pickScreen(project, 2))
+      blocks: normalizeSectionBlocks({
+        body: contrib.slice(2, 4),
+        image: pickScreen(project, 2)
+      })
     },
     {
       title: "デザインアプローチ",
-      body:
-        designNotes.length > 0
-          ? designNotes.map((note) => {
-              const heading = toText(note.heading);
-              const body = toText(note.body);
-              return heading && body ? `${heading}: ${body}` : heading || body;
-            }).filter(Boolean)
-          : contrib.slice(1, 4),
-      images: normalizeSectionImages(pickScreen(project, 3))
+      blocks: normalizeSectionBlocks({
+        body:
+          designNotes.length > 0
+            ? designNotes.map((note) => {
+                const heading = toText(note.heading);
+                const body = toText(note.body);
+                return heading && body ? `${heading}: ${body}` : heading || body;
+              }).filter(Boolean)
+            : contrib.slice(1, 4),
+        image: pickScreen(project, 3)
+      })
     },
     {
       title: "効果",
-      body: buildImpactFallback(project),
-      images: normalizeSectionImages(pickScreen(project, 4))
+      blocks: normalizeSectionBlocks({
+        body: buildImpactFallback(project),
+        image: pickScreen(project, 4)
+      })
     }
   ];
 }
 
+function buildDescriptionBlockMarkup(block, project, sectionTitle, context, blockIndex) {
+  if (block.type === "image" && block.image) {
+    const image = block.image;
+
+    return [
+      '<figure class="description-block description-block--image description-item__media">',
+      `  <img src="${escapeAttr(withBasePath(context.basePath, image.src))}" alt="${escapeAttr(toText(image.alt) || `${project.title} ${sectionTitle} ${blockIndex + 1}`)}" loading="lazy" decoding="async" style="--aspect:${escapeAttr(normalizeAspect(image.aspect))};--fit:${escapeAttr(toText(image.fit) === "contain" ? "contain" : "cover")};" />`,
+      toText(image.caption).length > 0 ? `  <figcaption class="description-image__caption">${escapeHtml(image.caption)}</figcaption>` : "",
+      "</figure>"
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
+
+  return [
+    '<section class="description-block description-block--text">',
+    block.title ? `  <h3 class="description-block__title">${escapeHtml(block.title)}</h3>` : "",
+    `  ${buildDescriptionBodyMarkup(block.body)}`,
+    "</section>"
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
 function buildDescriptionSections(project, context) {
   return normalizeDetailSections(project)
-    .filter((section) => toDescriptionLines(section.body).length > 0 || (Array.isArray(section.images) && section.images.length > 0))
-    .map((section, index) => {
-      const copyMarkup = [
-        '<div class="description-item__copy">',
-        `  <h2 class="description-subtitle">${escapeHtml(section.title)}</h2>`,
-        `  ${buildDescriptionBodyMarkup(section.body)}`,
+    .filter((section) => Array.isArray(section.blocks) && section.blocks.length > 0)
+    .map((section) => {
+      const contentMarkup = [
+        '<div class="description-item__content">',
+        section.blocks.map((block, blockIndex) => `  ${buildDescriptionBlockMarkup(block, project, section.title, context, blockIndex)}`).join("\n"),
         "</div>"
       ].join("\n");
 
-      const images = Array.isArray(section.images) ? section.images : [];
-      const mediaMarkup = images.length
-        ? [
-            '<div class="description-item__media-group">',
-            images
-              .map((image, imageIndex) => {
-                return [
-                  '  <figure class="description-item__media">',
-                  `    <img src="${escapeAttr(withBasePath(context.basePath, image.src))}" alt="${escapeAttr(toText(image.alt) || `${project.title} ${section.title} ${imageIndex + 1}`)}" loading="lazy" decoding="async" style="--aspect:${escapeAttr(normalizeAspect(image.aspect))};--fit:${escapeAttr(toText(image.fit) === "contain" ? "contain" : "cover")};" />`,
-                  "  </figure>"
-                ].join("\n");
-              })
-              .join("\n"),
-            "</div>"
-          ].join("\n")
-        : "";
-
       return [
         '<article class="description-item">',
-        [copyMarkup, mediaMarkup].filter(Boolean).join("\n"),
+        '  <div class="description-item__copy">',
+        `    <h2 class="description-subtitle">${escapeHtml(section.title)}</h2>`,
+        "  </div>",
+        contentMarkup,
         "</article>"
       ].join("\n");
     })
