@@ -2,6 +2,7 @@
   "name": "chshi-portfolio",
   "private": true,
   "scripts": {
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "dev:remote": "node build/dev-remote.js"
   }
 }

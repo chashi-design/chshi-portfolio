@@ -24,10 +24,10 @@
   <body>
     <div class="site-header-shell">
       <header class="site-header">
-        <a class="site-header__home" href="/">Home</a>
+        <a class="site-header__link site-header__home" href="/">Home</a>
         <nav class="site-header__nav" aria-label="Primary">
-          <a href="/projects/">Work</a>
-          <a href="/profile/">About</a>
+          <a class="site-header__link" href="/projects/">Work</a>
+          <a class="site-header__link" href="/profile/">About</a>
           <button class="theme-toggle site-header__theme-toggle" type="button" data-theme-toggle aria-label="ダークモードに切り替え">
             <span data-theme-icon aria-hidden="true">☾</span>
           </button>
@@ -77,62 +77,51 @@
         <section class="description-section" aria-label="Project detail sections">
           <div class="description-flow">
             <article class="description-item">
-<div class="description-item__copy">
-  <h2 class="description-subtitle">概要</h2>
+  <div class="description-item__copy">
+    <h2 class="description-subtitle">プロジェクト概要</h2>
+  </div>
+<div class="description-item__content">
+  <figure class="description-block description-block--image description-item__media">
+  <img src="/assets/img/trainlogapp-screen-1.svg" alt="Yahoo dummy screen 1" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:cover;" />
+  <figcaption class="description-image__caption">Yahoo!カーナビ の全体像を確認するためのメインビジュアル。</figcaption>
+</figure>
+  <section class="description-block description-block--text">
+  <h3 class="description-block__title">取り組みの狙い</h3>
   <div class="description-body-group">
+  <p class="description-body">Yahoo!カーナビ は「ナビ中に音楽操作を可能に」をテーマにした仮の詳細ページです。</p>
   <p class="description-body">Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。</p>
 </div>
-</div>
-<div class="description-item__media-group">
-  <figure class="description-item__media">
-    <img src="/assets/img/trainlogapp-screen-1.svg" alt="Yahoo dummy screen 1" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:cover;" />
-  </figure>
-</div>
-</article>
-<article class="description-item">
-<div class="description-item__copy">
-  <h2 class="description-subtitle">背景</h2>
+</section>
+  <figure class="description-block description-block--image description-item__media">
+  <img src="/assets/img/trainlogapp-screen-2.svg" alt="Yahoo dummy screen 2" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
+  <figcaption class="description-image__caption">Yahoo!カーナビ の画面構成や情報量を確認するためのサンプル。</figcaption>
+</figure>
+  <section class="description-block description-block--text">
+  <h3 class="description-block__title">構成のポイント</h3>
   <div class="description-body-group">
   <p class="description-body">ダミー仮説に基づき情報設計を整理</p>
   <p class="description-body">一覧カードの視線誘導を検証</p>
 </div>
-</div>
-<div class="description-item__media-group">
-  <figure class="description-item__media">
-    <img src="/assets/img/trainlogapp-screen-2.svg" alt="Yahoo dummy screen 2" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
-  </figure>
+</section>
 </div>
 </article>
 <article class="description-item">
-<div class="description-item__copy">
-  <h2 class="description-subtitle">体験設計</h2>
+  <div class="description-item__copy">
+    <h2 class="description-subtitle">体験設計</h2>
+  </div>
+<div class="description-item__content">
+  <section class="description-block description-block--text">
+  <h3 class="description-block__title">検証した観点</h3>
   <div class="description-body-group">
   <p class="description-body">詳細ページの見出し構成を調整</p>
   <p class="description-body">CTA配置の整合性を確認</p>
-</div>
-</div>
-<div class="description-item__media-group">
-  <figure class="description-item__media">
-    <img src="/assets/img/trainlogapp-screen-3.svg" alt="Yahoo dummy screen 3" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:contain;" />
-  </figure>
-</div>
-</article>
-<article class="description-item">
-<div class="description-item__copy">
-  <h2 class="description-subtitle">デザインアプローチ</h2>
-  <div class="description-body-group">
-  <p class="description-body">一覧カードの視線誘導を検証</p>
-  <p class="description-body">詳細ページの見出し構成を調整</p>
-  <p class="description-body">CTA配置の整合性を確認</p>
-</div>
-</div>
-</article>
-<article class="description-item">
-<div class="description-item__copy">
-  <h2 class="description-subtitle">効果</h2>
-  <div class="description-body-group">
   <p class="description-body">検証メモ</p>
 </div>
+</section>
+  <figure class="description-block description-block--image description-item__media">
+  <img src="/assets/img/trainlogapp-screen-3.svg" alt="Yahoo dummy screen 3" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:contain;" />
+  <figcaption class="description-image__caption">Yahoo!カーナビ の詳細な状態や別パターンを確認するための補足画像。</figcaption>
+</figure>
 </div>
 </article>
           </div>

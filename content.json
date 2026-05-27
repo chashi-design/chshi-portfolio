@@ -160,6 +160,66 @@
           "body": "このページはレイアウト検証目的のダミーコンテンツです。"
         }
       ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/web-redesign-2025-screen-1.svg",
+              "alt": "Maply のルート提案画面",
+              "caption": "AIが目的地や移動状況に応じて、次の行動を先回りして提示する想定のメイン画面。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "AIで移動前後の意思決定を軽くする",
+              "body": [
+                "Maply は、移動中の検索、比較、判断をひとつの流れにまとめる次世代地図アプリとして設計したダミーケースです。",
+                "従来の地図アプリが目的地検索を中心にしていたのに対し、ユーザーの予定、現在地、移動手段、混雑情報をもとに、次に必要になりそうな選択肢を提示する体験を想定しています。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/web-redesign-2025-screen-2.svg",
+              "alt": "Maply のスポット比較画面",
+              "caption": "候補地の違いを地図上だけでなく、滞在時間や移動コストの観点でも比較できる構成。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "比較ではなく決定を助けるUI",
+              "body": [
+                "スポット一覧は情報量を増やすだけではなく、ユーザーが選びやすい軸に絞って表示する方針にしました。",
+                "距離、所要時間、混雑度、予定との相性を同じ粒度で見られるようにし、詳細画面に入る前に判断できる状態を目指しています。"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "移動中でも迷わない情報量",
+              "body": [
+                "ナビゲーション中は操作時間が限られるため、重要な情報をカード化し、今見るべき情報だけを前面に出す設計にしています。",
+                "AIの提案は常に主役にせず、ユーザーが自分で判断できる余白を残すことを重視しました。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/web-redesign-2025-screen-3.svg",
+              "alt": "Maply の移動中アシスト画面",
+              "caption": "移動中の状態変化に合わせて、寄り道、休憩、ルート変更などの候補を控えめに提示する想定。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            }
+          ]
+        }
+      ],
       "links": [
         {
           "label": "Dummy Spec",
@@ -247,6 +307,67 @@
           "url": "https://example.com/yahoo-japan-news-experience/memo/v1",
           "note": "検証メモ"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-1.svg",
+              "alt": "Yahoo dummy screen 1",
+              "caption": "Yahoo!カーナビ の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Yahoo!カーナビ は「ディスプレイオーディオの改善」をテーマにした仮の詳細ページです。",
+                "Yahoo! JAPAN向けダミーカード 1。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Yahoo dummy screen 2",
+              "caption": "Yahoo!カーナビ の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミー仮説に基づき情報設計を整理",
+                "一覧カードの視線誘導を検証"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "詳細ページの見出し構成を調整",
+                "CTA配置の整合性を確認",
+                "検証メモ"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-3.svg",
+              "alt": "Yahoo dummy screen 3",
+              "caption": "Yahoo!カーナビ の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
+        }
       ]
     },
     {
@@ -327,6 +448,67 @@
           "label": "Dummy Memo",
           "url": "https://example.com/yahoo-japan-news-experience/memo/v2",
           "note": "検証メモ"
+        }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-1.svg",
+              "alt": "Yahoo dummy screen 1",
+              "caption": "Yahoo!カーナビ の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Yahoo!カーナビ は「10周年を説目にデザインリニューアル」をテーマにした仮の詳細ページです。",
+                "Yahoo! JAPAN向けダミーカード 2。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Yahoo dummy screen 2",
+              "caption": "Yahoo!カーナビ の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミー仮説に基づき情報設計を整理",
+                "一覧カードの視線誘導を検証"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "詳細ページの見出し構成を調整",
+                "CTA配置の整合性を確認",
+                "検証メモ"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-3.svg",
+              "alt": "Yahoo dummy screen 3",
+              "caption": "Yahoo!カーナビ の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
         }
       ]
     },
@@ -409,6 +591,67 @@
           "url": "https://example.com/yahoo-japan-news-experience/memo/v3",
           "note": "検証メモ"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-1.svg",
+              "alt": "Yahoo dummy screen 1",
+              "caption": "Yahoo!乗換案内 の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Yahoo!乗換案内 は「新機能「トレインキャスト」」をテーマにした仮の詳細ページです。",
+                "Yahoo! JAPAN向けダミーカード 3。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Yahoo dummy screen 2",
+              "caption": "Yahoo!乗換案内 の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミー仮説に基づき情報設計を整理",
+                "一覧カードの視線誘導を検証"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "詳細ページの見出し構成を調整",
+                "CTA配置の整合性を確認",
+                "検証メモ"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-3.svg",
+              "alt": "Yahoo dummy screen 3",
+              "caption": "Yahoo!乗換案内 の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
+        }
       ]
     },
     {
@@ -490,6 +733,67 @@
           "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
           "note": "検証メモ"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-1.svg",
+              "alt": "Yahoo dummy screen 1",
+              "caption": "Yahoo! Maps の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Yahoo! Maps は「 オフラインでもハザードマップなどが確認できる「防災モード」」をテーマにした仮の詳細ページです。",
+                "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Yahoo dummy screen 2",
+              "caption": "Yahoo! Maps の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミー仮説に基づき情報設計を整理",
+                "一覧カードの視線誘導を検証"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "詳細ページの見出し構成を調整",
+                "CTA配置の整合性を確認",
+                "検証メモ"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-3.svg",
+              "alt": "Yahoo dummy screen 3",
+              "caption": "Yahoo! Maps の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
+        }
       ]
     },
     {
@@ -563,6 +867,67 @@
           "label": "Dummy Link",
           "url": "https://example.com/others-experiment-lab/link/v1",
           "note": "参考リンク"
+        }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-1.svg",
+              "alt": "Others dummy screen 1",
+              "caption": "Others: UI Experiment (Dummy 1) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Others: UI Experiment (Dummy 1) は「Others / Dummy Subtitle 1」をテーマにした仮の詳細ページです。",
+                "Others向けダミーカード 1。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-2.svg",
+              "alt": "Others dummy screen 2",
+              "caption": "Others: UI Experiment (Dummy 1) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミーコンセプトの表示要件を定義",
+                "カード内余白の見え方を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "画像比率ごとの崩れを検証",
+                "ナビゲーションの動作確認",
+                "参考リンク"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-2.svg",
+              "alt": "Others dummy screen 2",
+              "caption": "Others: UI Experiment (Dummy 1) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
         }
       ]
     },
@@ -638,6 +1003,67 @@
           "url": "https://example.com/others-experiment-lab/link/v2",
           "note": "参考リンク"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-1.svg",
+              "alt": "Others dummy screen 1",
+              "caption": "Others: UI Experiment (Dummy 2) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Others: UI Experiment (Dummy 2) は「Others / Dummy Subtitle 2」をテーマにした仮の詳細ページです。",
+                "Others向けダミーカード 2。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-2.svg",
+              "alt": "Others dummy screen 2",
+              "caption": "Others: UI Experiment (Dummy 2) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミーコンセプトの表示要件を定義",
+                "カード内余白の見え方を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "画像比率ごとの崩れを検証",
+                "ナビゲーションの動作確認",
+                "参考リンク"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-2.svg",
+              "alt": "Others dummy screen 2",
+              "caption": "Others: UI Experiment (Dummy 2) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
+        }
       ]
     },
     {
@@ -711,6 +1137,67 @@
           "label": "Dummy Link",
           "url": "https://example.com/others-experiment-lab/link/v3",
           "note": "参考リンク"
+        }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-1.svg",
+              "alt": "Others dummy screen 1",
+              "caption": "Others: UI Experiment (Dummy 3) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Others: UI Experiment (Dummy 3) は「Others / Dummy Subtitle 3」をテーマにした仮の詳細ページです。",
+                "Others向けダミーカード 3。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-2.svg",
+              "alt": "Others dummy screen 2",
+              "caption": "Others: UI Experiment (Dummy 3) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミーコンセプトの表示要件を定義",
+                "カード内余白の見え方を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "画像比率ごとの崩れを検証",
+                "ナビゲーションの動作確認",
+                "参考リンク"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-2.svg",
+              "alt": "Others dummy screen 2",
+              "caption": "Others: UI Experiment (Dummy 3) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
         }
       ]
     },
@@ -786,6 +1273,67 @@
           "url": "https://example.com/others-experiment-lab/link/v4",
           "note": "参考リンク"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-1.svg",
+              "alt": "Others dummy screen 1",
+              "caption": "Others: UI Experiment (Dummy 4) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Others: UI Experiment (Dummy 4) は「Others / Dummy Subtitle 4」をテーマにした仮の詳細ページです。",
+                "Others向けダミーカード 4。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-2.svg",
+              "alt": "Others dummy screen 2",
+              "caption": "Others: UI Experiment (Dummy 4) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミーコンセプトの表示要件を定義",
+                "カード内余白の見え方を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "画像比率ごとの崩れを検証",
+                "ナビゲーションの動作確認",
+                "参考リンク"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/checkout-lab-ui-screen-2.svg",
+              "alt": "Others dummy screen 2",
+              "caption": "Others: UI Experiment (Dummy 4) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
+        }
       ]
     },
     {
@@ -859,6 +1407,67 @@
           "label": "Dummy Note",
           "url": "https://example.com/independent-production-case/note/v1",
           "note": "制作ノート"
+        }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/og-default.svg",
+              "alt": "Independent dummy screen 1",
+              "caption": "Independent Production Case (Dummy 1) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Independent Production Case (Dummy 1) は「independent production / Dummy Subtitle 1」をテーマにした仮の詳細ページです。",
+                "independent production向けダミーカード 1。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/web-redesign-2025-screen-1.svg",
+              "alt": "Independent dummy screen 2",
+              "caption": "Independent Production Case (Dummy 1) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "個人制作向け表示フォーマットを検証",
+                "カード見出しの可読性を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "1列/2列時の並び順を検証",
+                "詳細ページ構成の整合性を確認",
+                "制作ノート"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/web-redesign-2025-screen-1.svg",
+              "alt": "Independent dummy screen 2",
+              "caption": "Independent Production Case (Dummy 1) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            }
+          ]
         }
       ]
     },
@@ -934,6 +1543,67 @@
           "url": "https://example.com/independent-production-case/note/v2",
           "note": "制作ノート"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/og-default.svg",
+              "alt": "Independent dummy screen 1",
+              "caption": "Independent Production Case (Dummy 2) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Independent Production Case (Dummy 2) は「independent production / Dummy Subtitle 2」をテーマにした仮の詳細ページです。",
+                "independent production向けダミーカード 2。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/web-redesign-2025-screen-1.svg",
+              "alt": "Independent dummy screen 2",
+              "caption": "Independent Production Case (Dummy 2) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "個人制作向け表示フォーマットを検証",
+                "カード見出しの可読性を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "1列/2列時の並び順を検証",
+                "詳細ページ構成の整合性を確認",
+                "制作ノート"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/web-redesign-2025-screen-1.svg",
+              "alt": "Independent dummy screen 2",
+              "caption": "Independent Production Case (Dummy 2) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            }
+          ]
+        }
       ]
     },
     {
@@ -1007,6 +1677,67 @@
           "label": "Dummy Note",
           "url": "https://example.com/independent-production-case/note/v3",
           "note": "制作ノート"
+        }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/og-default.svg",
+              "alt": "Independent dummy screen 1",
+              "caption": "Independent Production Case (Dummy 3) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Independent Production Case (Dummy 3) は「independent production / Dummy Subtitle 3」をテーマにした仮の詳細ページです。",
+                "independent production向けダミーカード 3。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/web-redesign-2025-screen-1.svg",
+              "alt": "Independent dummy screen 2",
+              "caption": "Independent Production Case (Dummy 3) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "個人制作向け表示フォーマットを検証",
+                "カード見出しの可読性を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "1列/2列時の並び順を検証",
+                "詳細ページ構成の整合性を確認",
+                "制作ノート"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/web-redesign-2025-screen-1.svg",
+              "alt": "Independent dummy screen 2",
+              "caption": "Independent Production Case (Dummy 3) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            }
+          ]
         }
       ]
     },
@@ -1082,6 +1813,67 @@
           "url": "https://example.com/independent-production-case/note/v4",
           "note": "制作ノート"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/og-default.svg",
+              "alt": "Independent dummy screen 1",
+              "caption": "Independent Production Case (Dummy 4) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Independent Production Case (Dummy 4) は「independent production / Dummy Subtitle 4」をテーマにした仮の詳細ページです。",
+                "independent production向けダミーカード 4。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/web-redesign-2025-screen-1.svg",
+              "alt": "Independent dummy screen 2",
+              "caption": "Independent Production Case (Dummy 4) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "個人制作向け表示フォーマットを検証",
+                "カード見出しの可読性を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "1列/2列時の並び順を検証",
+                "詳細ページ構成の整合性を確認",
+                "制作ノート"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/web-redesign-2025-screen-1.svg",
+              "alt": "Independent dummy screen 2",
+              "caption": "Independent Production Case (Dummy 4) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            }
+          ]
+        }
       ]
     },
     {
@@ -1155,6 +1947,67 @@
           "label": "Dummy Slide",
           "url": "https://example.com/speaking-session-design/slide/v1",
           "note": "仮スライド"
+        }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-4.svg",
+              "alt": "Speaking dummy screen 1",
+              "caption": "Speaking Session Design (Dummy 1) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Speaking Session Design (Dummy 1) は「Speaking / Dummy Subtitle 1」をテーマにした仮の詳細ページです。",
+                "Speaking向けダミーカード 1。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Speaking dummy screen 2",
+              "caption": "Speaking Session Design (Dummy 1) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "登壇用ページの情報優先度を定義",
+                "ヒーロー領域の見え方を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "セクション見出しの整合性を調整",
+                "詳細ページ導線の動作確認",
+                "仮スライド"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Speaking dummy screen 2",
+              "caption": "Speaking Session Design (Dummy 1) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            }
+          ]
         }
       ]
     },
@@ -1230,6 +2083,67 @@
           "url": "https://example.com/speaking-session-design/slide/v2",
           "note": "仮スライド"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-4.svg",
+              "alt": "Speaking dummy screen 1",
+              "caption": "Speaking Session Design (Dummy 2) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Speaking Session Design (Dummy 2) は「Speaking / Dummy Subtitle 2」をテーマにした仮の詳細ページです。",
+                "Speaking向けダミーカード 2。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Speaking dummy screen 2",
+              "caption": "Speaking Session Design (Dummy 2) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "登壇用ページの情報優先度を定義",
+                "ヒーロー領域の見え方を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "セクション見出しの整合性を調整",
+                "詳細ページ導線の動作確認",
+                "仮スライド"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Speaking dummy screen 2",
+              "caption": "Speaking Session Design (Dummy 2) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            }
+          ]
+        }
       ]
     },
     {
@@ -1304,6 +2218,67 @@
           "url": "https://example.com/speaking-session-design/slide/v3",
           "note": "仮スライド"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-4.svg",
+              "alt": "Speaking dummy screen 1",
+              "caption": "Speaking Session Design (Dummy 3) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Speaking Session Design (Dummy 3) は「Speaking / Dummy Subtitle 3」をテーマにした仮の詳細ページです。",
+                "Speaking向けダミーカード 3。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Speaking dummy screen 2",
+              "caption": "Speaking Session Design (Dummy 3) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "登壇用ページの情報優先度を定義",
+                "ヒーロー領域の見え方を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "セクション見出しの整合性を調整",
+                "詳細ページ導線の動作確認",
+                "仮スライド"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Speaking dummy screen 2",
+              "caption": "Speaking Session Design (Dummy 3) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            }
+          ]
+        }
       ]
     },
     {
@@ -1377,6 +2352,67 @@
           "label": "Dummy Slide",
           "url": "https://example.com/speaking-session-design/slide/v4",
           "note": "仮スライド"
+        }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-4.svg",
+              "alt": "Speaking dummy screen 1",
+              "caption": "Speaking Session Design (Dummy 4) の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Speaking Session Design (Dummy 4) は「Speaking / Dummy Subtitle 4」をテーマにした仮の詳細ページです。",
+                "Speaking向けダミーカード 4。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Speaking dummy screen 2",
+              "caption": "Speaking Session Design (Dummy 4) の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "登壇用ページの情報優先度を定義",
+                "ヒーロー領域の見え方を確認"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "セクション見出しの整合性を調整",
+                "詳細ページ導線の動作確認",
+                "仮スライド"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Speaking dummy screen 2",
+              "caption": "Speaking Session Design (Dummy 4) の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            }
+          ]
         }
       ]
     },
@@ -1459,6 +2495,67 @@
           "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
           "note": "検証メモ"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-1.svg",
+              "alt": "Yahoo dummy screen 1",
+              "caption": "Yahoo! Maps の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Yahoo! Maps は「 地図で調べた場所やルートなどを複数のタブで表示できる「タブ機能」」をテーマにした仮の詳細ページです。",
+                "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Yahoo dummy screen 2",
+              "caption": "Yahoo! Maps の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミー仮説に基づき情報設計を整理",
+                "一覧カードの視線誘導を検証"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "詳細ページの見出し構成を調整",
+                "CTA配置の整合性を確認",
+                "検証メモ"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-3.svg",
+              "alt": "Yahoo dummy screen 3",
+              "caption": "Yahoo! Maps の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
+        }
       ]
     },
     {
@@ -1539,6 +2636,67 @@
           "label": "Dummy Memo",
           "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
           "note": "検証メモ"
+        }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-1.svg",
+              "alt": "Yahoo dummy screen 1",
+              "caption": "Yahoo! Maps の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Yahoo! Maps は「 テーママップの使い勝手を向上させるためのデザイン改善」をテーマにした仮の詳細ページです。",
+                "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Yahoo dummy screen 2",
+              "caption": "Yahoo! Maps の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミー仮説に基づき情報設計を整理",
+                "一覧カードの視線誘導を検証"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "詳細ページの見出し構成を調整",
+                "CTA配置の整合性を確認",
+                "検証メモ"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-3.svg",
+              "alt": "Yahoo dummy screen 3",
+              "caption": "Yahoo! Maps の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
         }
       ]
     },
@@ -1621,6 +2779,67 @@
           "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
           "note": "検証メモ"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-1.svg",
+              "alt": "Yahoo dummy screen 1",
+              "caption": "Yahoo! Maps の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Yahoo! Maps は「現実世界とアプリの世界を一つにする「ARモード」」をテーマにした仮の詳細ページです。",
+                "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Yahoo dummy screen 2",
+              "caption": "Yahoo! Maps の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミー仮説に基づき情報設計を整理",
+                "一覧カードの視線誘導を検証"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "詳細ページの見出し構成を調整",
+                "CTA配置の整合性を確認",
+                "検証メモ"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-3.svg",
+              "alt": "Yahoo dummy screen 3",
+              "caption": "Yahoo! Maps の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
+        }
       ]
     },
     {
@@ -1702,9 +2921,70 @@
           "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
           "note": "検証メモ"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-1.svg",
+              "alt": "Yahoo dummy screen 1",
+              "caption": "Yahoo!カーナビ の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Yahoo!カーナビ は「Mapbox を活用した「イルミネーションモード」」をテーマにした仮の詳細ページです。",
+                "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Yahoo dummy screen 2",
+              "caption": "Yahoo!カーナビ の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミー仮説に基づき情報設計を整理",
+                "一覧カードの視線誘導を検証"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "詳細ページの見出し構成を調整",
+                "CTA配置の整合性を確認",
+                "検証メモ"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-3.svg",
+              "alt": "Yahoo dummy screen 3",
+              "caption": "Yahoo!カーナビ の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
+        }
       ]
     },
-      {
+    {
       "slug": "yahoo-japan-news-experience-v9",
       "serviceIcon": "/assets/img/icon-yahoo-carnavi.png",
       "title": "Yahoo!カーナビ",
@@ -1782,6 +3062,67 @@
           "label": "Dummy Memo",
           "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
           "note": "検証メモ"
+        }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-1.svg",
+              "alt": "Yahoo dummy screen 1",
+              "caption": "Yahoo!カーナビ の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Yahoo!カーナビ は「メニュー画面の刷新」をテーマにした仮の詳細ページです。",
+                "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Yahoo dummy screen 2",
+              "caption": "Yahoo!カーナビ の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミー仮説に基づき情報設計を整理",
+                "一覧カードの視線誘導を検証"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "詳細ページの見出し構成を調整",
+                "CTA配置の整合性を確認",
+                "検証メモ"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-3.svg",
+              "alt": "Yahoo dummy screen 3",
+              "caption": "Yahoo!カーナビ の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
         }
       ]
     },
@@ -1864,6 +3205,67 @@
           "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
           "note": "検証メモ"
         }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-1.svg",
+              "alt": "Yahoo dummy screen 1",
+              "caption": "Yahoo!カーナビ の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Yahoo!カーナビ は「ルート選択画面の改善」をテーマにした仮の詳細ページです。",
+                "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Yahoo dummy screen 2",
+              "caption": "Yahoo!カーナビ の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミー仮説に基づき情報設計を整理",
+                "一覧カードの視線誘導を検証"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "詳細ページの見出し構成を調整",
+                "CTA配置の整合性を確認",
+                "検証メモ"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-3.svg",
+              "alt": "Yahoo dummy screen 3",
+              "caption": "Yahoo!カーナビ の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
+        }
       ]
     },
     {
@@ -1944,6 +3346,67 @@
           "label": "Dummy Memo",
           "url": "https://example.com/yahoo-japan-news-experience/memo/v4",
           "note": "検証メモ"
+        }
+      ],
+      "detailSections": [
+        {
+          "heading": "プロジェクト概要",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-1.svg",
+              "alt": "Yahoo dummy screen 1",
+              "caption": "Yahoo!カーナビ の全体像を確認するためのメインビジュアル。",
+              "aspect": "16 / 9",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "取り組みの狙い",
+              "body": [
+                "Yahoo!カーナビ は「ナビ中に音楽操作を可能に」をテーマにした仮の詳細ページです。",
+                "Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-2.svg",
+              "alt": "Yahoo dummy screen 2",
+              "caption": "Yahoo!カーナビ の画面構成や情報量を確認するためのサンプル。",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "構成のポイント",
+              "body": [
+                "ダミー仮説に基づき情報設計を整理",
+                "一覧カードの視線誘導を検証"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "体験設計",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "検証した観点",
+              "body": [
+                "詳細ページの見出し構成を調整",
+                "CTA配置の整合性を確認",
+                "検証メモ"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/trainlogapp-screen-3.svg",
+              "alt": "Yahoo dummy screen 3",
+              "caption": "Yahoo!カーナビ の詳細な状態や別パターンを確認するための補足画像。",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
         }
       ]
     }
