@@ -2,6 +2,7 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+const crypto = require("node:crypto");
 
 const ROOT = path.resolve(__dirname, "..");
 const CONTENT_PATH = path.join(ROOT, "content.json");
@@ -55,6 +56,14 @@ function readJson(filePath) {
 
 function readTemplate(filePath) {
   return fs.readFileSync(filePath, "utf8");
+}
+
+function buildAssetVersion() {
+  const hash = crypto.createHash("sha1");
+  [path.join(ROOT, "assets", "styles.css"), path.join(ROOT, "assets", "app.js")].forEach((filePath) => {
+    hash.update(fs.readFileSync(filePath));
+  });
+  return hash.digest("hex").slice(0, 12);
 }
 
 function renderTemplate(template, replacements) {
@@ -630,11 +639,7 @@ function normalizeMetaItems(value) {
 
 function buildDetailMetaList(value) {
   const items = normalizeMetaItems(value);
-  return [
-    '<ul class="detail-meta-list">',
-    items.map((item) => `  <li>${escapeHtml(item)}</li>`).join("\n"),
-    "</ul>"
-  ].join("\n");
+  return escapeHtml(items.join(", "));
 }
 
 function pickScreen(project, index) {
@@ -1030,6 +1035,7 @@ function buildProjectPage(project, index, projects, template, context) {
     OG_IMAGE: escapeAttr(ogImageUrl),
     OG_URL: escapeAttr(canonicalUrl),
     ASSET_PREFIX: context.basePath,
+    ASSET_VERSION: escapeAttr(context.assetVersion),
     JSON_LD: safeJsonLd(buildProjectJsonLd(project, context)),
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(projectsPath),
@@ -1108,9 +1114,11 @@ function buildSite(options = {}) {
   const site = content.site;
   const basePath = normalizeBasePath(site.basePath || "");
   const canonicalBase = toText(site.canonicalBase).replace(/\/+$/, "");
+  const assetVersion = buildAssetVersion();
   const context = {
     basePath,
     canonicalBase,
+    assetVersion,
     siteTitle: toText(site.title),
     siteDescription: toText(site.description),
     personName: toText(site.personName) || toText(site.title),
@@ -1168,6 +1176,7 @@ function buildSite(options = {}) {
     OG_IMAGE: escapeAttr(defaultOgImage),
     OG_URL: escapeAttr(homeCanonical),
     ASSET_PREFIX: basePath,
+    ASSET_VERSION: escapeAttr(assetVersion),
     JSON_LD: safeJsonLd(indexJsonLd),
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(projectsPath),
@@ -1193,6 +1202,7 @@ function buildSite(options = {}) {
     OG_IMAGE: escapeAttr(defaultOgImage),
     OG_URL: escapeAttr(projectsCanonical),
     ASSET_PREFIX: basePath,
+    ASSET_VERSION: escapeAttr(assetVersion),
     JSON_LD: safeJsonLd(projectsJsonLd),
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(projectsPath),
@@ -1215,6 +1225,7 @@ function buildSite(options = {}) {
     OG_IMAGE: escapeAttr(toAbsoluteUrl(canonicalBase, withBasePath(basePath, site.profileImage))),
     OG_URL: escapeAttr(profileCanonical),
     ASSET_PREFIX: basePath,
+    ASSET_VERSION: escapeAttr(assetVersion),
     JSON_LD: safeJsonLd(profileJsonLd),
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(projectsPath),

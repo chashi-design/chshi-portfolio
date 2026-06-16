@@ -17,8 +17,8 @@
     <meta name="twitter:description" content="LY Corporation向けダミーカード 1。表示検証用のプレースホルダーです。" />
     <meta name="twitter:image" content="https://portfolio.example.com/assets/img/maply-001-hero.png" />
 
-    <link rel="stylesheet" href="/assets/styles.css" />
-    <script defer src="/assets/app.js"></script>
+    <link rel="stylesheet" href="/assets/styles.css?v=ee1b0254d0c1" />
+    <script defer src="/assets/app.js?v=ee1b0254d0c1"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://portfolio.example.com/profile/"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://portfolio.example.com/"},{"@type":"CreativeWork","name":"Maply","description":"LY Corporation向けダミーカード 1。表示検証用のプレースホルダーです。","image":"https://portfolio.example.com/assets/img/maply-001-hero.png","url":"https://portfolio.example.com/projects/ly-corporation-brand-portal-v1/","keywords":"Dummy, Corporate","creator":{"@type":"Person","name":"Takanori Hirohashi"}}]}</script>
   </head>
   <body>
@@ -28,99 +28,114 @@
         <nav class="site-header__nav" aria-label="Primary">
           <a class="site-header__link" href="/projects/">Work</a>
           <a class="site-header__link" href="/profile/">About</a>
-          <button class="theme-toggle site-header__theme-toggle" type="button" data-theme-toggle aria-label="ダークモードに切り替え">
-            <span data-theme-icon aria-hidden="true">☾</span>
-          </button>
         </nav>
       </header>
     </div>
     <div class="site-shell site-shell--project">
+      <aside class="side-nav" aria-label="Page navigation">
+        <nav class="side-nav__links" aria-label="Primary">
+          <a class="side-nav__link" href="/">Home</a>
+          <a class="side-nav__link" href="/projects/">Work</a>
+          <a class="side-nav__link" href="/profile/">About</a>
+        </nav>
+      </aside>
+
       <main class="project-layout project-layout--detail">
+        <section class="card detail-module" aria-labelledby="detail-module-title">
+          <h1 id="detail-module-title" class="detail-module__title">バス・駐車場・ガソリンスタンドガイド</h1>
+          <dl class="detail-module__list">
+            <div class="detail-module__row detail-module__row--meta">
+              <div class="detail-module__meta-item">
+                <dt>Service</dt>
+                <dd>Maply</dd>
+              </div>
+              <div class="detail-module__meta-item">
+                <dt>Role</dt>
+                <dd>PdM, UI Design</dd>
+              </div>
+              <div class="detail-module__meta-item">
+                <dt>Date</dt>
+                <dd>2026/02</dd>
+              </div>
+              <div class="detail-module__meta-item">
+                <dt>Platform</dt>
+                <dd>iOS</dd>
+              </div>
+            </div>
+          </dl>
+        </section>
+
         <section class="card project-main">
           <figure class="project-main-media">
             <img src="/assets/img/maply-001-hero.png" alt="Maply hero image" loading="eager" decoding="async" />
           </figure>
         </section>
 
-        <section class="card detail-module" aria-labelledby="detail-module-title">
-          <h1 id="detail-module-title" class="detail-module__title">AIを活用した次世代地図アプリをリリース</h1>
-          <dl class="detail-module__list">
-            <div class="detail-module__row detail-module__row--meta">
-              <div class="detail-module__meta-item">
-                <dt>Service</dt>
-                <dd><ul class="detail-meta-list">
-  <li>Maply</li>
-</ul></dd>
-              </div>
-              <div class="detail-module__meta-item">
-                <dt>Role</dt>
-                <dd><ul class="detail-meta-list">
-  <li>UI Designer</li>
-</ul></dd>
-              </div>
-              <div class="detail-module__meta-item">
-                <dt>Date</dt>
-                <dd><ul class="detail-meta-list">
-  <li>2026/02</li>
-</ul></dd>
-              </div>
-              <div class="detail-module__meta-item">
-                <dt>Platform</dt>
-                <dd><ul class="detail-meta-list">
-  <li>Web</li>
-</ul></dd>
-              </div>
-            </div>
-          </dl>
-        </section>
-
         <section class="description-section" aria-label="Project detail sections">
           <div class="description-flow">
             <article class="description-item">
   <div class="description-item__copy">
-    <h2 class="description-subtitle">プロジェクト概要</h2>
+    <h2 class="description-subtitle">概要</h2>
   </div>
 <div class="description-item__content">
-  <figure class="description-block description-block--image description-item__media">
-  <img src="/assets/img/web-redesign-2025-screen-1.svg" alt="Maply のルート提案画面" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:cover;" />
-  <figcaption class="description-image__caption">AIが目的地や移動状況に応じて、次の行動を先回りして提示する想定のメイン画面。</figcaption>
-</figure>
   <section class="description-block description-block--text">
-  <h3 class="description-block__title">AIで移動前後の意思決定を軽くする</h3>
   <div class="description-body-group">
-  <p class="description-body">Maply は、移動中の検索、比較、判断をひとつの流れにまとめる次世代地図アプリとして設計したダミーケースです。</p>
-  <p class="description-body">従来の地図アプリが目的地検索を中心にしていたのに対し、ユーザーの予定、現在地、移動手段、混雑情報をもとに、次に必要になりそうな選択肢を提示する体験を想定しています。</p>
-</div>
-</section>
-  <figure class="description-block description-block--image description-item__media">
-  <img src="/assets/img/web-redesign-2025-screen-2.svg" alt="Maply のスポット比較画面" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
-  <figcaption class="description-image__caption">候補地の違いを地図上だけでなく、滞在時間や移動コストの観点でも比較できる構成。</figcaption>
-</figure>
-  <section class="description-block description-block--text">
-  <h3 class="description-block__title">比較ではなく決定を助けるUI</h3>
-  <div class="description-body-group">
-  <p class="description-body">スポット一覧は情報量を増やすだけではなく、ユーザーが選びやすい軸に絞って表示する方針にしました。</p>
-  <p class="description-body">距離、所要時間、混雑度、予定との相性を同じ粒度で見られるようにし、詳細画面に入る前に判断できる状態を目指しています。</p>
+  <p class="description-body">LYヤフーとして、様々なガイドを選ぶだけで、ユーザの目的に合わせて自由に変化するマップアプリ「Maply」 をリリース。</p>
+  <p class="description-body">その中でもルーティング領域の PdM として、バス・駐車場・ガソリンスタンドガイドの主に企画・デザインを担当。</p>
 </div>
 </section>
 </div>
 </article>
 <article class="description-item">
   <div class="description-item__copy">
-    <h2 class="description-subtitle">体験設計</h2>
+    <h2 class="description-subtitle">バスガイド</h2>
   </div>
 <div class="description-item__content">
+  <figure class="description-block description-block--image description-item__media">
+  <img src="/assets/img/maply-bus-001.png" alt="バスガイドのメイン画面" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
+</figure>
   <section class="description-block description-block--text">
-  <h3 class="description-block__title">移動中でも迷わない情報量</h3>
+  <h3 class="description-block__title">「どのバスに乗れば目的地に行けるか」の疑問を簡単解決</h3>
   <div class="description-body-group">
-  <p class="description-body">ナビゲーション中は操作時間が限られるため、重要な情報をカード化し、今見るべき情報だけを前面に出す設計にしています。</p>
-  <p class="description-body">AIの提案は常に主役にせず、ユーザーが自分で判断できる余白を残すことを重視しました。</p>
+  <p class="description-body">バス停を可視化し社外含め、現在存在するバスに関するサービスでは、そのバスがどのバス停に向かうか知ることができる体験が一般的にである。、時刻表・停車バス停を確認できる基本的なユーザ体験を担保しつつ、</p>
+  <p class="description-body">一方で、ユーザがバスを利用して目的地に行くため、どのバス停から乗れば最適かを探すことが難しい課題があることがわかり、それを解決する体験を解決できるガイドに仕上げた。</p>
+  <p class="description-body">目的地を入力すると、どのバス停に乗るがいいか・そのバス停は何時発なのかをシンプルなデザインで地図上に可視化。さらにそのバス停にフォーカスが当たると、乗換を含む目的地までのルート情報を一目でわかるようにデザインした。</p>
 </div>
 </section>
+</div>
+</article>
+<article class="description-item">
+  <div class="description-item__copy">
+    <h2 class="description-subtitle">駐車場ガイド</h2>
+  </div>
+<div class="description-item__content">
   <figure class="description-block description-block--image description-item__media">
-  <img src="/assets/img/web-redesign-2025-screen-3.svg" alt="Maply の移動中アシスト画面" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
-  <figcaption class="description-image__caption">移動中の状態変化に合わせて、寄り道、休憩、ルート変更などの候補を控えめに提示する想定。</figcaption>
+  <img src="/assets/img/maply-parking-001.png" alt="駐車場ガイドのメイン画面" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
 </figure>
+  <section class="description-block description-block--text">
+  <h3 class="description-block__title">満空情報や駐車形式・台数などの絞り込みで利用したい駐車場を一目で把握できる</h3>
+  <div class="description-body-group">
+  <p class="description-body">hogehogehogehoge</p>
+  <p class="description-body">hogehogehogehoge</p>
+</div>
+</section>
+</div>
+</article>
+<article class="description-item">
+  <div class="description-item__copy">
+    <h2 class="description-subtitle">ガソリンスタンドガイド</h2>
+  </div>
+<div class="description-item__content">
+  <figure class="description-block description-block--image description-item__media">
+  <img src="/assets/img/maply-gas-001.png" alt="ガソリンスタンドガイドのメイン画面" loading="lazy" decoding="async" style="--aspect:4 / 3;--fit:cover;" />
+</figure>
+  <section class="description-block description-block--text">
+  <h3 class="description-block__title">価格の比較や対応サービスの絞り込みで最適なガソリンスタンドを検索可能</h3>
+  <div class="description-body-group">
+  <p class="description-body">hogehogehogehoge</p>
+  <p class="description-body">hogehogehogehoge</p>
+</div>
+</section>
 </div>
 </article>
           </div>

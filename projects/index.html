@@ -17,8 +17,8 @@
     <meta name="twitter:description" content="All works by Takanori Hirohashi." />
     <meta name="twitter:image" content="https://portfolio.example.com/assets/img/og-default.svg" />
 
-    <link rel="stylesheet" href="/assets/styles.css" />
-    <script defer src="/assets/app.js"></script>
+    <link rel="stylesheet" href="/assets/styles.css?v=ee1b0254d0c1" />
+    <script defer src="/assets/app.js?v=ee1b0254d0c1"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://portfolio.example.com/profile/"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://portfolio.example.com/"},{"@type":"CollectionPage","name":"Takanori Hirohashi Portfolio All Works","description":"All portfolio works (24)","url":"https://portfolio.example.com/projects/"},{"@type":"ItemList","itemListElement":[{"@type":"ListItem","position":1,"url":"https://portfolio.example.com/projects/ly-corporation-brand-portal-v1/","name":"Maply"},{"@type":"ListItem","position":2,"url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v1/","name":"Yahoo!カーナビ"},{"@type":"ListItem","position":3,"url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v2/","name":"Yahoo!カーナビ"},{"@type":"ListItem","position":4,"url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v3/","name":"Yahoo!乗換案内"},{"@type":"ListItem","position":5,"url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v4/","name":"Yahoo! Maps"},{"@type":"ListItem","position":6,"url":"https://portfolio.example.com/projects/others-experiment-lab-v1/","name":"Others: UI Experiment (Dummy 1)"},{"@type":"ListItem","position":7,"url":"https://portfolio.example.com/projects/others-experiment-lab-v2/","name":"Others: UI Experiment (Dummy 2)"},{"@type":"ListItem","position":8,"url":"https://portfolio.example.com/projects/others-experiment-lab-v3/","name":"Others: UI Experiment (Dummy 3)"},{"@type":"ListItem","position":9,"url":"https://portfolio.example.com/projects/others-experiment-lab-v4/","name":"Others: UI Experiment (Dummy 4)"},{"@type":"ListItem","position":10,"url":"https://portfolio.example.com/projects/independent-production-case-v1/","name":"Independent Production Case (Dummy 1)"},{"@type":"ListItem","position":11,"url":"https://portfolio.example.com/projects/independent-production-case-v2/","name":"Independent Production Case (Dummy 2)"},{"@type":"ListItem","position":12,"url":"https://portfolio.example.com/projects/independent-production-case-v3/","name":"Independent Production Case (Dummy 3)"},{"@type":"ListItem","position":13,"url":"https://portfolio.example.com/projects/independent-production-case-v4/","name":"Independent Production Case (Dummy 4)"},{"@type":"ListItem","position":14,"url":"https://portfolio.example.com/projects/speaking-session-design-v1/","name":"Speaking Session Design (Dummy 1)"},{"@type":"ListItem","position":15,"url":"https://portfolio.example.com/projects/speaking-session-design-v2/","name":"Speaking Session Design (Dummy 2)"},{"@type":"ListItem","position":16,"url":"https://portfolio.example.com/projects/speaking-session-design-v3/","name":"Speaking Session Design (Dummy 3)"},{"@type":"ListItem","position":17,"url":"https://portfolio.example.com/projects/speaking-session-design-v4/","name":"Speaking Session Design (Dummy 4)"},{"@type":"ListItem","position":18,"url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v5/","name":"Yahoo! Maps"},{"@type":"ListItem","position":19,"url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v6/","name":"Yahoo! Maps"},{"@type":"ListItem","position":20,"url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v7/","name":"Yahoo! Maps"},{"@type":"ListItem","position":21,"url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v11/","name":"Yahoo!カーナビ"},{"@type":"ListItem","position":22,"url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v9/","name":"Yahoo!カーナビ"},{"@type":"ListItem","position":23,"url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v8/","name":"Yahoo!カーナビ"},{"@type":"ListItem","position":24,"url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v10/","name":"Yahoo!カーナビ"}]}]}</script>
   </head>
   <body>
@@ -28,13 +28,18 @@
         <nav class="site-header__nav" aria-label="Primary">
           <a class="site-header__link" href="/projects/">Work</a>
           <a class="site-header__link" href="/profile/">About</a>
-          <button class="theme-toggle site-header__theme-toggle" type="button" data-theme-toggle aria-label="ダークモードに切り替え">
-            <span data-theme-icon aria-hidden="true">☾</span>
-          </button>
         </nav>
       </header>
     </div>
     <div class="site-shell site-shell--project">
+      <aside class="side-nav" aria-label="Page navigation">
+        <nav class="side-nav__links" aria-label="Primary">
+          <a class="side-nav__link" href="/">Home</a>
+          <a class="side-nav__link" href="/projects/">Work</a>
+          <a class="side-nav__link" href="/profile/">About</a>
+        </nav>
+      </aside>
+
       <main class="project-layout projects-index-layout">
         <section class="card projects-index-intro">
           <p class="eyebrow">All Works</p>
@@ -49,11 +54,11 @@
 <a class="card bento-card clothoid-corner" href="/projects/ly-corporation-brand-portal-v1/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
   <div class="bento-card__body">
     <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-web-design.svg" alt="" loading="lazy" decoding="async" />
+      <img src="/assets/img/icon-ly-maply.png" alt="" loading="lazy" decoding="async" />
     </span>
     <h2 class="bento-card__title">Maply</h2>
     <p class="bento-card__date">2026/02</p>
-    <p class="bento-card__subtitle">AIを活用した次世代地図アプリをリリース</p>
+    <p class="bento-card__subtitle">バス・駐車場・ガソリンスタンドガイド</p>
   </div>
   <figure class="bento-card__media">
     <img src="/assets/img/maply-001-hero.png" alt="Maply preview" loading="lazy" decoding="async" />

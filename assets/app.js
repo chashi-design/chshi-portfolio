@@ -1,9 +1,4 @@
 (function () {
-  var storageKey = "portfolio-theme";
-  var root = document.documentElement;
-  var toggle = document.querySelector("[data-theme-toggle]");
-  var icon = toggle ? toggle.querySelector("[data-theme-icon]") : null;
-
   function setupCardPressFeedback() {
     var cards = document.querySelectorAll(
       ".site-shell:not(.site-shell--project) .bento-card, .site-shell:not(.site-shell--project) .sns-card"
@@ -75,47 +70,6 @@
         clearReleaseTimer();
         clearPressed();
       });
-    });
-  }
-
-  function updateToggleUI(theme) {
-    if (!toggle) {
-      return;
-    }
-    if (icon) {
-      icon.textContent = theme === "dark" ? "☀" : "☾";
-    }
-    toggle.setAttribute("aria-label", theme === "dark" ? "ライトモードに切り替え" : "ダークモードに切り替え");
-  }
-
-  function applyTheme(theme) {
-    if (theme === "dark") {
-      root.setAttribute("data-theme", "dark");
-    } else {
-      root.removeAttribute("data-theme");
-    }
-    updateToggleUI(theme === "dark" ? "dark" : "light");
-  }
-
-  try {
-    var saved = window.localStorage.getItem(storageKey);
-    if (saved) {
-      applyTheme(saved);
-    }
-  } catch (error) {
-    // Ignore storage read errors in private mode or restricted contexts.
-  }
-
-  if (toggle) {
-    toggle.addEventListener("click", function () {
-      var current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
-      var next = current === "dark" ? "light" : "dark";
-      applyTheme(next);
-      try {
-        window.localStorage.setItem(storageKey, next);
-      } catch (error) {
-        // Ignore storage write errors.
-      }
     });
   }
 

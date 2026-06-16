@@ -17,8 +17,8 @@
     <meta name="twitter:description" content="{{OG_DESCRIPTION}}" />
     <meta name="twitter:image" content="{{OG_IMAGE}}" />
 
-    <link rel="stylesheet" href="{{ASSET_PREFIX}}/assets/styles.css" />
-    <script defer src="{{ASSET_PREFIX}}/assets/app.js"></script>
+    <link rel="stylesheet" href="{{ASSET_PREFIX}}/assets/styles.css?v={{ASSET_VERSION}}" />
+    <script defer src="{{ASSET_PREFIX}}/assets/app.js?v={{ASSET_VERSION}}"></script>
     <script type="application/ld+json">{{JSON_LD}}</script>
   </head>
   <body>
@@ -28,13 +28,18 @@
         <nav class="site-header__nav" aria-label="Primary">
           <a class="site-header__link" href="{{WORK_URL}}">Work</a>
           <a class="site-header__link" href="{{PROFILE_URL}}">About</a>
-          <button class="theme-toggle site-header__theme-toggle" type="button" data-theme-toggle aria-label="ダークモードに切り替え">
-            <span data-theme-icon aria-hidden="true">☾</span>
-          </button>
         </nav>
       </header>
     </div>
     <div class="site-shell site-shell--project">
+      <aside class="side-nav" aria-label="Page navigation">
+        <nav class="side-nav__links" aria-label="Primary">
+          <a class="side-nav__link" href="{{HOME_URL}}">Home</a>
+          <a class="side-nav__link" href="{{WORK_URL}}">Work</a>
+          <a class="side-nav__link" href="{{PROFILE_URL}}">About</a>
+        </nav>
+      </aside>
+
       <main class="profile-layout">
         <section class="profile-section" aria-labelledby="about-title">
           <div class="profile-section__body">

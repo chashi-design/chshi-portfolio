@@ -17,8 +17,8 @@
     <meta name="twitter:description" content="Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。" />
     <meta name="twitter:image" content="https://portfolio.example.com/assets/img/trainlogapp-hero.svg" />
 
-    <link rel="stylesheet" href="/assets/styles.css" />
-    <script defer src="/assets/app.js"></script>
+    <link rel="stylesheet" href="/assets/styles.css?v=ee1b0254d0c1" />
+    <script defer src="/assets/app.js?v=ee1b0254d0c1"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://portfolio.example.com/profile/"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://portfolio.example.com/"},{"@type":"CreativeWork","name":"Yahoo! Maps","description":"Yahoo! JAPAN向けダミーカード 4。表示検証用のプレースホルダーです。","image":"https://portfolio.example.com/assets/img/trainlogapp-hero.svg","url":"https://portfolio.example.com/projects/yahoo-japan-news-experience-v5/","keywords":"Dummy, Media","creator":{"@type":"Person","name":"Takanori Hirohashi"}}]}</script>
   </head>
   <body>
@@ -28,50 +28,47 @@
         <nav class="site-header__nav" aria-label="Primary">
           <a class="site-header__link" href="/projects/">Work</a>
           <a class="site-header__link" href="/profile/">About</a>
-          <button class="theme-toggle site-header__theme-toggle" type="button" data-theme-toggle aria-label="ダークモードに切り替え">
-            <span data-theme-icon aria-hidden="true">☾</span>
-          </button>
         </nav>
       </header>
     </div>
     <div class="site-shell site-shell--project">
-      <main class="project-layout project-layout--detail">
-        <section class="card project-main">
-          <figure class="project-main-media">
-            <img src="/assets/img/trainlogapp-hero.svg" alt="Yahoo! Maps hero image" loading="eager" decoding="async" />
-          </figure>
-        </section>
+      <aside class="side-nav" aria-label="Page navigation">
+        <nav class="side-nav__links" aria-label="Primary">
+          <a class="side-nav__link" href="/">Home</a>
+          <a class="side-nav__link" href="/projects/">Work</a>
+          <a class="side-nav__link" href="/profile/">About</a>
+        </nav>
+      </aside>
 
+      <main class="project-layout project-layout--detail">
         <section class="card detail-module" aria-labelledby="detail-module-title">
           <h1 id="detail-module-title" class="detail-module__title">地図で調べた場所やルートなどを複数のタブで表示できる「タブ機能」</h1>
           <dl class="detail-module__list">
             <div class="detail-module__row detail-module__row--meta">
               <div class="detail-module__meta-item">
                 <dt>Service</dt>
-                <dd><ul class="detail-meta-list">
-  <li>Yahoo! Maps</li>
-</ul></dd>
+                <dd>Yahoo! Maps</dd>
               </div>
               <div class="detail-module__meta-item">
                 <dt>Role</dt>
-                <dd><ul class="detail-meta-list">
-  <li>Product Designer</li>
-</ul></dd>
+                <dd>Product Designer</dd>
               </div>
               <div class="detail-module__meta-item">
                 <dt>Date</dt>
-                <dd><ul class="detail-meta-list">
-  <li>2026/02</li>
-</ul></dd>
+                <dd>2026/02</dd>
               </div>
               <div class="detail-module__meta-item">
                 <dt>Platform</dt>
-                <dd><ul class="detail-meta-list">
-  <li>Mobile Web</li>
-</ul></dd>
+                <dd>Mobile Web</dd>
               </div>
             </div>
           </dl>
+        </section>
+
+        <section class="card project-main">
+          <figure class="project-main-media">
+            <img src="/assets/img/trainlogapp-hero.svg" alt="Yahoo! Maps hero image" loading="eager" decoding="async" />
+          </figure>
         </section>
 
         <section class="description-section" aria-label="Project detail sections">
