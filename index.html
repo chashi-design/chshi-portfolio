@@ -17,47 +17,28 @@
     <meta name="twitter:description" content="UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。" />
     <meta name="twitter:image" content="https://portfolio.example.com/assets/img/og-default.svg" />
 
-    <link rel="stylesheet" href="/assets/styles.css" />
-    <script defer src="/assets/app.js"></script>
+    <link rel="stylesheet" href="/assets/styles.css?v=ee1b0254d0c1" />
+    <script defer src="/assets/app.js?v=ee1b0254d0c1"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://portfolio.example.com/profile/"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://portfolio.example.com/"}]}</script>
   </head>
-  <body>
+  <body class="page-home">
     <div class="site-header-shell">
       <header class="site-header">
         <a class="site-header__link site-header__home" href="/">Home</a>
         <nav class="site-header__nav" aria-label="Primary">
           <a class="site-header__link" href="/projects/">Work</a>
           <a class="site-header__link" href="/profile/">About</a>
-          <button class="theme-toggle site-header__theme-toggle" type="button" data-theme-toggle aria-label="ダークモードに切り替え">
-            <span data-theme-icon aria-hidden="true">☾</span>
-          </button>
         </nav>
       </header>
     </div>
     <div class="site-shell">
-      <header class="masthead" id="profile">
-        <div class="masthead-profile">
-          <img
-            class="profile-avatar"
-            src="/assets/img/profile-avatar.png"
-            alt="Takanori Hirohashi profile image"
-            width="180"
-            height="180"
-            loading="eager"
-            decoding="async"
-          />
-          <h1>Takanori Hirohashi</h1>
-          
-          <ul class="lead-list">
-            <li>💡 Software Designer</li>
-<li>💡 User Interface</li>
-<li>💡 Information Architecture</li>
-<li>💡 iOS &amp; Android &amp; Web</li>
-<li>🇯🇵 Japan</li>
-<li>💻 LY Corporation</li>
-          </ul>
-        </div>
-      </header>
+      <aside class="side-nav" aria-label="Page navigation">
+        <nav class="side-nav__links" aria-label="Primary">
+          <a class="side-nav__link" href="/">Home</a>
+          <a class="side-nav__link" href="/projects/">Work</a>
+          <a class="side-nav__link" href="/profile/">About</a>
+        </nav>
+      </aside>
 
       <main>
         <section class="sns-links" aria-label="SNS links">
@@ -99,11 +80,11 @@
 <a class="card bento-card clothoid-corner" href="/projects/ly-corporation-brand-portal-v1/" style="--col:6;--row:1;--col-tablet:4;--row-tablet:1;--col-mobile:4;--row-mobile:1">
   <div class="bento-card__body">
     <span class="bento-card__service" aria-hidden="true">
-      <img src="/assets/img/icon-web-design.svg" alt="" loading="lazy" decoding="async" />
+      <img src="/assets/img/icon-ly-maply.png" alt="" loading="lazy" decoding="async" />
     </span>
     <h2 class="bento-card__title">Maply</h2>
     <p class="bento-card__date">2026/02</p>
-    <p class="bento-card__subtitle">AIを活用した次世代地図アプリをリリース</p>
+    <p class="bento-card__subtitle">バス・駐車場・ガソリンスタンドガイド</p>
   </div>
   <figure class="bento-card__media">
     <img src="/assets/img/maply-001-hero.png" alt="Maply preview" loading="lazy" decoding="async" />

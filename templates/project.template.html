@@ -17,8 +17,8 @@
     <meta name="twitter:description" content="{{OG_DESCRIPTION}}" />
     <meta name="twitter:image" content="{{OG_IMAGE}}" />
 
-    <link rel="stylesheet" href="{{ASSET_PREFIX}}/assets/styles.css" />
-    <script defer src="{{ASSET_PREFIX}}/assets/app.js"></script>
+    <link rel="stylesheet" href="{{ASSET_PREFIX}}/assets/styles.css?v={{ASSET_VERSION}}" />
+    <script defer src="{{ASSET_PREFIX}}/assets/app.js?v={{ASSET_VERSION}}"></script>
     <script type="application/ld+json">{{JSON_LD}}</script>
   </head>
   <body>
@@ -28,20 +28,19 @@
         <nav class="site-header__nav" aria-label="Primary">
           <a class="site-header__link" href="{{WORK_URL}}">Work</a>
           <a class="site-header__link" href="{{PROFILE_URL}}">About</a>
-          <button class="theme-toggle site-header__theme-toggle" type="button" data-theme-toggle aria-label="ダークモードに切り替え">
-            <span data-theme-icon aria-hidden="true">☾</span>
-          </button>
         </nav>
       </header>
     </div>
     <div class="site-shell site-shell--project">
-      <main class="project-layout project-layout--detail">
-        <section class="card project-main">
-          <figure class="project-main-media">
-            <img src="{{HERO_IMAGE}}" alt="{{HERO_ALT}}" loading="eager" decoding="async" />
-          </figure>
-        </section>
+      <aside class="side-nav" aria-label="Page navigation">
+        <nav class="side-nav__links" aria-label="Primary">
+          <a class="side-nav__link" href="{{HOME_URL}}">Home</a>
+          <a class="side-nav__link" href="{{WORK_URL}}">Work</a>
+          <a class="side-nav__link" href="{{PROFILE_URL}}">About</a>
+        </nav>
+      </aside>
 
+      <main class="project-layout project-layout--detail">
         <section class="card detail-module" aria-labelledby="detail-module-title">
           <h1 id="detail-module-title" class="detail-module__title">{{PROJECT_SUBTITLE}}</h1>
           <dl class="detail-module__list">
@@ -64,6 +63,12 @@
               </div>
             </div>
           </dl>
+        </section>
+
+        <section class="card project-main">
+          <figure class="project-main-media">
+            <img src="{{HERO_IMAGE}}" alt="{{HERO_ALT}}" loading="eager" decoding="async" />
+          </figure>
         </section>
 
         <section class="description-section" aria-label="Project detail sections">

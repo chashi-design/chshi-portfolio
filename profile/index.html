@@ -17,8 +17,8 @@
     <meta name="twitter:description" content="UI/UXデザインとフロントエンド実装を横断し、情報設計から体験設計、インターフェースの仕上げまで一貫して扱うデザイナー。Web / iOS / Android を対象に、サービスの芯が伝わる体験設計と、運用しやすい実装の両立を重視しています。" />
     <meta name="twitter:image" content="https://portfolio.example.com/assets/img/profile-avatar.png" />
 
-    <link rel="stylesheet" href="/assets/styles.css" />
-    <script defer src="/assets/app.js"></script>
+    <link rel="stylesheet" href="/assets/styles.css?v=ee1b0254d0c1" />
+    <script defer src="/assets/app.js?v=ee1b0254d0c1"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","description":"UI/UXデザインとフロントエンド実装を横断し、情報設計から体験設計、インターフェースの仕上げまで一貫して扱うデザイナー。Web / iOS / Android を対象に、サービスの芯が伝わる体験設計と、運用しやすい実装の両立を重視しています。","url":"https://portfolio.example.com/profile/","image":"https://portfolio.example.com/assets/img/profile-avatar.png","sameAs":["https://dribbble.com/chashi","https://note.com/chashi","https://x.com/t_chashi"]},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://portfolio.example.com/"},{"@type":"AboutPage","name":"Takanori Hirohashi Profile","description":"UI/UXデザインとフロントエンド実装を横断し、情報設計から体験設計、インターフェースの仕上げまで一貫して扱うデザイナー。Web / iOS / Android を対象に、サービスの芯が伝わる体験設計と、運用しやすい実装の両立を重視しています。","url":"https://portfolio.example.com/profile/","about":{"@type":"Person","name":"Takanori Hirohashi"}}]}</script>
   </head>
   <body>
@@ -28,13 +28,18 @@
         <nav class="site-header__nav" aria-label="Primary">
           <a class="site-header__link" href="/projects/">Work</a>
           <a class="site-header__link" href="/profile/">About</a>
-          <button class="theme-toggle site-header__theme-toggle" type="button" data-theme-toggle aria-label="ダークモードに切り替え">
-            <span data-theme-icon aria-hidden="true">☾</span>
-          </button>
         </nav>
       </header>
     </div>
     <div class="site-shell site-shell--project">
+      <aside class="side-nav" aria-label="Page navigation">
+        <nav class="side-nav__links" aria-label="Primary">
+          <a class="side-nav__link" href="/">Home</a>
+          <a class="side-nav__link" href="/projects/">Work</a>
+          <a class="side-nav__link" href="/profile/">About</a>
+        </nav>
+      </aside>
+
       <main class="profile-layout">
         <section class="profile-section" aria-labelledby="about-title">
           <div class="profile-section__body">

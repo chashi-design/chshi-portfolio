@@ -83,10 +83,10 @@
   "projects": [
     {
       "slug": "ly-corporation-brand-portal-v1",
-      "serviceIcon": "/assets/img/icon-web-design.svg",
+      "serviceIcon": "/assets/img/icon-ly-maply.png",
       "title": "Maply",
       "date": "2026/02",
-      "subtitle": "AIを活用した次世代地図アプリをリリース",
+      "subtitle": "バス・駐車場・ガソリンスタンドガイド",
       "summary": "LY Corporation向けダミーカード 1。表示検証用のプレースホルダーです。",
       "section": "LY Corporation",
       "featured": false,
@@ -113,11 +113,11 @@
       "facts": [
         {
           "label": "Role",
-          "value": "UI Designer"
+          "value": "PdM, UI Design"
         },
         {
           "label": "Platform",
-          "value": "Web"
+          "value": "iOS"
         },
         {
           "label": "Year",
@@ -162,60 +162,75 @@
       ],
       "detailSections": [
         {
-          "heading": "プロジェクト概要",
+          "heading": "概要",
           "blocks": [
             {
-              "type": "image",
-              "src": "/assets/img/web-redesign-2025-screen-1.svg",
-              "alt": "Maply のルート提案画面",
-              "caption": "AIが目的地や移動状況に応じて、次の行動を先回りして提示する想定のメイン画面。",
-              "aspect": "16 / 9",
-              "fit": "cover"
-            },
-            {
               "type": "text",
-              "heading": "AIで移動前後の意思決定を軽くする",
               "body": [
-                "Maply は、移動中の検索、比較、判断をひとつの流れにまとめる次世代地図アプリとして設計したダミーケースです。",
-                "従来の地図アプリが目的地検索を中心にしていたのに対し、ユーザーの予定、現在地、移動手段、混雑情報をもとに、次に必要になりそうな選択肢を提示する体験を想定しています。"
-              ]
-            },
-            {
-              "type": "image",
-              "src": "/assets/img/web-redesign-2025-screen-2.svg",
-              "alt": "Maply のスポット比較画面",
-              "caption": "候補地の違いを地図上だけでなく、滞在時間や移動コストの観点でも比較できる構成。",
-              "aspect": "4 / 3",
-              "fit": "cover"
-            },
-            {
-              "type": "text",
-              "heading": "比較ではなく決定を助けるUI",
-              "body": [
-                "スポット一覧は情報量を増やすだけではなく、ユーザーが選びやすい軸に絞って表示する方針にしました。",
-                "距離、所要時間、混雑度、予定との相性を同じ粒度で見られるようにし、詳細画面に入る前に判断できる状態を目指しています。"
+                "LYヤフーとして、様々なガイドを選ぶだけで、ユーザの目的に合わせて自由に変化するマップアプリ「Maply」 をリリース。",
+                "その中でもルーティング領域の PdM として、バス・駐車場・ガソリンスタンドガイドの主に企画・デザインを担当。"
               ]
             }
           ]
         },
         {
-          "heading": "体験設計",
+          "heading": "バスガイド",
           "blocks": [
             {
-              "type": "text",
-              "heading": "移動中でも迷わない情報量",
-              "body": [
-                "ナビゲーション中は操作時間が限られるため、重要な情報をカード化し、今見るべき情報だけを前面に出す設計にしています。",
-                "AIの提案は常に主役にせず、ユーザーが自分で判断できる余白を残すことを重視しました。"
-              ]
-            },
-            {
               "type": "image",
-              "src": "/assets/img/web-redesign-2025-screen-3.svg",
-              "alt": "Maply の移動中アシスト画面",
-              "caption": "移動中の状態変化に合わせて、寄り道、休憩、ルート変更などの候補を控えめに提示する想定。",
+              "src": "/assets/img/maply-bus-001.png",
+              "alt": "バスガイドのメイン画面",
               "aspect": "4 / 3",
               "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "「どのバスに乗れば目的地に行けるか」の疑問を簡単解決",
+              "body": [
+                "バス停を可視化し社外含め、現在存在するバスに関するサービスでは、そのバスがどのバス停に向かうか知ることができる体験が一般的にである。、時刻表・停車バス停を確認できる基本的なユーザ体験を担保しつつ、",
+                "一方で、ユーザがバスを利用して目的地に行くため、どのバス停から乗れば最適かを探すことが難しい課題があることがわかり、それを解決する体験を解決できるガイドに仕上げた。",
+                "目的地を入力すると、どのバス停に乗るがいいか・そのバス停は何時発なのかをシンプルなデザインで地図上に可視化。さらにそのバス停にフォーカスが当たると、乗換を含む目的地までのルート情報を一目でわかるようにデザインした。"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "駐車場ガイド",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/maply-parking-001.png",
+              "alt": "駐車場ガイドのメイン画面",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "満空情報や駐車形式・台数などの絞り込みで利用したい駐車場を一目で把握できる",
+              "body": [
+                "hogehogehogehoge",
+                "hogehogehogehoge"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "ガソリンスタンドガイド",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/maply-gas-001.png",
+              "alt": "ガソリンスタンドガイドのメイン画面",
+              "aspect": "4 / 3",
+              "fit": "cover"
+            },
+            {
+              "type": "text",
+              "heading": "価格の比較や対応サービスの絞り込みで最適なガソリンスタンドを検索可能",
+              "body": [
+                "hogehogehogehoge",
+                "hogehogehogehoge"
+              ]
             }
           ]
         }
