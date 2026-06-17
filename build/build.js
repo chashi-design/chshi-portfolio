@@ -17,6 +17,15 @@ const OUTPUT_PROFILE_DIR = path.join(ROOT, "profile");
 const OUTPUT_PROFILE_INDEX_PATH = path.join(OUTPUT_PROFILE_DIR, "index.html");
 const BUILD_DIR = path.join(ROOT, "build");
 const WATCH_TARGETS = [CONTENT_PATH, path.join(ROOT, "templates"), path.join(ROOT, "assets"), BUILD_DIR];
+const GRID_TOGGLE_HTML = '<button class="grid-toggle" type="button" aria-pressed="false" aria-label="Toggle grid overlay">Grid</button>';
+const GRID_COLUMNS_HTML = [
+  '<span class="grid-guides__margin grid-guides__margin--left"></span>',
+  '<span class="grid-guides__margin grid-guides__margin--right"></span>',
+  ...Array.from({ length: 12 }, (_, index) => {
+    const label = String(index + 1).padStart(2, "0");
+    return `<span class="grid-guides__col">${label}</span>`;
+  })
+].join("\n        ");
 
 const DETAIL_SECTION_CONFIG = [
   { key: "overview", title: "概要" },
@@ -1037,6 +1046,8 @@ function buildProjectPage(project, index, projects, template, context) {
     ASSET_PREFIX: context.basePath,
     ASSET_VERSION: escapeAttr(context.assetVersion),
     JSON_LD: safeJsonLd(buildProjectJsonLd(project, context)),
+    GRID_TOGGLE: GRID_TOGGLE_HTML,
+    GRID_COLUMNS: GRID_COLUMNS_HTML,
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(projectsPath),
     PROFILE_URL: escapeAttr(profilePath),
@@ -1178,6 +1189,8 @@ function buildSite(options = {}) {
     ASSET_PREFIX: basePath,
     ASSET_VERSION: escapeAttr(assetVersion),
     JSON_LD: safeJsonLd(indexJsonLd),
+    GRID_TOGGLE: GRID_TOGGLE_HTML,
+    GRID_COLUMNS: GRID_COLUMNS_HTML,
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(projectsPath),
     PROFILE_URL: escapeAttr(profilePath),
@@ -1204,6 +1217,8 @@ function buildSite(options = {}) {
     ASSET_PREFIX: basePath,
     ASSET_VERSION: escapeAttr(assetVersion),
     JSON_LD: safeJsonLd(projectsJsonLd),
+    GRID_TOGGLE: GRID_TOGGLE_HTML,
+    GRID_COLUMNS: GRID_COLUMNS_HTML,
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(projectsPath),
     PROFILE_URL: escapeAttr(profilePath),
@@ -1227,6 +1242,8 @@ function buildSite(options = {}) {
     ASSET_PREFIX: basePath,
     ASSET_VERSION: escapeAttr(assetVersion),
     JSON_LD: safeJsonLd(profileJsonLd),
+    GRID_TOGGLE: GRID_TOGGLE_HTML,
+    GRID_COLUMNS: GRID_COLUMNS_HTML,
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(projectsPath),
     PROFILE_URL: escapeAttr(profilePath),

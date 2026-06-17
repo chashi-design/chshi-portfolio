@@ -21,7 +21,7 @@
     <script defer src="{{ASSET_PREFIX}}/assets/app.js?v={{ASSET_VERSION}}"></script>
     <script type="application/ld+json">{{JSON_LD}}</script>
   </head>
-  <body class="page-home">
+  <body class="swiss-page page-home">
     <div class="site-header-shell">
       <header class="site-header">
         <a class="site-header__link site-header__home" href="{{HOME_URL}}">Home</a>
@@ -31,7 +31,9 @@
         </nav>
       </header>
     </div>
-    <div class="site-shell">
+    {{GRID_TOGGLE}}
+    <div class="site-shell swiss-wrap">
+      <div class="grid-guides" aria-hidden="true">{{GRID_COLUMNS}}</div>
       <aside class="side-nav" aria-label="Page navigation">
         <nav class="side-nav__links" aria-label="Primary">
           <a class="side-nav__link" href="{{HOME_URL}}">Home</a>
@@ -41,6 +43,22 @@
       </aside>
 
       <main>
+        <section class="swiss-masthead swiss-band" aria-labelledby="home-title">
+          <div class="swiss-masthead__identity">
+            <h1 class="masthead-title" id="home-title">{{PERSON_NAME}}</h1>
+            {{PERSON_SUBNAME}}
+          </div>
+          <div class="swiss-masthead__copy">
+            <p class="swiss-lead">{{SITE_DESCRIPTION}}</p>
+            <ul class="swiss-lead-list">
+              {{SITE_LEAD_BULLETS}}
+            </ul>
+          </div>
+          <figure class="swiss-profile">
+            <img src="{{PROFILE_IMAGE}}" alt="{{PERSON_NAME}}" loading="eager" decoding="async" />
+          </figure>
+        </section>
+
         <section class="sns-links" aria-label="SNS links">
           <div class="sns-grid">
             {{SNS_CARDS}}

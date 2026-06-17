@@ -21,7 +21,7 @@
     <script defer src="{{ASSET_PREFIX}}/assets/app.js?v={{ASSET_VERSION}}"></script>
     <script type="application/ld+json">{{JSON_LD}}</script>
   </head>
-  <body>
+  <body class="swiss-page page-detail">
     <div class="site-header-shell">
       <header class="site-header">
         <a class="site-header__link site-header__home" href="{{HOME_URL}}">Home</a>
@@ -31,7 +31,9 @@
         </nav>
       </header>
     </div>
-    <div class="site-shell site-shell--project">
+    {{GRID_TOGGLE}}
+    <div class="site-shell site-shell--project swiss-wrap">
+      <div class="grid-guides" aria-hidden="true">{{GRID_COLUMNS}}</div>
       <aside class="side-nav" aria-label="Page navigation">
         <nav class="side-nav__links" aria-label="Primary">
           <a class="side-nav__link" href="{{HOME_URL}}">Home</a>
