@@ -17,8 +17,13 @@
     <meta name="twitter:description" content="UI/UXデザインとフロントエンド実装を横断し、情報設計から体験設計、インターフェースの仕上げまで一貫して扱うデザイナー。Web / iOS / Android を対象に、サービスの芯が伝わる体験設計と、運用しやすい実装の両立を重視しています。" />
     <meta name="twitter:image" content="https://portfolio.example.com/assets/img/profile-avatar.png" />
 
-    <link rel="stylesheet" href="/assets/styles.css?v=4fb27e12c6cb" />
-    <script defer src="/assets/app.js?v=4fb27e12c6cb"></script>
+    <script>
+      (function () {
+        document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css?v=d97bc0969db3" />
+    <script defer src="/assets/app.js?v=d97bc0969db3"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","description":"UI/UXデザインとフロントエンド実装を横断し、情報設計から体験設計、インターフェースの仕上げまで一貫して扱うデザイナー。Web / iOS / Android を対象に、サービスの芯が伝わる体験設計と、運用しやすい実装の両立を重視しています。","url":"https://portfolio.example.com/profile/","image":"https://portfolio.example.com/assets/img/profile-avatar.png","sameAs":["https://dribbble.com/chashi","https://note.com/chashi","https://x.com/t_chashi"]},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://portfolio.example.com/"},{"@type":"AboutPage","name":"Takanori Hirohashi Profile","description":"UI/UXデザインとフロントエンド実装を横断し、情報設計から体験設計、インターフェースの仕上げまで一貫して扱うデザイナー。Web / iOS / Android を対象に、サービスの芯が伝わる体験設計と、運用しやすい実装の両立を重視しています。","url":"https://portfolio.example.com/profile/","about":{"@type":"Person","name":"Takanori Hirohashi"}}]}</script>
   </head>
   <body class="swiss-page page-profile">
@@ -26,8 +31,13 @@
       <header class="site-header">
         <a class="site-header__link site-header__home" href="/">Home</a>
         <nav class="site-header__nav" aria-label="Primary">
-          <a class="site-header__link" href="/projects/">Work</a>
-          <a class="site-header__link" href="/profile/">About</a>
+          <label class="theme-switcher">
+            <select class="theme-switcher__select" data-theme-select aria-label="Color theme">
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
         </nav>
       </header>
     </div>
@@ -50,8 +60,13 @@
       <aside class="side-nav" aria-label="Page navigation">
         <nav class="side-nav__links" aria-label="Primary">
           <a class="side-nav__link" href="/">Home</a>
-          <a class="side-nav__link" href="/projects/">Work</a>
-          <a class="side-nav__link" href="/profile/">About</a>
+          <label class="theme-switcher theme-switcher--side">
+            <select class="theme-switcher__select" data-theme-select aria-label="Color theme">
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
         </nav>
       </aside>
 
@@ -103,31 +118,21 @@
           <h2 id="speaking-title" class="profile-section__title">登壇</h2>
           <div class="profile-link-list">
             <article class="profile-link-item">
-  <p class="profile-link-item__label">2026/02</p>
+  <p class="profile-link-item__label">2026</p>
   <div class="profile-link-item__body">
-    <a class="inline-link" href="/projects/speaking-session-design-v1/">Speaking Session Design (Dummy 1)</a>
-    <p class="profile-link-item__note">Speaking / Dummy Subtitle 1</p>
+    <a class="inline-link" href="/projects/speaking-design-conference-2026/">Design Conference 2026</a>
   </div>
 </article>
 <article class="profile-link-item">
-  <p class="profile-link-item__label">2026/02</p>
+  <p class="profile-link-item__label">2026</p>
   <div class="profile-link-item__body">
-    <a class="inline-link" href="/projects/speaking-session-design-v2/">Speaking Session Design (Dummy 2)</a>
-    <p class="profile-link-item__note">Speaking / Dummy Subtitle 2</p>
+    <a class="inline-link" href="/projects/speaking-ui-meetup-2026/">UI Meetup 2026</a>
   </div>
 </article>
 <article class="profile-link-item">
-  <p class="profile-link-item__label">2026/02</p>
+  <p class="profile-link-item__label">2025</p>
   <div class="profile-link-item__body">
-    <a class="inline-link" href="/projects/speaking-session-design-v3/">Speaking Session Design (Dummy 3)</a>
-    <p class="profile-link-item__note">Speaking / Dummy Subtitle 3</p>
-  </div>
-</article>
-<article class="profile-link-item">
-  <p class="profile-link-item__label">2026/02</p>
-  <div class="profile-link-item__body">
-    <a class="inline-link" href="/projects/speaking-session-design-v4/">Speaking Session Design (Dummy 4)</a>
-    <p class="profile-link-item__note">Speaking / Dummy Subtitle 4</p>
+    <a class="inline-link" href="/projects/speaking-product-design-night-2025/">Product Design Night 2025</a>
   </div>
 </article>
           </div>

@@ -1,14 +1,22 @@
 (function () {
-  function setupCardPressFeedback() {
-    var cards = document.querySelectorAll(
-      ".site-shell:not(.site-shell--project) .bento-card, .site-shell:not(.site-shell--project) .sns-card"
+  function setupPressFeedback() {
+    var pressTargets = document.querySelectorAll(
+      [
+        ".site-shell:not(.site-shell--project) .bento-card",
+        ".site-shell:not(.site-shell--project) .sns-card",
+        ".site-header__link",
+        ".side-nav__link",
+        ".project-detail-nav__link:not(.project-detail-nav__link--disabled)",
+        ".theme-switcher",
+        ".about-teaser__link"
+      ].join(", ")
     );
 
-    if (!cards.length) {
+    if (!pressTargets.length) {
       return;
     }
 
-    cards.forEach(function (card) {
+    pressTargets.forEach(function (target) {
       var pressStartedAt = 0;
       var releaseTimerId = 0;
 
@@ -20,11 +28,11 @@
       }
 
       function setPressed() {
-        card.classList.add("is-pressed");
+        target.classList.add("is-pressed");
       }
 
       function clearPressed() {
-        card.classList.remove("is-pressed");
+        target.classList.remove("is-pressed");
       }
 
       function scheduleRelease(minimumPressMs) {
@@ -39,7 +47,7 @@
         }, delay);
       }
 
-      card.addEventListener("pointerdown", function (event) {
+      target.addEventListener("pointerdown", function (event) {
         if (event.pointerType === "mouse" && event.button !== 0) {
           return;
         }
@@ -47,26 +55,26 @@
         setPressed();
       });
 
-      card.addEventListener("pointerup", function (event) {
+      target.addEventListener("pointerup", function (event) {
         if (event.pointerType === "mouse" && event.button !== 0) {
           return;
         }
         scheduleRelease(320);
       });
 
-      card.addEventListener("pointercancel", function () {
+      target.addEventListener("pointercancel", function () {
         clearReleaseTimer();
         clearPressed();
       });
 
-      card.addEventListener("pointerleave", function (event) {
+      target.addEventListener("pointerleave", function (event) {
         if (event.pointerType === "mouse") {
           clearReleaseTimer();
           clearPressed();
         }
       });
 
-      card.addEventListener("blur", function () {
+      target.addEventListener("blur", function () {
         clearReleaseTimer();
         clearPressed();
       });
@@ -106,9 +114,76 @@
     });
   }
 
+  function setupThemeSwitcher() {
+    var selects = document.querySelectorAll("[data-theme-select]");
+
+    if (!selects.length) {
+      document.documentElement.dataset.theme = "dark";
+      return;
+    }
+
+    var visibleSelects = Array.prototype.filter.call(selects, function (select) {
+      var switcher = select.closest(".theme-switcher");
+      return switcher && window.getComputedStyle(switcher).display !== "none";
+    });
+
+    if (!visibleSelects.length) {
+      document.documentElement.dataset.theme = "dark";
+      return;
+    }
+
+    var storageKey = "color-theme";
+    var validThemes = {
+      system: true,
+      light: true,
+      dark: true
+    };
+
+    function readStoredTheme() {
+      try {
+        var storedTheme = window.localStorage.getItem(storageKey);
+        return validThemes[storedTheme] ? storedTheme : "system";
+      } catch (error) {
+        return "system";
+      }
+    }
+
+    function writeStoredTheme(theme) {
+      try {
+        window.localStorage.setItem(storageKey, theme);
+      } catch (error) {
+        return;
+      }
+    }
+
+    function applyTheme(theme) {
+      var nextTheme = validThemes[theme] ? theme : "system";
+
+      document.documentElement.dataset.theme = nextTheme;
+      writeStoredTheme(nextTheme);
+
+      selects.forEach(function (select) {
+        select.value = nextTheme;
+        var switcher = select.closest(".theme-switcher");
+
+        if (switcher) {
+          switcher.dataset.themeState = nextTheme;
+        }
+      });
+    }
+
+    selects.forEach(function (select) {
+      select.addEventListener("change", function () {
+        applyTheme(select.value);
+      });
+    });
+
+    applyTheme(readStoredTheme());
+  }
+
   function setupOpticalAlignment() {
     var elements = document.querySelectorAll(
-      ".masthead-title, .bento-card__title, .project-section__title, .projects-index-intro h1, .profile-page-title, .profile-section__title, .detail-module__title, .description-subtitle"
+      ".masthead-title, .bento-card__title, .project-section__title, .home-speaking__heading, .profile-page-title, .profile-section__title, .detail-module__title, .description-subtitle"
     );
 
     if (!elements.length) {
@@ -162,7 +237,120 @@
     window.addEventListener("resize", alignInk);
   }
 
-  setupCardPressFeedback();
+  function setupHomeScrollTheme() {
+    var body = document.body;
+    var works = document.querySelector("#works");
+
+    if (!body || !body.classList.contains("page-home") || !works) {
+      return;
+    }
+
+    var ticking = false;
+
+    function updateTheme() {
+      ticking = false;
+      var triggerY = window.innerHeight * 0.45;
+      var workTop = works.getBoundingClientRect().top;
+      body.classList.toggle("is-work-theme", workTop <= triggerY);
+    }
+
+    function requestUpdate() {
+      if (ticking) {
+        return;
+      }
+
+      ticking = true;
+      window.requestAnimationFrame(updateTheme);
+    }
+
+    updateTheme();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    window.addEventListener("hashchange", requestUpdate);
+    window.setTimeout(requestUpdate, 0);
+  }
+
+  function setupGreetingScramble() {
+    var greeting = document.querySelector(".about-teaser__greeting");
+
+    if (!greeting) {
+      return;
+    }
+
+    var source = greeting.getAttribute("data-greetings") || "";
+    var greetings = source
+      .split("|")
+      .map(function (item) {
+        return item.trim();
+      })
+      .filter(Boolean);
+
+    if (greetings.length < 2) {
+      return;
+    }
+
+    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var scrambleCharacters = "abcdefghijklmnopqrstuvwxyz0123456789@#$%&*+=?";
+    var index = 0;
+    var frame = 0;
+    var frameCount = reduceMotion ? 6 : 12;
+    var frameDelay = reduceMotion ? 70 : 42;
+    var holdDelay = reduceMotion ? 2800 : 2200;
+    var timerId = 0;
+
+    function randomCharacter() {
+      return scrambleCharacters.charAt(Math.floor(Math.random() * scrambleCharacters.length));
+    }
+
+    function scrambleToward(target) {
+      var targetCharacters = Array.from(target);
+      var revealCount = Math.floor((frame / frameCount) * targetCharacters.length);
+
+      greeting.textContent = targetCharacters
+        .map(function (character, characterIndex) {
+          if (characterIndex < revealCount || character === " " || character === ".") {
+            return character;
+          }
+
+          return randomCharacter();
+        })
+        .join("");
+
+      greeting.classList.add("is-scrambling");
+      frame += 1;
+
+      if (frame <= frameCount) {
+        timerId = window.setTimeout(function () {
+          scrambleToward(target);
+        }, frameDelay);
+        return;
+      }
+
+      greeting.textContent = target;
+      greeting.classList.remove("is-scrambling");
+      frame = 0;
+      timerId = window.setTimeout(nextGreeting, holdDelay);
+    }
+
+    function nextGreeting() {
+      index = (index + 1) % greetings.length;
+      scrambleToward(greetings[index]);
+    }
+
+    timerId = window.setTimeout(nextGreeting, holdDelay);
+
+    window.addEventListener("pagehide", function () {
+      if (timerId) {
+        window.clearTimeout(timerId);
+      }
+    });
+  }
+
+  setupPressFeedback();
   setupGridOverlay();
+  setupThemeSwitcher();
   setupOpticalAlignment();
+  setupHomeScrollTheme();
+  setupGreetingScramble();
 })();

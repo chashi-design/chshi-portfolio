@@ -17,6 +17,11 @@
     <meta name="twitter:description" content="{{OG_DESCRIPTION}}" />
     <meta name="twitter:image" content="{{OG_IMAGE}}" />
 
+    <script>
+      (function () {
+        document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
     <link rel="stylesheet" href="{{ASSET_PREFIX}}/assets/styles.css?v={{ASSET_VERSION}}" />
     <script defer src="{{ASSET_PREFIX}}/assets/app.js?v={{ASSET_VERSION}}"></script>
     <script type="application/ld+json">{{JSON_LD}}</script>
@@ -26,8 +31,13 @@
       <header class="site-header">
         <a class="site-header__link site-header__home" href="{{HOME_URL}}">Home</a>
         <nav class="site-header__nav" aria-label="Primary">
-          <a class="site-header__link" href="{{WORK_URL}}">Work</a>
-          <a class="site-header__link" href="{{PROFILE_URL}}">About</a>
+          <label class="theme-switcher">
+            <select class="theme-switcher__select" data-theme-select aria-label="Color theme">
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
         </nav>
       </header>
     </div>
@@ -37,38 +47,28 @@
       <aside class="side-nav" aria-label="Page navigation">
         <nav class="side-nav__links" aria-label="Primary">
           <a class="side-nav__link" href="{{HOME_URL}}">Home</a>
-          <a class="side-nav__link" href="{{WORK_URL}}">Work</a>
-          <a class="side-nav__link" href="{{PROFILE_URL}}">About</a>
+          <label class="theme-switcher theme-switcher--side">
+            <select class="theme-switcher__select" data-theme-select aria-label="Color theme">
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
         </nav>
       </aside>
 
       <main>
-        <section class="swiss-masthead swiss-band" aria-labelledby="home-title">
-          <div class="swiss-masthead__identity">
-            <h1 class="masthead-title" id="home-title">{{PERSON_NAME}}</h1>
-            {{PERSON_SUBNAME}}
-          </div>
-          <div class="swiss-masthead__copy">
-            <p class="swiss-lead">{{SITE_DESCRIPTION}}</p>
-            <ul class="swiss-lead-list">
-              {{SITE_LEAD_BULLETS}}
-            </ul>
-          </div>
-          <figure class="swiss-profile">
-            <img src="{{PROFILE_IMAGE}}" alt="{{PERSON_NAME}}" loading="eager" decoding="async" />
-          </figure>
-        </section>
-
-        <section class="sns-links" aria-label="SNS links">
-          <div class="sns-grid">
-            {{SNS_CARDS}}
+        <section class="about-teaser" aria-labelledby="about-teaser-title">
+          <div class="about-teaser__inner">
+            <h2 id="about-teaser-title" class="about-teaser__title"><span class="about-teaser__greeting" data-greetings="hi.|hey.|hola.|ciao.|ola.|hej.|はじめまして|你好。|안녕.">hi.</span><br />i'm Chashi.</h2>
+            <p class="about-teaser__copy">I’m a designer working across UI/UX design and front-end implementation, shaping experiences from information architecture to interface detail.</p>
+            <a class="about-teaser__link" href="{{PROFILE_URL}}">→ say hi</a>
           </div>
         </section>
-
         <div class="project-sections" id="works">
           {{PROJECT_SECTIONS}}
         </div>
-        {{MORE_WORKS_SECTION}}
+        {{SPEAKING_SECTION}}
       </main>
 
       <footer class="site-footer">

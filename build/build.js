@@ -8,11 +8,9 @@ const ROOT = path.resolve(__dirname, "..");
 const CONTENT_PATH = path.join(ROOT, "content.json");
 const INDEX_TEMPLATE_PATH = path.join(ROOT, "templates", "index.template.html");
 const PROJECT_TEMPLATE_PATH = path.join(ROOT, "templates", "project.template.html");
-const PROJECTS_TEMPLATE_PATH = path.join(ROOT, "templates", "projects.template.html");
 const PROFILE_TEMPLATE_PATH = path.join(ROOT, "templates", "profile.template.html");
 const OUTPUT_INDEX_PATH = path.join(ROOT, "index.html");
 const OUTPUT_PROJECTS_DIR = path.join(ROOT, "projects");
-const OUTPUT_PROJECTS_INDEX_PATH = path.join(OUTPUT_PROJECTS_DIR, "index.html");
 const OUTPUT_PROFILE_DIR = path.join(ROOT, "profile");
 const OUTPUT_PROFILE_INDEX_PATH = path.join(OUTPUT_PROFILE_DIR, "index.html");
 const BUILD_DIR = path.join(ROOT, "build");
@@ -148,17 +146,17 @@ function truncate(text, limit) {
   return `${raw.slice(0, Math.max(0, limit - 1))}…`;
 }
 
-function toYearMonthNumber(value) {
-  const matched = toText(value).match(/^(\d{4})\/(0[1-9]|1[0-2])$/);
+function toYearNumber(value) {
+  const matched = toText(value).match(/^(\d{4})$/);
   if (!matched) {
     return 0;
   }
-  return Number(matched[1]) * 100 + Number(matched[2]);
+  return Number(matched[1]);
 }
 
 function sortByDateDescThenOrderAsc(projects) {
   return [...projects].sort((a, b) => {
-    const dateDiff = toYearMonthNumber(b.date) - toYearMonthNumber(a.date);
+    const dateDiff = toYearNumber(b.date) - toYearNumber(a.date);
     if (dateDiff !== 0) {
       return dateDiff;
     }
@@ -166,12 +164,9 @@ function sortByDateDescThenOrderAsc(projects) {
   });
 }
 
-function getFeaturedProjects(projects, fallbackCount) {
-  const featured = projects.filter((project) => project.featured === true);
-  if (featured.length > 0) {
-    return [...featured].sort((a, b) => Number(a.order) - Number(b.order));
-  }
-  return projects.slice(0, Math.max(1, fallbackCount));
+function isSpeakingProject(project) {
+  const category = toText(project.category).toLowerCase();
+  return category === "talk" || toText(project.slug).startsWith("speaking-");
 }
 
 function validateContent(content) {
@@ -216,12 +211,6 @@ function validateContent(content) {
       assert(toText(item[field]).length > 0, `site.snsLinks[${index}].${field} is required.`);
     });
   });
-  assert(Array.isArray(site.indexSections), "site.indexSections must be an array.");
-  assert(site.indexSections.length > 0, "site.indexSections must contain at least one section.");
-  site.indexSections.forEach((sectionName, sectionIndex) => {
-    assert(toText(sectionName).length > 0, `site.indexSections[${sectionIndex}] must not be empty.`);
-  });
-
   assert(/^https?:\/\//i.test(site.canonicalBase), "site.canonicalBase must start with http:// or https://.");
 
   assert(Array.isArray(content.projects), "projects must be an array.");
@@ -234,16 +223,12 @@ function validateContent(content) {
     const pointer = `projects[${index}]`;
     assert(project && typeof project === "object", `${pointer} must be an object.`);
 
-    ["slug", "title", "date", "subtitle", "summary", "section", "serviceIcon", "heroImage"].forEach((field) => {
+    ["slug", "title", "date", "heroImage"].forEach((field) => {
       assert(toText(project[field]).length > 0, `${pointer}.${field} is required.`);
     });
     assert(
-      /^\d{4}\/(0[1-9]|1[0-2])$/.test(toText(project.date)),
-      `${pointer}.date must use yyyy/mm format.`
-    );
-    assert(
-      site.indexSections.includes(project.section),
-      `${pointer}.section must be one of site.indexSections.`
+      /^\d{4}$/.test(toText(project.date)),
+      `${pointer}.date must use yyyy format.`
     );
 
     assert(
@@ -303,7 +288,6 @@ function validateContent(content) {
           assert(toText(block.src).length > 0, `${blockPointer}.src is required for image blocks.`);
         }
         if (type === "text") {
-          assert(toText(block.subtitle).length > 0, `${blockPointer}.subtitle is required for text blocks.`);
           assert(toText(block.body).length > 0, `${blockPointer}.body is required for text blocks.`);
         }
       });
@@ -314,7 +298,6 @@ function validateContent(content) {
         project.detailSections.forEach((section, sectionIndex) => {
           const sectionPointer = `${pointer}.detailSections[${sectionIndex}]`;
           assert(section && typeof section === "object", `${sectionPointer} must be an object.`);
-          assert(toText(section.heading).length > 0, `${sectionPointer}.heading is required.`);
 
           if (section.blocks !== undefined) {
             validateDetailContentBlocks(section.blocks, sectionPointer);
@@ -369,7 +352,11 @@ function validateContent(content) {
   });
 }
 
-function buildProjectCard(project, context) {
+function buildProjectCard(project, context, options = {}) {
+  const showServiceBrand = options.showServiceBrand !== false;
+  const showServiceTitle = showServiceBrand && options.showServiceTitle !== false;
+  const showDate = options.showDate !== false;
+  const showCategory = options.showCategory === true;
   const bento = project.bento || {};
   const colDesktop = clampInt(bento.colSpan, 1, 12, project.featured ? 6 : 4);
   const rowDesktop = clampInt(bento.rowSpan, 1, 6, project.featured ? 2 : 1);
@@ -388,67 +375,89 @@ function buildProjectCard(project, context) {
   ].join(";");
 
   const projectPath = withBasePath(context.basePath, `/projects/${project.slug}/`);
-  const serviceIcon = withBasePath(context.basePath, toText(project.serviceIcon));
   const heroImage = withBasePath(context.basePath, toText(project.heroImage));
   const date = toText(project.date);
+  const category = toText(project.category) || "UI Design";
+  const linkLabel = [project.title, showCategory ? category : ""]
+    .map((item) => toText(item))
+    .filter(Boolean)
+    .join(" / ");
 
   return [
-    `<a class="card bento-card clothoid-corner" href="${escapeAttr(projectPath)}" style="${escapeAttr(style)}">`,
+    `<a class="card bento-card clothoid-corner" href="${escapeAttr(projectPath)}" style="${escapeAttr(style)}" aria-label="${escapeAttr(linkLabel)}">`,
     `  <div class="bento-card__body">`,
-    `    <span class="bento-card__service" aria-hidden="true">`,
-    `      <img src="${escapeAttr(serviceIcon)}" alt="" loading="lazy" decoding="async" />`,
-    `    </span>`,
-    `    <h2 class="bento-card__title">${escapeHtml(project.title)}</h2>`,
-    `    <p class="bento-card__date">${escapeHtml(date)}</p>`,
-    `    <p class="bento-card__subtitle">${escapeHtml(project.subtitle)}</p>`,
+    showServiceTitle ? `    <h2 class="bento-card__title">${escapeHtml(project.title)}</h2>` : "",
+    showDate ? `    <p class="bento-card__date">${escapeHtml(date)}</p>` : "",
+    showCategory ? `    <p class="bento-card__category">${escapeHtml(category)}</p>` : "",
     `  </div>`,
     `  <figure class="bento-card__media">`,
     `    <img src="${escapeAttr(heroImage)}" alt="${escapeAttr(project.title)} preview" loading="lazy" decoding="async" />`,
     `  </figure>`,
     `</a>`
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+function buildProjectSections(projects, context, options = {}) {
+  if (options.flatten === true) {
+    const orderedItems = [...projects];
+    const cards = orderedItems.map((project) => buildProjectCard(project, context, options.cardOptions)).join("\n");
+    const label = toText(options.ariaLabel) || "All projects";
+
+    return [
+      `<section class="project-section project-section--flat" aria-label="${escapeAttr(label)}">`,
+      `  <div class="bento-grid" aria-label="${escapeAttr(label)}">`,
+      cards,
+      "  </div>",
+      "</section>"
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
+
+  const label = toText(options.ariaLabel) || "Projects";
+  const orderedItems = sortByDateDescThenOrderAsc(projects);
+  const cards = orderedItems.map((project) => buildProjectCard(project, context, options.cardOptions)).join("\n");
+
+  return [
+    `<section class="project-section" aria-label="${escapeAttr(label)}">`,
+    `  <div class="bento-grid" aria-label="${escapeAttr(label)}">`,
+    cards,
+    "  </div>",
+    "</section>"
   ].join("\n");
 }
 
-function toSectionId(value) {
-  return (
-    toText(value)
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "") || "section"
+function buildHomeSpeakingSection(projects, context) {
+  const speakingProjects = sortByDateDescThenOrderAsc(
+    projects.filter((project) => isSpeakingProject(project))
   );
-}
 
-function buildProjectSections(projects, context, sectionOrder) {
-  const sectionMap = new Map(sectionOrder.map((sectionName) => [sectionName, []]));
+  const items = speakingProjects.length
+    ? speakingProjects
+        .map((project) => {
+          const href = withBasePath(context.basePath, `/projects/${project.slug}/`);
+          const category = toText(project.category) || "UI Design";
 
-  projects.forEach((project) => {
-    const sectionName = toText(project.section);
-    if (!sectionMap.has(sectionName)) {
-      sectionMap.set(sectionName, []);
-    }
-    sectionMap.get(sectionName).push(project);
-  });
+          return [
+            `<a class="home-speaking__item" href="${escapeAttr(href)}" aria-label="${escapeAttr(`${project.title} / ${category}`)}">`,
+            `  <span class="home-speaking__title">${escapeHtml(project.title)}</span>`,
+            `  <span class="home-speaking__category">${escapeHtml(category)}</span>`,
+            "</a>"
+          ].join("\n");
+        })
+        .join("\n")
+    : '<p class="home-speaking__empty">準備中</p>';
 
-  return [...sectionMap.entries()]
-    .map(([sectionName, items], sectionIndex) => {
-      if (!items.length) {
-        return "";
-      }
-      const orderedItems = sortByDateDescThenOrderAsc(items);
-      const sectionId = `project-section-${sectionIndex + 1}-${toSectionId(sectionName)}`;
-      const cards = orderedItems.map((project) => buildProjectCard(project, context)).join("\n");
-
-      return [
-        `<section class="project-section" aria-labelledby="${escapeAttr(sectionId)}">`,
-        `  <h2 class="project-section__title" id="${escapeAttr(sectionId)}">${escapeHtml(sectionName)}</h2>`,
-        `  <div class="bento-grid" aria-label="${escapeAttr(`${sectionName} projects`)}">`,
-        cards,
-        "  </div>",
-        "</section>"
-      ].join("\n");
-    })
-    .filter(Boolean)
-    .join("\n");
+  return [
+    '<section class="home-speaking" aria-labelledby="home-speaking-title">',
+    '  <h2 class="home-speaking__heading" id="home-speaking-title">登壇</h2>',
+    '  <div class="home-speaking__list">',
+    items,
+    "  </div>",
+    "</section>"
+  ].join("\n");
 }
 
 function buildIndexJsonLd(context, homeCanonical) {
@@ -465,40 +474,6 @@ function buildIndexJsonLd(context, homeCanonical) {
         name: context.siteTitle,
         description: context.siteDescription,
         url: homeCanonical
-      }
-    ]
-  };
-}
-
-function buildProjectsIndexJsonLd(context, homeCanonical, projectsCanonical, projects, basePath) {
-  return {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        name: context.personName,
-        url: context.personUrl || homeCanonical
-      },
-      {
-        "@type": "WebSite",
-        name: context.siteTitle,
-        description: context.siteDescription,
-        url: homeCanonical
-      },
-      {
-        "@type": "CollectionPage",
-        name: `${context.siteTitle} All Works`,
-        description: `All portfolio works (${projects.length})`,
-        url: projectsCanonical
-      },
-      {
-        "@type": "ItemList",
-        itemListElement: projects.map((project, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          url: toAbsoluteUrl(context.canonicalBase, withBasePath(basePath, `/projects/${project.slug}/`)),
-          name: toText(project.title)
-        }))
       }
     ]
   };
@@ -589,7 +564,7 @@ function buildScreen(screen, fallbackAlt) {
   const source = escapeAttr(toText(screen.src));
   const alt = escapeAttr(toText(screen.alt) || fallbackAlt);
   const aspect = escapeAttr(normalizeAspect(screen.aspect));
-  const fit = toText(screen.fit) === "contain" ? "contain" : "cover";
+  const fit = "contain";
   const captionText = toText(screen.caption);
 
   return [
@@ -712,7 +687,7 @@ function normalizeDetailBlock(block) {
 
   return {
     type: "text",
-    title: toText(block.heading) || toText(block.subtitle),
+    title: toText(block.heading),
     body: block.body
   };
 }
@@ -784,8 +759,8 @@ function normalizeSectionBlocks(section) {
 
 function normalizeDetailSections(project) {
   if (Array.isArray(project.detailSections)) {
-    return project.detailSections.map((section, index) => ({
-      title: toText(section.heading) || `Section ${index + 1}`,
+    return project.detailSections.map((section) => ({
+      title: toText(section.heading),
       blocks: normalizeSectionBlocks(section)
     }));
   }
@@ -796,7 +771,7 @@ function normalizeDetailSections(project) {
       const sectionValue = customSections[sectionConfig.key] || {};
 
       return {
-        title: toText(sectionValue.heading) || sectionConfig.title,
+        title: toText(sectionValue.heading),
         blocks: normalizeSectionBlocks(sectionValue)
       };
     });
@@ -809,7 +784,7 @@ function normalizeDetailSections(project) {
     {
       title: "概要",
       blocks: normalizeSectionBlocks({
-        body: project.summary,
+        body: project.title,
         image: pickScreen(project, 0)
       })
     },
@@ -857,7 +832,7 @@ function buildDescriptionBlockMarkup(block, project, sectionTitle, context, bloc
 
     return [
       '<figure class="description-block description-block--image description-item__media">',
-      `  <img src="${escapeAttr(withBasePath(context.basePath, image.src))}" alt="${escapeAttr(toText(image.alt) || `${project.title} ${sectionTitle} ${blockIndex + 1}`)}" loading="lazy" decoding="async" style="--aspect:${escapeAttr(normalizeAspect(image.aspect))};--fit:${escapeAttr(toText(image.fit) === "contain" ? "contain" : "cover")};" />`,
+      `  <img src="${escapeAttr(withBasePath(context.basePath, image.src))}" alt="${escapeAttr(toText(image.alt) || `${project.title} ${sectionTitle} ${blockIndex + 1}`)}" loading="lazy" decoding="async" style="--aspect:${escapeAttr(normalizeAspect(image.aspect))};--fit:contain;" />`,
       toText(image.caption).length > 0 ? `  <figcaption class="description-image__caption">${escapeHtml(image.caption)}</figcaption>` : "",
       "</figure>"
     ]
@@ -879,22 +854,46 @@ function buildDescriptionSections(project, context) {
   return normalizeDetailSections(project)
     .filter((section) => Array.isArray(section.blocks) && section.blocks.length > 0)
     .map((section) => {
+      const title = toText(section.title);
       const contentMarkup = [
         '<div class="description-item__content">',
-        section.blocks.map((block, blockIndex) => `  ${buildDescriptionBlockMarkup(block, project, section.title, context, blockIndex)}`).join("\n"),
+        section.blocks.map((block, blockIndex) => `  ${buildDescriptionBlockMarkup(block, project, title, context, blockIndex)}`).join("\n"),
         "</div>"
       ].join("\n");
+      const titleMarkup = title
+        ? [
+            '  <div class="description-item__copy">',
+            `    <h2 class="description-subtitle">${escapeHtml(title)}</h2>`,
+            "  </div>"
+          ].join("\n")
+        : "";
+      const firstBlockType = toText(section.blocks[0]?.type) || "text";
+      const articleClass = [
+        "description-item",
+        title ? "" : "description-item--untitled",
+        firstBlockType === "image" ? "description-item--starts-image" : "description-item--starts-text"
+      ]
+        .filter(Boolean)
+        .join(" ");
 
       return [
-        '<article class="description-item">',
-        '  <div class="description-item__copy">',
-        `    <h2 class="description-subtitle">${escapeHtml(section.title)}</h2>`,
-        "  </div>",
+        `<article class="${articleClass}">`,
+        titleMarkup,
         contentMarkup,
         "</article>"
-      ].join("\n");
+      ].filter(Boolean).join("\n");
     })
     .join("\n");
+}
+
+function getProjectDescription(project, context) {
+  const sectionText = normalizeDetailSections(project)
+    .flatMap((section) => section.blocks || [])
+    .filter((block) => block.type === "text")
+    .flatMap((block) => toDescriptionLines(block.body))
+    .find(Boolean);
+
+  return sectionText || context.siteDescription || project.title;
 }
 
 function buildProjectJsonLd(project, context) {
@@ -910,7 +909,7 @@ function buildProjectJsonLd(project, context) {
   const work = {
     "@type": projectType,
     name: project.title,
-    description: truncate(project.summary, 180),
+    description: truncate(getProjectDescription(project, context), 180),
     image: imageUrl,
     url: canonicalUrl,
     keywords: project.tags.join(", "),
@@ -999,31 +998,41 @@ function buildOptionalSections(project) {
 }
 
 function buildPagination(projects, index, context) {
+  if (index < 0) {
+    return [
+      '<div class="project-detail-nav" role="navigation" aria-label="Project navigation">',
+      '<span class="project-detail-nav__link project-detail-nav__link--disabled" aria-disabled="true">← prev</span>',
+      '<span class="project-detail-nav__count" aria-label="Project position">-/-</span>',
+      '<span class="project-detail-nav__link project-detail-nav__link--disabled" aria-disabled="true">next →</span>',
+      "</div>"
+    ].join("\n");
+  }
+
   const prev = projects[index - 1];
   const next = projects[index + 1];
-  const homePath = withBasePath(context.basePath, "/");
 
   const prevMarkup = prev
-    ? `<a href="${escapeAttr(withBasePath(context.basePath, `/projects/${prev.slug}/`))}">← ${escapeHtml(prev.title)}</a>`
-    : '<span aria-hidden="true"></span>';
+    ? `<a class="project-detail-nav__link" href="${escapeAttr(withBasePath(context.basePath, `/projects/${prev.slug}/`))}" aria-label="${escapeAttr(`Previous: ${prev.title}`)}">← prev</a>`
+    : '<span class="project-detail-nav__link project-detail-nav__link--disabled" aria-disabled="true">← prev</span>';
 
   const nextMarkup = next
-    ? `<a href="${escapeAttr(withBasePath(context.basePath, `/projects/${next.slug}/`))}">${escapeHtml(next.title)} →</a>`
-    : '<span aria-hidden="true"></span>';
-
-  const backMarkup = `<a href="${escapeAttr(homePath)}">Back</a>`;
+    ? `<a class="project-detail-nav__link" href="${escapeAttr(withBasePath(context.basePath, `/projects/${next.slug}/`))}" aria-label="${escapeAttr(`Next: ${next.title}`)}">next →</a>`
+    : '<span class="project-detail-nav__link project-detail-nav__link--disabled" aria-disabled="true">next →</span>';
+  const countMarkup = `<span class="project-detail-nav__count" aria-label="${escapeAttr(`Project ${index + 1} of ${projects.length}`)}">${index + 1}/${projects.length}</span>`;
 
   return [
-    `<span class="project-nav__slot">${prevMarkup}</span>`,
-    `<span class="project-nav__slot">${backMarkup}</span>`,
-    `<span class="project-nav__slot">${nextMarkup}</span>`
+    '<div class="project-detail-nav" role="navigation" aria-label="Project navigation">',
+    prevMarkup,
+    countMarkup,
+    nextMarkup,
+    "</div>"
   ].join("\n");
 }
 
 function buildProjectPage(project, index, projects, template, context) {
   const projectPath = withBasePath(context.basePath, `/projects/${project.slug}/`);
   const homePath = withBasePath(context.basePath, "/");
-  const projectsPath = withBasePath(context.basePath, "/projects/");
+  const workPath = `${homePath}#works`;
   const profilePath = withBasePath(context.basePath, "/profile/");
   const canonicalUrl = toAbsoluteUrl(context.canonicalBase, projectPath);
   const ogImageUrl = toAbsoluteUrl(context.canonicalBase, withBasePath(context.basePath, project.heroImage));
@@ -1033,7 +1042,7 @@ function buildProjectPage(project, index, projects, template, context) {
   const descriptionSections = buildDescriptionSections(project, context);
 
   const pageTitle = `${project.title} | ${context.siteTitle}`;
-  const metaDescription = truncate(project.summary, 160);
+  const metaDescription = truncate(getProjectDescription(project, context), 160);
 
   return renderTemplate(template, {
     PAGE_TITLE: escapeHtml(pageTitle),
@@ -1049,13 +1058,12 @@ function buildProjectPage(project, index, projects, template, context) {
     GRID_TOGGLE: GRID_TOGGLE_HTML,
     GRID_COLUMNS: GRID_COLUMNS_HTML,
     HOME_URL: escapeAttr(homePath),
-    WORK_URL: escapeAttr(projectsPath),
+    WORK_URL: escapeAttr(workPath),
     PROFILE_URL: escapeAttr(profilePath),
     PROJECT_TITLE: escapeHtml(project.title),
-    PROJECT_SUBTITLE: escapeHtml(project.subtitle),
+    PROJECT_NAV: buildPagination(projects, index, context),
     PROJECT_SERVICE: buildDetailMetaList(serviceValue),
     PROJECT_DATE: buildDetailMetaList(project.date),
-    PROJECT_SUMMARY: escapeHtml(project.summary),
     PROJECT_PLATFORM: buildDetailMetaList(platformValue),
     PROJECT_ROLE: buildDetailMetaList(roleValue),
     HERO_IMAGE: escapeAttr(withBasePath(context.basePath, project.heroImage)),
@@ -1094,7 +1102,7 @@ function buildProfileInlineText(items) {
 
 function buildProfileSpeakingItems(projects, context) {
   const items = sortByDateDescThenOrderAsc(
-    projects.filter((project) => toText(project.section) === "Speaking")
+    projects.filter((project) => isSpeakingProject(project))
   );
 
   if (items.length === 0) {
@@ -1109,7 +1117,6 @@ function buildProfileSpeakingItems(projects, context) {
         `  <p class="profile-link-item__label">${escapeHtml(project.date)}</p>`,
         '  <div class="profile-link-item__body">',
         `    <a class="inline-link" href="${escapeAttr(href)}">${escapeHtml(project.title)}</a>`,
-        `    <p class="profile-link-item__note">${escapeHtml(project.subtitle)}</p>`,
         "  </div>",
         "</article>"
       ].join("\n");
@@ -1138,40 +1145,33 @@ function buildSite(options = {}) {
   };
 
   const projects = [...content.projects].sort((a, b) => Number(a.order) - Number(b.order));
-  const featuredProjects = getFeaturedProjects(projects, 8);
-  const sectionOrder = site.indexSections.map((sectionName) => toText(sectionName));
 
   const indexTemplate = readTemplate(INDEX_TEMPLATE_PATH);
   const projectTemplate = readTemplate(PROJECT_TEMPLATE_PATH);
-  const projectsTemplate = readTemplate(PROJECTS_TEMPLATE_PATH);
   const profileTemplate = readTemplate(PROFILE_TEMPLATE_PATH);
 
-  const featuredProjectSections = buildProjectSections(featuredProjects, context, sectionOrder);
-  const allProjectSections = buildProjectSections(projects, context, sectionOrder);
+  const workProjects = projects.filter((project) => !isSpeakingProject(project));
+  const speakingProjects = projects.filter((project) => isSpeakingProject(project));
+  const projectSections = buildProjectSections(workProjects, context, {
+    flatten: true,
+    ariaLabel: "All works",
+    showTitle: false,
+    cardOptions: { showDate: false, showCategory: true }
+  });
+  const speakingSection = buildHomeSpeakingSection(projects, context);
   const snsCards = buildSnsCards(site, context);
   const siteLeadBullets = site.leadBullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n");
   const homePath = withBasePath(basePath, "/");
-  const projectsPath = withBasePath(basePath, "/projects/");
+  const workPath = `${homePath}#works`;
   const profilePath = withBasePath(basePath, "/profile/");
   const homeCanonical = toAbsoluteUrl(canonicalBase, homePath);
-  const projectsCanonical = toAbsoluteUrl(canonicalBase, projectsPath);
   const profileCanonical = toAbsoluteUrl(canonicalBase, profilePath);
   const profileDescription = toDescriptionLines(site.profile.description).join(" ");
   const defaultOgImage = toAbsoluteUrl(canonicalBase, withBasePath(basePath, site.ogImageDefault));
   const homeMetaDescription = truncate(context.siteDescription, 160);
-  const projectsMetaDescription = truncate(`All works by ${context.personName}.`, 160);
   const profileMetaDescription = truncate(profileDescription, 160);
-  const showMoreWorks = projects.length > featuredProjects.length;
-  const moreWorksSection = showMoreWorks
-    ? [
-        '<section class="more-works" aria-label="Show all works">',
-        `  <a class="button button--ghost more-works__button" href="${escapeAttr(projectsPath)}">もっと見る</a>`,
-        "</section>"
-      ].join("\n")
-    : "";
 
   const indexJsonLd = buildIndexJsonLd(context, homeCanonical);
-  const projectsJsonLd = buildProjectsIndexJsonLd(context, homeCanonical, projectsCanonical, projects, basePath);
   const profileJsonLd = buildProfileJsonLd(context, homeCanonical, profileCanonical, site, basePath);
 
   const personSubNameMarkup = context.personSubName
@@ -1192,7 +1192,7 @@ function buildSite(options = {}) {
     GRID_TOGGLE: GRID_TOGGLE_HTML,
     GRID_COLUMNS: GRID_COLUMNS_HTML,
     HOME_URL: escapeAttr(homePath),
-    WORK_URL: escapeAttr(projectsPath),
+    WORK_URL: escapeAttr(workPath),
     PROFILE_URL: escapeAttr(profilePath),
     SITE_TITLE: escapeHtml(context.siteTitle),
     PERSON_NAME: escapeHtml(context.personName),
@@ -1201,30 +1201,8 @@ function buildSite(options = {}) {
     SITE_DESCRIPTION: escapeHtml(context.siteDescription),
     SITE_LEAD_BULLETS: siteLeadBullets,
     SNS_CARDS: snsCards,
-    PROJECT_SECTIONS: featuredProjectSections,
-    MORE_WORKS_SECTION: moreWorksSection
-  });
-
-  const projectsTitle = `All Works | ${context.siteTitle}`;
-  const projectsHtml = renderTemplate(projectsTemplate, {
-    PAGE_TITLE: escapeHtml(projectsTitle),
-    META_DESCRIPTION: escapeAttr(projectsMetaDescription),
-    CANONICAL_URL: escapeAttr(projectsCanonical),
-    OG_TITLE: escapeAttr(projectsTitle),
-    OG_DESCRIPTION: escapeAttr(projectsMetaDescription),
-    OG_IMAGE: escapeAttr(defaultOgImage),
-    OG_URL: escapeAttr(projectsCanonical),
-    ASSET_PREFIX: basePath,
-    ASSET_VERSION: escapeAttr(assetVersion),
-    JSON_LD: safeJsonLd(projectsJsonLd),
-    GRID_TOGGLE: GRID_TOGGLE_HTML,
-    GRID_COLUMNS: GRID_COLUMNS_HTML,
-    HOME_URL: escapeAttr(homePath),
-    WORK_URL: escapeAttr(projectsPath),
-    PROFILE_URL: escapeAttr(profilePath),
-    LIST_TITLE: escapeHtml("All Works"),
-    LIST_DESCRIPTION: escapeHtml(`全${projects.length}件の作品を一覧で掲載しています。`),
-    PROJECT_SECTIONS: allProjectSections
+    PROJECT_SECTIONS: projectSections,
+    SPEAKING_SECTION: speakingSection
   });
 
   const profileTitle = `Profile | ${context.siteTitle}`;
@@ -1245,7 +1223,7 @@ function buildSite(options = {}) {
     GRID_TOGGLE: GRID_TOGGLE_HTML,
     GRID_COLUMNS: GRID_COLUMNS_HTML,
     HOME_URL: escapeAttr(homePath),
-    WORK_URL: escapeAttr(projectsPath),
+    WORK_URL: escapeAttr(workPath),
     PROFILE_URL: escapeAttr(profilePath),
     PERSON_NAME: escapeHtml(context.personName),
     PERSON_SUBNAME: personSubNameMarkup,
@@ -1262,14 +1240,15 @@ function buildSite(options = {}) {
 
   fs.rmSync(OUTPUT_PROJECTS_DIR, { recursive: true, force: true });
   fs.mkdirSync(OUTPUT_PROJECTS_DIR, { recursive: true });
-  fs.writeFileSync(OUTPUT_PROJECTS_INDEX_PATH, projectsHtml, "utf8");
 
   fs.rmSync(OUTPUT_PROFILE_DIR, { recursive: true, force: true });
   fs.mkdirSync(OUTPUT_PROFILE_DIR, { recursive: true });
   fs.writeFileSync(OUTPUT_PROFILE_INDEX_PATH, profileHtml, "utf8");
 
-  projects.forEach((project, index) => {
-    const pageHtml = buildProjectPage(project, index, projects, projectTemplate, context);
+  projects.forEach((project) => {
+    const navigationProjects = isSpeakingProject(project) ? speakingProjects : workProjects;
+    const navigationIndex = navigationProjects.findIndex((item) => item.slug === project.slug);
+    const pageHtml = buildProjectPage(project, navigationIndex, navigationProjects, projectTemplate, context);
     const outputDir = path.join(OUTPUT_PROJECTS_DIR, project.slug);
     fs.mkdirSync(outputDir, { recursive: true });
     fs.writeFileSync(path.join(outputDir, "index.html"), pageHtml, "utf8");
@@ -1278,7 +1257,6 @@ function buildSite(options = {}) {
   logger.log(`Built ${projects.length} projects.`);
   logger.log(`- ${path.relative(ROOT, OUTPUT_INDEX_PATH)}`);
   logger.log(`- ${path.relative(ROOT, OUTPUT_PROFILE_INDEX_PATH)}`);
-  logger.log(`- ${path.relative(ROOT, OUTPUT_PROJECTS_INDEX_PATH)}`);
   projects.forEach((project) => {
     logger.log(`- projects/${project.slug}/index.html`);
   });
@@ -1288,7 +1266,6 @@ function buildSite(options = {}) {
     outputs: [
       OUTPUT_INDEX_PATH,
       OUTPUT_PROFILE_INDEX_PATH,
-      OUTPUT_PROJECTS_INDEX_PATH,
       ...projects.map((project) => path.join(OUTPUT_PROJECTS_DIR, project.slug, "index.html"))
     ]
   };

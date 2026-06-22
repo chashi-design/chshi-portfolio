@@ -17,6 +17,11 @@
     <meta name="twitter:description" content="{{OG_DESCRIPTION}}" />
     <meta name="twitter:image" content="{{OG_IMAGE}}" />
 
+    <script>
+      (function () {
+        document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
     <link rel="stylesheet" href="{{ASSET_PREFIX}}/assets/styles.css?v={{ASSET_VERSION}}" />
     <script defer src="{{ASSET_PREFIX}}/assets/app.js?v={{ASSET_VERSION}}"></script>
     <script type="application/ld+json">{{JSON_LD}}</script>
@@ -26,8 +31,14 @@
       <header class="site-header">
         <a class="site-header__link site-header__home" href="{{HOME_URL}}">Home</a>
         <nav class="site-header__nav" aria-label="Primary">
-          <a class="site-header__link" href="{{WORK_URL}}">Work</a>
-          <a class="site-header__link" href="{{PROFILE_URL}}">About</a>
+          {{PROJECT_NAV}}
+          <label class="theme-switcher">
+            <select class="theme-switcher__select" data-theme-select aria-label="Color theme">
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
         </nav>
       </header>
     </div>
@@ -37,20 +48,22 @@
       <aside class="side-nav" aria-label="Page navigation">
         <nav class="side-nav__links" aria-label="Primary">
           <a class="side-nav__link" href="{{HOME_URL}}">Home</a>
-          <a class="side-nav__link" href="{{WORK_URL}}">Work</a>
-          <a class="side-nav__link" href="{{PROFILE_URL}}">About</a>
+          {{PROJECT_NAV}}
+          <label class="theme-switcher theme-switcher--side">
+            <select class="theme-switcher__select" data-theme-select aria-label="Color theme">
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
         </nav>
       </aside>
 
       <main class="project-layout project-layout--detail">
         <section class="card detail-module" aria-labelledby="detail-module-title">
-          <h1 id="detail-module-title" class="detail-module__title">{{PROJECT_SUBTITLE}}</h1>
+          <h1 id="detail-module-title" class="detail-module__title">{{PROJECT_TITLE}}</h1>
           <dl class="detail-module__list">
             <div class="detail-module__row detail-module__row--meta">
-              <div class="detail-module__meta-item">
-                <dt>Service</dt>
-                <dd>{{PROJECT_SERVICE}}</dd>
-              </div>
               <div class="detail-module__meta-item">
                 <dt>Role</dt>
                 <dd>{{PROJECT_ROLE}}</dd>
