@@ -2641,7 +2641,7 @@ h3 {
 .page-profile .career-item__title,
 .page-profile .profile-link-item__note {
   color: var(--ink);
-  font-size: 14px;
+  font-size: 15px;
   line-height: var(--lh);
 }
 
@@ -2655,33 +2655,60 @@ h3 {
 .page-profile .career-item,
 .page-profile .profile-link-item {
   display: grid;
-  grid-template-columns: repeat(13, minmax(0, 1fr));
-  column-gap: var(--gutter);
+  column-gap: 0;
   align-items: start;
+}
+
+.page-profile .career-item {
+  grid-template-columns: 88px minmax(0, 1fr);
+  column-gap: calc(var(--bl) * 2);
 }
 
 .page-profile .career-item__period,
 .page-profile .profile-link-item__label {
-  grid-column: 1 / 3;
+  grid-column: 1;
   margin: 0;
-  color: var(--accent);
-  font-size: 14px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 400;
   line-height: var(--lh);
 }
 
 .page-profile .career-item__title,
 .page-profile .profile-link-item__body {
-  grid-column: 3 / 8;
+  grid-column: 2;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: var(--lh);
 }
 
 .page-profile .profile-sns-links .sns-grid {
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  column-gap: var(--gutter);
-  row-gap: calc(var(--lh) * 2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 calc(var(--bl) / 2);
 }
 
-.page-profile .profile-sns-links .sns-card {
-  grid-column: span 2;
+.page-profile .profile-sns-link {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: var(--lh);
+  text-decoration: underline;
+  text-underline-offset: calc(var(--bl) / 2);
+}
+
+.page-profile .profile-sns-separator {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: var(--lh);
+}
+
+.page-profile .profile-sns-link:hover,
+.page-profile .profile-sns-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: calc(var(--bl) / 2);
 }
 
 .page-detail .detail-module {
@@ -3078,6 +3105,18 @@ h3 {
     width: 100%;
     max-width: none;
   }
+
+  .page-profile .career-item {
+    grid-template-columns: 88px minmax(0, 1fr);
+  }
+
+  .page-profile .career-item__period {
+    grid-column: 1;
+  }
+
+  .page-profile .career-item__title {
+    grid-column: 2;
+  }
 }
 
 /* Preserve source asset proportions for every portfolio image. */
@@ -3288,6 +3327,7 @@ h3 {
 }
 
 .page-profile .profile-page-title,
+.page-profile .profile-section__title,
 .page-detail .detail-module__title {
   margin: 0;
   width: 100%;

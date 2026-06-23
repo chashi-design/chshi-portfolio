@@ -147,11 +147,11 @@ function truncate(text, limit) {
 }
 
 function toYearNumber(value) {
-  const matched = toText(value).match(/^(\d{4})$/);
+  const matched = toText(value).match(/^(\d{4})(?:[〜~-](\d{4}))?$/);
   if (!matched) {
     return 0;
   }
-  return Number(matched[1]);
+  return Number(matched[2] || matched[1]);
 }
 
 function sortByDateDescThenOrderAsc(projects) {
@@ -227,8 +227,8 @@ function validateContent(content) {
       assert(toText(project[field]).length > 0, `${pointer}.${field} is required.`);
     });
     assert(
-      /^\d{4}$/.test(toText(project.date)),
-      `${pointer}.date must use yyyy format.`
+      /^\d{4}(?:[〜~-]\d{4})?$/.test(toText(project.date)),
+      `${pointer}.date must use yyyy or yyyy〜yyyy format.`
     );
 
     assert(
@@ -543,6 +543,17 @@ function buildSnsCards(site, context) {
       ].join("\n");
     })
     .join("\n");
+}
+
+function buildProfileSnsLinks(site) {
+  return site.snsLinks
+    .map((item) => {
+      const name = toText(item.name);
+      const url = toText(item.url);
+
+      return `<a class="profile-sns-link" href="${escapeAttr(url)}"${maybeExternalAttrs(url)}>${escapeHtml(name)}</a>`;
+    })
+    .join('<span class="profile-sns-separator" aria-hidden="true">・</span>');
 }
 
 function buildFactCards(project) {
@@ -1100,30 +1111,6 @@ function buildProfileInlineText(items) {
   return `<p class="profile-inline-text">${escapeHtml(text)}</p>`;
 }
 
-function buildProfileSpeakingItems(projects, context) {
-  const items = sortByDateDescThenOrderAsc(
-    projects.filter((project) => isSpeakingProject(project))
-  );
-
-  if (items.length === 0) {
-    return '<p class="profile-empty">-</p>';
-  }
-
-  return items
-    .map((project) => {
-      const href = withBasePath(context.basePath, `/projects/${project.slug}/`);
-      return [
-        '<article class="profile-link-item">',
-        `  <p class="profile-link-item__label">${escapeHtml(project.date)}</p>`,
-        '  <div class="profile-link-item__body">',
-        `    <a class="inline-link" href="${escapeAttr(href)}">${escapeHtml(project.title)}</a>`,
-        "  </div>",
-        "</article>"
-      ].join("\n");
-    })
-    .join("\n");
-}
-
 function buildSite(options = {}) {
   const logger = options.logger || console;
   const content = readJson(CONTENT_PATH);
@@ -1160,6 +1147,7 @@ function buildSite(options = {}) {
   });
   const speakingSection = buildHomeSpeakingSection(projects, context);
   const snsCards = buildSnsCards(site, context);
+  const profileSnsLinks = buildProfileSnsLinks(site);
   const siteLeadBullets = site.leadBullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n");
   const homePath = withBasePath(basePath, "/");
   const workPath = `${homePath}#works`;
@@ -1206,9 +1194,7 @@ function buildSite(options = {}) {
   });
 
   const profileTitle = `Profile | ${context.siteTitle}`;
-  const profileSkills = buildProfileInlineText(site.profile.skills);
   const profileLikes = buildProfileInlineText(site.profile.likes);
-  const profileSpeakingItems = buildProfileSpeakingItems(projects, context);
   const profileHtml = renderTemplate(profileTemplate, {
     PAGE_TITLE: escapeHtml(profileTitle),
     META_DESCRIPTION: escapeAttr(profileMetaDescription),
@@ -1230,10 +1216,8 @@ function buildSite(options = {}) {
     PROFILE_IMAGE: escapeAttr(withBasePath(basePath, site.profileImage)),
     PROFILE_DESCRIPTION: buildProfileDescriptionMarkup(site.profile.description),
     CAREER_ITEMS: buildCareerItems(site.profile.career),
-    PROFILE_SKILLS: profileSkills,
     PROFILE_LIKES: profileLikes,
-    SPEAKING_ITEMS: profileSpeakingItems,
-    PROFILE_SNS_CARDS: snsCards
+    PROFILE_SNS_CARDS: profileSnsLinks
   });
 
   fs.writeFileSync(OUTPUT_INDEX_PATH, indexHtml, "utf8");

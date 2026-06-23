@@ -103,7 +103,7 @@
       "facts": [
         {
           "label": "Role",
-          "value": "PdM, UI Design"
+          "value": "PdM / UI Design"
         },
         {
           "label": "Platform",
@@ -236,7 +236,7 @@
     {
       "slug": "riff",
       "title": "RIFF",
-      "date": "2026",
+      "date": "2020〜2026",
       "category": "UI Design",
       "featured": false,
       "order": 2,
@@ -257,7 +257,7 @@
       "facts": [
         {
           "label": "Role",
-          "value": "UI Design / Design System"
+          "value": "PdM / Design System"
         },
         {
           "label": "Platform",
@@ -265,7 +265,7 @@
         },
         {
           "label": "Year",
-          "value": "2026"
+          "value": "2020〜2026"
         }
       ],
       "screens": [],
@@ -320,7 +320,7 @@
     {
       "slug": "yahoo-carnavi",
       "title": "Yahoo!カーナビ",
-      "date": "2026",
+      "date": "2025",
       "category": "UI Design",
       "featured": false,
       "order": 3,
@@ -341,7 +341,7 @@
       "facts": [
         {
           "label": "Role",
-          "value": "Product Designer"
+          "value": "PdM / UI Design"
         },
         {
           "label": "Platform",
@@ -349,7 +349,7 @@
         },
         {
           "label": "Year",
-          "value": "2026"
+          "value": "2025"
         }
       ],
       "screens": [],
@@ -404,7 +404,7 @@
     {
       "slug": "yahoo-transit",
       "title": "Yahoo!乗換案内",
-      "date": "2026",
+      "date": "2023",
       "category": "UI Design",
       "featured": false,
       "order": 4,
@@ -425,15 +425,15 @@
       "facts": [
         {
           "label": "Role",
-          "value": "Product Designer"
+          "value": "UI Design / Concept Making"
         },
         {
           "label": "Platform",
-          "value": "iOS / Android"
+          "value": "iOS"
         },
         {
           "label": "Year",
-          "value": "2026"
+          "value": "2023"
         }
       ],
       "screens": [],
@@ -488,7 +488,7 @@
     {
       "slug": "yahoo-maps",
       "title": "Yahoo! Maps",
-      "date": "2026",
+      "date": "2017",
       "category": "UI Design",
       "featured": false,
       "order": 5,
@@ -517,7 +517,7 @@
         },
         {
           "label": "Year",
-          "value": "2026"
+          "value": "2017"
         }
       ],
       "screens": [],
@@ -597,7 +597,7 @@
         },
         {
           "label": "Platform",
-          "value": "iOS App / Web"
+          "value": "iOS / Web"
         },
         {
           "label": "Year",
@@ -621,7 +621,7 @@
           ]
         },
         {
-          "heading": "App Icon",
+          "heading": "アプリアイコン",
           "blocks": [
             {
               "type": "text",
@@ -639,7 +639,7 @@
           ]
         },
         {
-          "heading": "Character",
+          "heading": "キャラクター",
           "blocks": [
             {
               "type": "text",
@@ -657,7 +657,7 @@
           ]
         },
         {
-          "heading": "Landing Page",
+          "heading": "ランディングページ",
           "blocks": [
             {
               "type": "text",
@@ -675,7 +675,7 @@
           ]
         },
         {
-          "heading": "App Store Design",
+          "heading": "App Store",
           "blocks": [
             {
               "type": "text",
@@ -800,7 +800,7 @@
             },
             {
               "type": "image",
-              "src": "/assets/img/ginco/ginco- sign-up.png",
+              "src": "/assets/img/ginco/ginco-registration.png",
               "alt": "サインアップ画面",
               "aspect": "4 / 3",
               "fit": "contain"
@@ -831,7 +831,7 @@
     {
       "slug": "timee-travel",
       "title": "タイミートラベル",
-      "date": "2026",
+      "date": "2019",
       "category": "UI Design",
       "featured": false,
       "order": 9,
@@ -852,15 +852,15 @@
       "facts": [
         {
           "label": "Role",
-          "value": "UI Design / Front-end"
+          "value": "UI Design / Web Design"
         },
         {
           "label": "Platform",
-          "value": "Web"
+          "value": "iOS / Web"
         },
         {
           "label": "Year",
-          "value": "2026"
+          "value": "2019"
         }
       ],
       "screens": [],
@@ -880,26 +880,72 @@
           ]
         },
         {
-          "heading": "",
+          "heading": "カラーパレット",
           "blocks": [
             {
-              "type": "image",
-              "src": "/assets/img/timee-travel/timee-travel-color.png",
-              "alt": "タイミートラベル カラーパレッド",
-              "aspect": "4 / 3",
-              "fit": "contain"
+              "type": "text",
+              "body": [
+                "hoge"
+              ]
             },
             {
               "type": "image",
-              "src": "/assets/img/timee-travel/timee-travel-search.png",
-              "alt": "タイミートラベル 予約まで",
+              "src": "/assets/img/timee-travel/timee-travel-color.png",
+              "alt": "カラーパレット",
               "aspect": "4 / 3",
               "fit": "contain"
+            }
+          ]
+        },
+        {
+          "heading": "初回インストール時",
+          "blocks": [
+            {
+              "type": "text",
+              "body": [
+                "hoge"
+              ]
             },
             {
               "type": "image",
               "src": "/assets/img/timee-travel/timee-travel-registration.png",
-              "alt": "タイミートラベル アカウント登録",
+              "alt": "初回インストール時",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
+        },
+        {
+          "heading": "応募方法",
+          "blocks": [
+            {
+              "type": "text",
+              "body": [
+                "hoge"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/timee-travel/timee-travel-search.png",
+              "alt": "応募方法",
+              "aspect": "4 / 3",
+              "fit": "contain"
+            }
+          ]
+        },
+        {
+          "heading": "管理画面",
+          "blocks": [
+            {
+              "type": "text",
+              "body": [
+                "hoge"
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/timee-travel/timee-travel-management.png",
+              "alt": "管理画面",
               "aspect": "4 / 3",
               "fit": "contain"
             }
