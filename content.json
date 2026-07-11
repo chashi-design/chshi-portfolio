@@ -155,16 +155,23 @@
           "heading": "概要",
           "blocks": [
             {
+              "type": "image",
+              "src": "/assets/img/carnavi/carnavi-hero.png",
+              "alt": "Yahoo!カーナビ 10周年リニューアル",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
               "type": "text",
               "body": [
-                "LYヤフーとして、様々なガイドを選ぶだけで、ユーザの目的に合わせて自由に変化するマップアプリ「Maply」 をリリース。",
-                "その中でもルーティング領域の PdM として、バス・駐車場・ガソリンスタンドガイドの主に企画・デザインを担当。"
+                "LYヤフーとして、様々なガイドを選ぶだけで、ユーザの目的に合わせて自由に変化するマップアプリ「Maply」をリリースしました。",
+                "その中でもルーティング領域の PdM として、バス・駐車場・ガソリンスタンドガイドの主に企画・デザインを担当しました。"
               ]
             }
           ]
         },
         {
-          "heading": "バスガイド",
+          "heading": "バス停",
           "blocks": [
             {
               "type": "image",
@@ -177,15 +184,15 @@
               "type": "text",
               "heading": "「どのバスに乗れば目的地に行けるか」の疑問を簡単解決",
               "body": [
-                "バス停を可視化し社外含め、現在存在するバスに関するサービスでは、そのバスがどのバス停に向かうか知ることができる体験が一般的にである。、時刻表・停車バス停を確認できる基本的なユーザ体験を担保しつつ、",
-                "一方で、ユーザがバスを利用して目的地に行くため、どのバス停から乗れば最適かを探すことが難しい課題があることがわかり、それを解決する体験を解決できるガイドに仕上げた。",
-                "目的地を入力すると、どのバス停に乗るがいいか・そのバス停は何時発なのかをシンプルなデザインで地図上に可視化。さらにそのバス停にフォーカスが当たると、乗換を含む目的地までのルート情報を一目でわかるようにデザインした。"
+                "社外含め、バスに関するサービスでは、そのバスがどのバス停に向かうか知ることができる体験が一般的です。",
+                "一方で、ユーザがバスを利用して目的地に行くため、どのバス停から乗れば最適かを探すことが難しい課題があることがわかり、それを解決する体験を解決できるガイドを作成しました。",
+                "目的地を入力すると、どのバス停に乗るがいいか・そのバス停は何時発なのかをシンプルなデザインで地図上に可視化されます。そのバス停にフォーカスが当たると、乗換を含む目的地までのルート情報を一目でわかるようにデザインしました。"
               ]
             }
           ]
         },
         {
-          "heading": "駐車場ガイド",
+          "heading": "駐車場",
           "blocks": [
             {
               "type": "image",
@@ -196,16 +203,16 @@
             },
             {
               "type": "text",
-              "heading": "満空情報や駐車形式・台数などの絞り込みで利用したい駐車場を一目で把握できる",
+              "heading": "満空情報や駐車形式・台数などの絞り込みで利用したい駐車場を一目で把握",
               "body": [
-                "hogehogehogehoge",
-                "hogehogehogehoge"
+                "地図から一目で駐車場の満空情報や料金、最大料金有無が把握できるようUIを設計しました。",
+                "また台数や支払い方法などのほかに、フラップ式やゲート式など駐車場探しにこだわるユーザが求める情報を表示できるようにしました。"
               ]
             }
           ]
         },
         {
-          "heading": "ガソリンスタンドガイド",
+          "heading": "ガソリンスタンド",
           "blocks": [
             {
               "type": "image",
@@ -216,10 +223,23 @@
             },
             {
               "type": "text",
-              "heading": "価格の比較や対応サービスの絞り込みで最適なガソリンスタンドを検索可能",
+              "heading": "価格の比較や対応サービスの絞り込みで最適なガソリンスタンドを検索",
               "body": [
-                "hogehogehogehoge",
-                "hogehogehogehoge"
+                "ガソリンスタンド探しにおいて、誰もが知りたい情報である“価格”を地図から一目でわかるようUIを設計しました。",
+                "油種が異なったり、セルフは苦手など、ガソリンスタンドを選ぶ中にもさまざまなユースケースがあります。そのため、並び替えはもちろん、油種や価格情報、様々なサービスごとに絞り込みできるようにしました。"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "ルート選択",
+          "blocks": [
+            {
+              "type": "text",
+              "heading": "ルート選択画面のデザイン統一",
+              "body": [
+                "Yahoo! Maps アプリでは、移動手段ごとに開発体制が異なっていたため、一貫したデザインにコントロールするのが難しい状況でした。",
+                "そのため、自身が PdM に入り、全体を管轄したことで、どの移動手段画面でも Maply のデザインルールに統一されたUIにアップデートできました。"
               ]
             }
           ]
@@ -236,7 +256,7 @@
     {
       "slug": "riff",
       "title": "RIFF",
-      "date": "2020〜2026",
+      "date": "2020 - PRESENT",
       "category": "UI Design",
       "featured": false,
       "order": 2,
@@ -265,7 +285,7 @@
         },
         {
           "label": "Year",
-          "value": "2020〜2026"
+          "value": "2020 - PRESENT"
         }
       ],
       "screens": [],
@@ -332,7 +352,7 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "heroImage": "/assets/img/carnavi-001-hero.png",
+      "heroImage": "/assets/img/carnavi/carnavi-hero.png",
       "tags": [
         "UI Design",
         "Case Study"
@@ -357,44 +377,184 @@
       "links": [],
       "detailSections": [
         {
-          "heading": "プロジェクト概要",
+          "heading": "概要",
           "blocks": [
             {
               "type": "image",
-              "src": "/assets/img/carnavi-002-hero.png",
-              "alt": "Yahoo!カーナビ overview",
-              "caption": "Yahoo!カーナビ の主要画面と体験の全体像。",
+              "src": "/assets/img/carnavi/carnavi-hero.png",
+              "alt": "Yahoo!カーナビ 10周年リニューアル",
               "aspect": "16 / 9",
               "fit": "contain"
             },
             {
               "type": "text",
-              "heading": "取り組みの狙い",
               "body": [
-                "Yahoo!カーナビのUI/UXデザインに関するケーススタディ。情報設計、主要導線、画面設計を中心に整理しています。",
-                "サービスの文脈に合わせて、ユーザーが迷わず目的へ進める情報設計とUIの整理を行いました。"
+                "Yahoo!カーナビアプリにおいて、10周年に向けたデザインリニューアルのリード、PdM、UIデザインなどを担当しました。"
               ]
             }
           ]
         },
         {
-          "heading": "体験設計",
+          "heading": "10周年に向けたデザインリニューアル",
           "blocks": [
             {
               "type": "text",
-              "heading": "設計の観点",
               "body": [
-                "利用シーンごとの情報優先度を見直し、主要導線を明確にしました。",
-                "画面ごとの役割を整理し、継続的に改善しやすいUI構成に落とし込みました。"
+                "EV・カーシェア・自動運転など、自動車業界が変化する中で、Yahoo!カーナビにも新しい車の使い方やニーズへの対応が求められていました。",
+                "今回のリニューアルでは、幅広いユーザーに配慮しつつ、今後のコアユーザーとなり得る若年層の利用促進に着目。変化する車の使い方を踏まえ、「カジュアルに使え、ココロオドル車移動を提供できるカーアプリ」というコンセプトを検討・組織に浸透させ、それを軸に体験設計やデザインの見直しを行いました。"
+              ]
+            },
+            {
+              "type": "text",
+              "heading": "コンセプト",
+              "body": [
+                ""
               ]
             },
             {
               "type": "image",
-              "src": "/assets/img/carnavi-002-hero.png",
-              "alt": "Yahoo!カーナビ interface detail",
-              "caption": "Yahoo!カーナビ の画面構成とUIディテール。",
-              "aspect": "4 / 3",
+              "src": "/assets/img/carnavi/carnavi-renewal-concept.png",
+              "alt": "Yahoo!カーナビ リニューアルコンセプト",
+              "aspect": "16 / 9",
               "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "「カジュアルに使え、ココロオドル車移動を提供できるカーアプリ」",
+                "POや他職種メンバーを巻き込み、約3ヶ月かけてコンセプトキーワードを確立させました。"
+              ]
+            },
+            {
+              "type": "text",
+              "heading": "トップ",
+              "body": [
+                ""
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/carnavi/carnavi-renewal-top.png",
+              "alt": "Yahoo!カーナビ リニューアルトップ画面",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "実際の各機能の利用数をもとにファースト画面に表示させる機能を厳選し、ユーザ要望が多かった「地図を広く見たい」を改善しました。"
+              ]
+            },
+            {
+              "type": "text",
+              "heading": "ルート選択",
+              "body": [
+                ""
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/carnavi/carnavi-renewal-route.png",
+              "alt": "Yahoo!カーナビ リニューアルルート選択画面",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "ルート候補からユーザが求めるものを簡単に選択しやすくし、様々なルート情報をわかりやすく整理しました。"
+              ]
+            },
+            {
+              "type": "text",
+              "heading": "ナビ",
+              "body": [
+                ""
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/carnavi/carnavi-renewal-navi.png",
+              "alt": "Yahoo!カーナビ リニューアルナビ画面",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "より安心安全に運転できるよう、曲がる交差点を吹き出しで表示や、現在地と次の案内地の距離を考慮して地図スケールを自動的に変化させる機能を搭載できました。"
+              ]
+            },
+            {
+              "type": "text",
+              "heading": "地図スタイル",
+              "body": [
+                ""
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/carnavi/carnavi-renewal-map.png",
+              "alt": "Yahoo!カーナビ リニューアル地図スタイル",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "Mapbox が提供している3D地図表現に対応したことで、より位置がわかりやすくなり、リアルな地図に近づけました。この変更により、見ているだけでワクワクするような体験を提供できました。"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "CarPlay / Android Auto",
+          "blocks": [
+            {
+              "type": "text",
+              "body": [
+                "PdM として、アプリ利用者のうち、Carplay / Android Auto でナビする利用者数を半期でYoY150%弱成長させることができました。"
+              ]
+            },
+            {
+              "type": "text",
+              "heading": "CarPlay - ナビ案内中、iPhone側に道路情報を表示",
+              "body": [
+                ""
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/carnavi/carnavi-carplay-001.png",
+              "alt": "Yahoo!カーナビ CarPlay ナビ案内中のiPhone道路情報",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "運転中でも一瞬で理解できることを意識し、渋滞情報、高速走行時はサービスエリアの施設情報や到着予想時刻を確認できるようにしました。"
+              ]
+            },
+            {
+              "type": "text",
+              "heading": "Android Auto - 検索メニュー",
+              "body": [
+                ""
+              ]
+            },
+            {
+              "type": "image",
+              "src": "/assets/img/carnavi/carnavi-androidauto-001.png",
+              "alt": "Yahoo!カーナビ Android Auto 検索メニュー",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "自宅や職場、登録している施設などを簡単に選択できるようにしました。"
+              ]
             }
           ]
         }
@@ -416,7 +576,7 @@
         "colSpanMobile": 4,
         "rowSpanMobile": 1
       },
-      "heroImage": "/assets/img/transit-001-hero.png",
+      "heroImage": "/assets/img/transit/transit-hero.png",
       "tags": [
         "UI Design",
         "Case Study"
@@ -441,44 +601,163 @@
       "links": [],
       "detailSections": [
         {
-          "heading": "プロジェクト概要",
+          "heading": "概要",
           "blocks": [
             {
               "type": "image",
-              "src": "/assets/img/transit-001-hero.png",
-              "alt": "Yahoo!乗換案内 overview",
-              "caption": "Yahoo!乗換案内 の主要画面と体験の全体像。",
+              "src": "/assets/img/transit/transit-hero.png",
+              "alt": "Yahoo!乗換案内 交通マップ - トレインキャスト",
               "aspect": "16 / 9",
               "fit": "contain"
             },
             {
               "type": "text",
-              "heading": "取り組みの狙い",
               "body": [
-                "Yahoo!乗換案内のUI/UXデザインに関するケーススタディ。情報設計、主要導線、画面設計を中心に整理しています。",
-                "サービスの文脈に合わせて、ユーザーが迷わず目的へ進める情報設計とUIの整理を行いました。"
+                "iOS - Yahoo!乗換案内アプリの交通マップ - トレインキャスト, 運行情報キャストにおいて、デザインコンセプトからデザインリードを行いました。"
               ]
             }
           ]
         },
         {
-          "heading": "体験設計",
+          "heading": "背景",
           "blocks": [
             {
               "type": "text",
-              "heading": "設計の観点",
               "body": [
-                "利用シーンごとの情報優先度を見直し、主要導線を明確にしました。",
-                "画面ごとの役割を整理し、継続的に改善しやすいUI構成に落とし込みました。"
+                "公共交通での快適な移動をサポートするだけでなく、鉄道ファンや列車に興味を持つお子様などにより楽しんでいただけるよう、2023年8月のサービス開始15周年を記念して、交通マップ - トレインキャスト, 運行情報キャストの企画・デザイン検討を開始しました。"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "heading": "コンセプト",
+          "blocks": [
             {
               "type": "image",
-              "src": "/assets/img/transit-001-hero.png",
-              "alt": "Yahoo!乗換案内 interface detail",
-              "caption": "Yahoo!乗換案内 の画面構成とUIディテール。",
-              "aspect": "4 / 3",
+              "src": "/assets/img/transit/transit-traincast-design-concept.png",
+              "alt": "トレインキャスト デザインコンセプト",
+              "aspect": "16 / 9",
               "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "ベンチマークのサービスとして、Flightradar24 を参考し、サービスコンセプトとして、「神の目線で見られる」「オタク心をくすぶる」「現実に即したビジュアライズ」と定義しました。",
+                "その後、社員を中心に検討しているサービスコンセプトが本当に刺さるか、具体的にどういうターゲットに使ってもらえそうかなど徹底的に調査し、サービスの核となるターゲットユーザやビジュアルなどの方針を決定していきました。"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "ターゲットユーザ",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/transit/transit-traincast-target.png",
+              "alt": "トレインキャスト ターゲットユーザ",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "調査結果をもとに、コアな鉄道ファンだけではなく、幅広いユーザに使ってもらえる可能性が出てきたため、「鉄道が好き、または趣味として楽しんでいるユーザ」に設定しました。",
+                "結果的に老若男女のみなさんにたくさん利用していただくことに繋がりました。",
+                "Xのリンク"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "UI - トップ",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/transit/transit-traincast-ui-top.png",
+              "alt": "トレインキャスト UI トップ",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "眺めるだけでも楽しめるよう、新幹線・有料列車・普通列車の表示有無と現在走行している全国の列車数を表示できます。一目で「日本中でこんなに電車が走っているだ！」と地図からでも数字からでも驚きと感動を提供できることを意識したでUIにしました。"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "UI - 電車詳細",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/transit/transit-traincast-ui-detail.png",
+              "alt": "トレインキャスト UI 電車詳細",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "気になる電車アイコンを選択すると、選択した列車の詳細情報を確認できます。列車情報はもちろん、表定速度や総走行距離、区間平均速度、普段目にすることができない情報も見ることができます。",
+                "様々な情報を迷わず確認できるレイアウトを意識しながらUIを設計しました。"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "UI - 運行情報",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/transit/transit-traincast-ui-train-status.png",
+              "alt": "トレインキャスト UI 運行情報",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "全国の列車の遅延や運転見合わせなどの運行情報を地図上で一覧できます。",
+                "見ている地図の位置に合わせて、自動でその地域の運行情報を確認できたり、下部のカードを横スワイプするとその路線に合わせて地図表示も最適化するなど、操作性をこだわりました。"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "電車アイコン",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/transit/transit-traincast-ui-train-icon.png",
+              "alt": "トレインキャスト 電車アイコン",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "「現実に即したビジュアライズ」というコンセプトのもと、協業したデザイナーに1つ1つ精密に電車のアイコンを作成してもらいました。"
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "地図スタイル",
+          "blocks": [
+            {
+              "type": "image",
+              "src": "/assets/img/transit/transit-traincast-map.png",
+              "alt": "トレインキャスト 地図スタイル",
+              "aspect": "16 / 9",
+              "fit": "contain"
+            },
+            {
+              "type": "text",
+              "body": [
+                "これまでは地下鉄のみ路線カラーだった地図を、JRや私鉄なども含めた地図スタイルにアップデートしました。",
+                "路線カラーが増えたことで地図が見づらくならないよう、駅や路線名など公共交通に必要な情報は一目でわかるように、かつ目印となる他施設のピンの色や表示量などをこだわりました。"
+              ]
             }
           ]
         }
@@ -572,7 +851,7 @@
     {
       "slug": "biggr",
       "title": "Biggr",
-      "date": "2026",
+      "date": "2026 - PRESENT",
       "category": "UI Design",
       "featured": false,
       "order": 6,
@@ -601,7 +880,7 @@
         },
         {
           "label": "Year",
-          "value": "2026"
+          "value": "2026 - PRESENT"
         }
       ],
       "screens": [],
@@ -830,7 +1109,7 @@
     },
     {
       "slug": "timee-travel",
-      "title": "タイミートラベル",
+      "title": "Timeeトラベル",
       "date": "2019",
       "category": "UI Design",
       "featured": false,
@@ -873,7 +1152,7 @@
             {
               "type": "text",
               "body": [
-                "タイミートラベルのUI/UXデザインに関するケーススタディ。情報設計、主要導線、画面設計を中心に整理しています。",
+                "TimeeトラベルのUI/UXデザインに関するケーススタディ。情報設計、主要導線、画面設計を中心に整理しています。",
                 "サービスの文脈に合わせて、ユーザーが迷わず目的へ進める情報設計とUIの整理を行いました。"
               ]
             }

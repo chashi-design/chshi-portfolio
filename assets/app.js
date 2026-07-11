@@ -237,39 +237,6 @@
     window.addEventListener("resize", alignInk);
   }
 
-  function setupHomeScrollTheme() {
-    var body = document.body;
-    var works = document.querySelector("#works");
-
-    if (!body || !body.classList.contains("page-home") || !works) {
-      return;
-    }
-
-    var ticking = false;
-
-    function updateTheme() {
-      ticking = false;
-      var triggerY = window.innerHeight * 0.45;
-      var workTop = works.getBoundingClientRect().top;
-      body.classList.toggle("is-work-theme", workTop <= triggerY);
-    }
-
-    function requestUpdate() {
-      if (ticking) {
-        return;
-      }
-
-      ticking = true;
-      window.requestAnimationFrame(updateTheme);
-    }
-
-    updateTheme();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-    window.addEventListener("hashchange", requestUpdate);
-    window.setTimeout(requestUpdate, 0);
-  }
-
   function setupGreetingScramble() {
     var greeting = document.querySelector(".about-teaser__greeting");
 
@@ -347,10 +314,166 @@
     });
   }
 
+  function setupScrollReveal() {
+    var body = document.body;
+
+    if (
+      !body ||
+      (!body.classList.contains("page-home") &&
+        !body.classList.contains("page-profile") &&
+        !body.classList.contains("page-detail"))
+    ) {
+      return;
+    }
+
+    var selectors = [];
+
+    if (body.classList.contains("page-home")) {
+      selectors = [
+        ".about-teaser__title",
+        ".about-teaser__copy",
+        ".page-home .bento-card__body",
+        ".page-home .bento-card__media",
+        ".home-speaking__heading",
+        ".home-speaking__item"
+      ];
+    } else if (body.classList.contains("page-profile")) {
+      selectors = [
+        ".profile-page-title",
+        ".profile-avatar",
+        ".profile-section__title",
+        ".profile-description",
+        ".career-item",
+        ".profile-inline-text",
+        ".profile-sns-links"
+      ];
+    } else {
+      selectors = [
+        ".detail-module__title",
+        ".detail-module__list",
+        ".project-main-media",
+        ".description-block--text",
+        ".description-block--image"
+      ];
+    }
+
+    var elements = Array.prototype.slice.call(document.querySelectorAll(selectors.join(", ")));
+
+    if (!elements.length) {
+      return;
+    }
+
+    elements.forEach(function (element, index) {
+      element.classList.add("scroll-reveal");
+      element.style.setProperty("--reveal-delay", Math.min(index % 6, 5) * 45 + "ms");
+    });
+
+    var pendingElements = elements.slice();
+    var ticking = false;
+
+    function updateVisibility() {
+      ticking = false;
+
+      if (!pendingElements.length) {
+        window.removeEventListener("scroll", requestUpdate);
+        window.removeEventListener("resize", requestUpdate);
+        return;
+      }
+
+      var revealLine = window.innerHeight * 0.9;
+
+      pendingElements = pendingElements.filter(function (element) {
+        var rect = element.getBoundingClientRect();
+        var shouldReveal = rect.top <= revealLine && rect.bottom >= 0;
+
+        if (shouldReveal) {
+          element.classList.add("is-visible");
+        }
+
+        return !shouldReveal;
+      });
+    }
+
+    function requestUpdate() {
+      if (ticking) {
+        return;
+      }
+
+      ticking = true;
+      window.requestAnimationFrame(updateVisibility);
+    }
+
+    requestUpdate();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    window.setTimeout(requestUpdate, 120);
+  }
+
+  function setupInvertingCursor() {
+    var supportsFinePointer =
+      window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    if (!supportsFinePointer) {
+      return;
+    }
+
+    var cursor = document.createElement("div");
+    var cursorSize = 48;
+    var cursorHalf = cursorSize / 2;
+
+    cursor.className = "inverting-cursor";
+    cursor.setAttribute("aria-hidden", "true");
+    document.body.appendChild(cursor);
+    document.documentElement.classList.add("has-inverting-cursor");
+
+    function moveCursor(event) {
+      cursor.style.transform = [
+        "translate3d(",
+        event.clientX - cursorHalf,
+        "px, ",
+        event.clientY - cursorHalf,
+        "px, 0)"
+      ].join("");
+      cursor.classList.add("is-visible");
+    }
+
+    function updateInteractiveState(event) {
+      var target = event.target;
+      var interactive = target && target.closest && target.closest("a, button, select, summary, [role='button']");
+      cursor.classList.toggle("is-interactive", Boolean(interactive));
+    }
+
+    document.addEventListener("pointermove", function (event) {
+      if (event.pointerType && event.pointerType !== "mouse") {
+        return;
+      }
+
+      moveCursor(event);
+      updateInteractiveState(event);
+    });
+
+    document.addEventListener("pointerdown", function (event) {
+      if (event.pointerType && event.pointerType !== "mouse") {
+        return;
+      }
+
+      cursor.classList.add("is-pressed");
+    });
+
+    document.addEventListener("pointerup", function () {
+      cursor.classList.remove("is-pressed");
+    });
+
+    document.addEventListener("pointerleave", function () {
+      cursor.classList.remove("is-visible", "is-interactive", "is-pressed");
+    });
+  }
+
   setupPressFeedback();
   setupGridOverlay();
   setupThemeSwitcher();
   setupOpticalAlignment();
-  setupHomeScrollTheme();
   setupGreetingScramble();
+  setupScrollReveal();
+  setupInvertingCursor();
 })();

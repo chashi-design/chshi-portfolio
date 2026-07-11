@@ -147,9 +147,12 @@ function truncate(text, limit) {
 }
 
 function toYearNumber(value) {
-  const matched = toText(value).match(/^(\d{4})(?:[〜~-](\d{4}))?$/);
+  const matched = toText(value).trim().match(/^(\d{4})(?:\s*[〜~-]\s*(\d{4}|present))?$/i);
   if (!matched) {
     return 0;
+  }
+  if (toText(matched[2]).toLowerCase() === "present") {
+    return Number(matched[1]);
   }
   return Number(matched[2] || matched[1]);
 }
@@ -227,8 +230,8 @@ function validateContent(content) {
       assert(toText(project[field]).length > 0, `${pointer}.${field} is required.`);
     });
     assert(
-      /^\d{4}(?:[〜~-]\d{4})?$/.test(toText(project.date)),
-      `${pointer}.date must use yyyy or yyyy〜yyyy format.`
+      /^\d{4}(?:\s*[〜~-]\s*(?:\d{4}|present))?$/i.test(toText(project.date)),
+      `${pointer}.date must use yyyy, yyyy〜yyyy, or yyyy - PRESENT format.`
     );
 
     assert(
@@ -681,7 +684,10 @@ function validateDetailContentBlocks(blocks, pointer) {
     }
 
     if (type === "text") {
-      assert(toDescriptionLines(block.body).length > 0, `${blockPointer}.body is required for text blocks.`);
+      assert(
+        toDescriptionLines(block.body).length > 0 || toText(block.heading).length > 0,
+        `${blockPointer}.body or ${blockPointer}.heading is required for text blocks.`
+      );
     }
   });
 }
@@ -851,10 +857,12 @@ function buildDescriptionBlockMarkup(block, project, sectionTitle, context, bloc
       .join("\n");
   }
 
+  const bodyLines = toDescriptionLines(block.body);
+
   return [
     '<section class="description-block description-block--text">',
     block.title ? `  <h3 class="description-block__title">${escapeHtml(block.title)}</h3>` : "",
-    `  ${buildDescriptionBodyMarkup(block.body)}`,
+    bodyLines.length > 0 ? `  ${buildDescriptionBodyMarkup(block.body)}` : "",
     "</section>"
   ]
     .filter(Boolean)
@@ -1139,11 +1147,14 @@ function buildSite(options = {}) {
 
   const workProjects = projects.filter((project) => !isSpeakingProject(project));
   const speakingProjects = projects.filter((project) => isSpeakingProject(project));
-  const projectSections = buildProjectSections(workProjects, context, {
+  const homeWorkProjects = sortByDateDescThenOrderAsc(workProjects);
+  const navigationWorkProjects = homeWorkProjects;
+  const navigationSpeakingProjects = sortByDateDescThenOrderAsc(speakingProjects);
+  const projectSections = buildProjectSections(homeWorkProjects, context, {
     flatten: true,
     ariaLabel: "All works",
     showTitle: false,
-    cardOptions: { showDate: false, showCategory: true }
+    cardOptions: { showDate: true, showCategory: false }
   });
   const speakingSection = buildHomeSpeakingSection(projects, context);
   const snsCards = buildSnsCards(site, context);
@@ -1230,7 +1241,7 @@ function buildSite(options = {}) {
   fs.writeFileSync(OUTPUT_PROFILE_INDEX_PATH, profileHtml, "utf8");
 
   projects.forEach((project) => {
-    const navigationProjects = isSpeakingProject(project) ? speakingProjects : workProjects;
+    const navigationProjects = isSpeakingProject(project) ? navigationSpeakingProjects : navigationWorkProjects;
     const navigationIndex = navigationProjects.findIndex((item) => item.slug === project.slug);
     const pageHtml = buildProjectPage(project, navigationIndex, navigationProjects, projectTemplate, context);
     const outputDir = path.join(OUTPUT_PROJECTS_DIR, project.slug);
