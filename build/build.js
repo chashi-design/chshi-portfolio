@@ -147,14 +147,11 @@ function truncate(text, limit) {
 }
 
 function toYearNumber(value) {
-  const matched = toText(value).trim().match(/^(\d{4})(?:\s*[〜~-]\s*(\d{4}|present))?$/i);
-  if (!matched) {
+  const years = [...toText(value).trim().matchAll(/\d{4}/g)].map((match) => Number(match[0]));
+  if (years.length === 0) {
     return 0;
   }
-  if (toText(matched[2]).toLowerCase() === "present") {
-    return Number(matched[1]);
-  }
-  return Number(matched[2] || matched[1]);
+  return years[years.length - 1];
 }
 
 function sortByDateDescThenOrderAsc(projects) {
@@ -200,6 +197,9 @@ function validateContent(content) {
     assert(item && typeof item === "object", `site.profile.career[${index}] must be an object.`);
     assert(toText(item.period).length > 0, `site.profile.career[${index}].period is required.`);
     assert(toText(item.title).length > 0, `site.profile.career[${index}].title is required.`);
+    if (item.url !== undefined) {
+      assert(/^https?:\/\//i.test(toText(item.url)), `site.profile.career[${index}].url must be an http(s) URL.`);
+    }
   });
   assert(Array.isArray(site.leadBullets), "site.leadBullets must be an array.");
   assert(site.leadBullets.length > 0, "site.leadBullets must contain at least one item.");
@@ -230,8 +230,8 @@ function validateContent(content) {
       assert(toText(project[field]).length > 0, `${pointer}.${field} is required.`);
     });
     assert(
-      /^\d{4}(?:\s*[〜~-]\s*(?:\d{4}|present))?$/i.test(toText(project.date)),
-      `${pointer}.date must use yyyy, yyyy〜yyyy, or yyyy - PRESENT format.`
+      /^\d{4}(?:(?:\s*[〜~-]\s*(?:\d{4}|present))|(?:\s*,\s*\d{4})*)?$/i.test(toText(project.date)),
+      `${pointer}.date must use yyyy, yyyy, yyyy, yyyy〜yyyy, or yyyy - PRESENT format.`
     );
 
     assert(
@@ -432,37 +432,6 @@ function buildProjectSections(projects, context, options = {}) {
   ].join("\n");
 }
 
-function buildHomeSpeakingSection(projects, context) {
-  const speakingProjects = sortByDateDescThenOrderAsc(
-    projects.filter((project) => isSpeakingProject(project))
-  );
-
-  const items = speakingProjects.length
-    ? speakingProjects
-        .map((project) => {
-          const href = withBasePath(context.basePath, `/projects/${project.slug}/`);
-          const category = toText(project.category) || "UI Design";
-
-          return [
-            `<a class="home-speaking__item" href="${escapeAttr(href)}" aria-label="${escapeAttr(`${project.title} / ${category}`)}">`,
-            `  <span class="home-speaking__title">${escapeHtml(project.title)}</span>`,
-            `  <span class="home-speaking__category">${escapeHtml(category)}</span>`,
-            "</a>"
-          ].join("\n");
-        })
-        .join("\n")
-    : '<p class="home-speaking__empty">準備中</p>';
-
-  return [
-    '<section class="home-speaking" aria-labelledby="home-speaking-title">',
-    '  <h2 class="home-speaking__heading" id="home-speaking-title">登壇</h2>',
-    '  <div class="home-speaking__list">',
-    items,
-    "  </div>",
-    "</section>"
-  ].join("\n");
-}
-
 function buildIndexJsonLd(context, homeCanonical) {
   return {
     "@context": "https://schema.org",
@@ -580,11 +549,14 @@ function buildScreen(screen, fallbackAlt) {
   const aspect = escapeAttr(normalizeAspect(screen.aspect));
   const fit = "contain";
   const captionText = toText(screen.caption);
+  const media = /\.(mp4|webm|mov)(?:[?#].*)?$/i.test(toText(screen.src))
+    ? `<video src="${source}" aria-label="${alt}" muted loop playsinline preload="metadata" data-scroll-video></video>`
+    : `<img src="${source}" alt="${alt}" loading="lazy" decoding="async" />`;
 
   return [
     '<article class="card screen">',
     `  <figure class="screen-media" style="--aspect:${aspect};--fit:${fit};">`,
-    `    <img src="${source}" alt="${alt}" loading="lazy" decoding="async" />`,
+    `    ${media}`,
     "  </figure>",
     captionText ? `  <p class="screen-caption">${escapeHtml(captionText)}</p>` : "",
     "</article>"
@@ -677,10 +649,10 @@ function validateDetailContentBlocks(blocks, pointer) {
     assert(block && typeof block === "object", `${blockPointer} must be an object.`);
 
     const type = toText(block.type).toLowerCase();
-    assert(type === "image" || type === "text", `${blockPointer}.type must be "image" or "text".`);
+    assert(type === "image" || type === "video" || type === "text" || type === "link" || type === "docswell" || type === "youtube", `${blockPointer}.type must be "image", "video", "text", "link", "docswell", or "youtube".`);
 
-    if (type === "image") {
-      assert(toText(block.src).length > 0, `${blockPointer}.src is required for image blocks.`);
+    if (type === "image" || type === "video") {
+      assert(toText(block.src).length > 0, `${blockPointer}.src is required for ${type} blocks.`);
     }
 
     if (type === "text") {
@@ -688,6 +660,19 @@ function validateDetailContentBlocks(blocks, pointer) {
         toDescriptionLines(block.body).length > 0 || toText(block.heading).length > 0,
         `${blockPointer}.body or ${blockPointer}.heading is required for text blocks.`
       );
+    }
+
+    if (type === "link") {
+      assert(toText(block.url).length > 0, `${blockPointer}.url is required for link blocks.`);
+    }
+
+    if (type === "docswell") {
+      assert(toText(block.slideId).length > 0, `${blockPointer}.slideId is required for docswell blocks.`);
+      assert(toText(block.url).length > 0, `${blockPointer}.url is required for docswell blocks.`);
+    }
+
+    if (type === "youtube") {
+      assert(toText(block.src).length > 0, `${blockPointer}.src is required for youtube blocks.`);
     }
   });
 }
@@ -702,10 +687,45 @@ function normalizeDetailBlock(block) {
     };
   }
 
+  if (type === "video") {
+    return {
+      type: "video",
+      video: normalizeSectionImage(block)
+    };
+  }
+
+  if (type === "link") {
+    return {
+      type: "link",
+      label: toText(block.label) || toText(block.url),
+      url: toText(block.url),
+      note: toText(block.note)
+    };
+  }
+
+  if (type === "docswell") {
+    return {
+      type: "docswell",
+      slideId: toText(block.slideId),
+      label: toText(block.label) || toText(block.url),
+      url: toText(block.url),
+      aspect: toText(block.aspect) || "0.563"
+    };
+  }
+
+  if (type === "youtube") {
+    return {
+      type: "youtube",
+      src: toText(block.src),
+      title: toText(block.title) || "YouTube video player"
+    };
+  }
+
   return {
     type: "text",
     title: toText(block.heading),
-    body: block.body
+    body: block.body,
+    list: block.list === true
   };
 }
 
@@ -725,17 +745,35 @@ function toDescriptionLines(value) {
     .filter(Boolean);
 }
 
-function buildDescriptionBodyMarkup(value) {
+function buildDescriptionBodyMarkup(value, options = {}) {
   const lines = toDescriptionLines(value);
   if (lines.length === 0) {
     return '<div class="description-body-group"><p class="description-body">-</p></div>';
   }
 
+  const renderInline = (line) =>
+    escapeHtml(line).replace(
+      /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+      (_match, label, url) => `<a href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(label)}</a>`
+    );
+
+  if (options.list === true) {
+    return [
+      '<ul class="description-body-group description-list">',
+      lines.map((line) => `  <li class="description-body description-list__item">${renderInline(line)}</li>`).join("\n"),
+      "</ul>"
+    ].join("\n");
+  }
+
   return [
     '<div class="description-body-group">',
-    lines.map((line) => `  <p class="description-body">${escapeHtml(line)}</p>`).join("\n"),
+    lines.map((line) => `  <p class="description-body">${renderInline(line)}</p>`).join("\n"),
     "</div>"
   ].join("\n");
+}
+
+function stripMarkdownLinks(value) {
+  return toText(value).replace(/\[([^\]]+)\]\(https?:\/\/[^)\s]+\)/g, "$1");
 }
 
 function buildImpactFallback(project) {
@@ -846,10 +884,12 @@ function normalizeDetailSections(project) {
 function buildDescriptionBlockMarkup(block, project, sectionTitle, context, blockIndex) {
   if (block.type === "image" && block.image) {
     const image = block.image;
+    const imageSrc = escapeAttr(withBasePath(context.basePath, image.src));
+    const imageAlt = escapeAttr(toText(image.alt) || `${project.title} ${sectionTitle} ${blockIndex + 1}`);
 
     return [
       '<figure class="description-block description-block--image description-item__media">',
-      `  <img src="${escapeAttr(withBasePath(context.basePath, image.src))}" alt="${escapeAttr(toText(image.alt) || `${project.title} ${sectionTitle} ${blockIndex + 1}`)}" loading="lazy" decoding="async" style="--aspect:${escapeAttr(normalizeAspect(image.aspect))};--fit:contain;" />`,
+      `  <img src="${imageSrc}" alt="${imageAlt}" loading="lazy" decoding="async" style="--aspect:${escapeAttr(normalizeAspect(image.aspect))};--fit:contain;" />`,
       toText(image.caption).length > 0 ? `  <figcaption class="description-image__caption">${escapeHtml(image.caption)}</figcaption>` : "",
       "</figure>"
     ]
@@ -857,12 +897,65 @@ function buildDescriptionBlockMarkup(block, project, sectionTitle, context, bloc
       .join("\n");
   }
 
+  if (block.type === "video" && block.video) {
+    const video = block.video;
+    const videoSrc = escapeAttr(withBasePath(context.basePath, video.src));
+    const videoAlt = escapeAttr(toText(video.alt) || `${project.title} ${sectionTitle} ${blockIndex + 1}`);
+
+    return [
+      '<figure class="description-block description-block--video description-item__media">',
+      `  <video src="${videoSrc}" aria-label="${videoAlt}" muted loop playsinline preload="metadata" data-scroll-video style="--aspect:${escapeAttr(normalizeAspect(video.aspect))};--fit:contain;"></video>`,
+      toText(video.caption).length > 0 ? `<figcaption class="description-image__caption">${escapeHtml(video.caption)}</figcaption>` : "",
+      "</figure>"
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
+
+  if (block.type === "link") {
+    const label = toText(block.label) || toText(block.url);
+    const note = toText(block.note);
+
+    return [
+      '<section class="description-block description-block--link">',
+      `  <a class="description-link-card" href="${escapeAttr(block.url)}" target="_blank" rel="noreferrer noopener">`,
+      '    <span class="description-link-card__content">',
+      `      <span class="description-link-card__label">${escapeHtml(label)}</span>`,
+      note ? `      <span class="description-link-card__note">${escapeHtml(note)}</span>` : "",
+      "    </span>",
+      '    <span class="description-link-card__arrow" aria-hidden="true">↗</span>',
+      "  </a>",
+      "</section>"
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
+
+  if (block.type === "docswell") {
+    return [
+      '<section class="description-block description-block--embed">',
+      `  <script async class="docswell-embed" src="https://www.docswell.com/assets/libs/docswell-embed/docswell-embed.min.js" data-src="https://www.docswell.com/slide/${escapeAttr(block.slideId)}/embed" data-aspect="${escapeAttr(block.aspect)}"></script>`,
+      '  <div class="docswell-link">',
+      `    <a href="${escapeAttr(block.url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(block.label)}</a>`,
+      "  </div>",
+      "</section>"
+    ].join("\n");
+  }
+
+  if (block.type === "youtube") {
+    return [
+      '<section class="description-block description-block--embed description-block--youtube">',
+      `  <iframe src="${escapeAttr(block.src)}" title="${escapeAttr(block.title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+      "</section>"
+    ].join("\n");
+  }
+
   const bodyLines = toDescriptionLines(block.body);
 
   return [
     '<section class="description-block description-block--text">',
     block.title ? `  <h3 class="description-block__title">${escapeHtml(block.title)}</h3>` : "",
-    bodyLines.length > 0 ? `  ${buildDescriptionBodyMarkup(block.body)}` : "",
+    bodyLines.length > 0 ? `  ${buildDescriptionBodyMarkup(block.body, { list: block.list })}` : "",
     "</section>"
   ]
     .filter(Boolean)
@@ -912,7 +1005,7 @@ function getProjectDescription(project, context) {
     .flatMap((block) => toDescriptionLines(block.body))
     .find(Boolean);
 
-  return sectionText || context.siteDescription || project.title;
+  return stripMarkdownLinks(sectionText || context.siteDescription || project.title);
 }
 
 function buildProjectJsonLd(project, context) {
@@ -1017,12 +1110,15 @@ function buildOptionalSections(project) {
 }
 
 function buildPagination(projects, index, context) {
+  const prevIcon = '<svg class="project-detail-nav__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>';
+  const nextIcon = '<svg class="project-detail-nav__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M12 5l7 7-7 7" /></svg>';
+
   if (index < 0) {
     return [
       '<div class="project-detail-nav" role="navigation" aria-label="Project navigation">',
-      '<span class="project-detail-nav__link project-detail-nav__link--disabled" aria-disabled="true">← prev</span>',
+      `<span class="project-detail-nav__link project-detail-nav__link--prev project-detail-nav__link--disabled" aria-disabled="true" aria-label="Previous project">${prevIcon}</span>`,
       '<span class="project-detail-nav__count" aria-label="Project position">-/-</span>',
-      '<span class="project-detail-nav__link project-detail-nav__link--disabled" aria-disabled="true">next →</span>',
+      `<span class="project-detail-nav__link project-detail-nav__link--next project-detail-nav__link--disabled" aria-disabled="true" aria-label="Next project">${nextIcon}</span>`,
       "</div>"
     ].join("\n");
   }
@@ -1031,12 +1127,12 @@ function buildPagination(projects, index, context) {
   const next = projects[index + 1];
 
   const prevMarkup = prev
-    ? `<a class="project-detail-nav__link" href="${escapeAttr(withBasePath(context.basePath, `/projects/${prev.slug}/`))}" aria-label="${escapeAttr(`Previous: ${prev.title}`)}">← prev</a>`
-    : '<span class="project-detail-nav__link project-detail-nav__link--disabled" aria-disabled="true">← prev</span>';
+    ? `<a class="project-detail-nav__link project-detail-nav__link--prev" href="${escapeAttr(withBasePath(context.basePath, `/projects/${prev.slug}/`))}" aria-label="${escapeAttr(`Previous: ${prev.title}`)}">${prevIcon}</a>`
+    : `<span class="project-detail-nav__link project-detail-nav__link--prev project-detail-nav__link--disabled" aria-disabled="true" aria-label="Previous project">${prevIcon}</span>`;
 
   const nextMarkup = next
-    ? `<a class="project-detail-nav__link" href="${escapeAttr(withBasePath(context.basePath, `/projects/${next.slug}/`))}" aria-label="${escapeAttr(`Next: ${next.title}`)}">next →</a>`
-    : '<span class="project-detail-nav__link project-detail-nav__link--disabled" aria-disabled="true">next →</span>';
+    ? `<a class="project-detail-nav__link project-detail-nav__link--next" href="${escapeAttr(withBasePath(context.basePath, `/projects/${next.slug}/`))}" aria-label="${escapeAttr(`Next: ${next.title}`)}">${nextIcon}</a>`
+    : `<span class="project-detail-nav__link project-detail-nav__link--next project-detail-nav__link--disabled" aria-disabled="true" aria-label="Next project">${nextIcon}</span>`;
   const countMarkup = `<span class="project-detail-nav__count" aria-label="${escapeAttr(`Project ${index + 1} of ${projects.length}`)}">${index + 1}/${projects.length}</span>`;
 
   return [
@@ -1091,22 +1187,39 @@ function buildProjectPage(project, index, projects, template, context) {
   });
 }
 
-function buildProfileDescriptionMarkup(value) {
+function buildProfileDescriptionMarkup(value, spanLines) {
   const paragraphs = toDescriptionLines(value);
   if (paragraphs.length === 0) {
     return '<p class="profile-description__body">-</p>';
   }
 
-  return paragraphs.map((paragraph) => `<p class="profile-description__body">${escapeHtml(paragraph)}</p>`).join("\n");
+  return paragraphs
+    .map((paragraph, index) => {
+      const candidateSpans = Array.isArray(spanLines?.[index])
+        ? spanLines[index].map((item) => toText(item)).filter(Boolean)
+        : [];
+      const spans = candidateSpans.join("") === paragraph ? candidateSpans : [paragraph];
+      const body = spans.map((span) => `<span>${escapeHtml(span)}</span>`).join("");
+      return `<p class="profile-description__body">${body}</p>`;
+    })
+    .join("\n");
 }
 
 function buildCareerItems(careerItems) {
   return careerItems
     .map((item) => {
+      const titleText = toText(item.title);
+      const linkText = toText(item.linkText);
+      const titleSuffix = linkText && titleText.length > linkText.length
+        ? ` ${escapeHtml(titleText.slice(linkText.length).trim())}`
+        : "";
+      const title = item.url
+        ? `<a href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(linkText || titleText)}</a>${titleSuffix}`
+        : escapeHtml(titleText);
       return [
         '<article class="career-item">',
         `  <p class="career-item__period">${escapeHtml(item.period)}</p>`,
-        `  <p class="career-item__title">${escapeHtml(item.title)}</p>`,
+        `  <p class="career-item__title">${title}</p>`,
         "</article>"
       ].join("\n");
     })
@@ -1143,7 +1256,6 @@ function buildSite(options = {}) {
 
   const indexTemplate = readTemplate(INDEX_TEMPLATE_PATH);
   const projectTemplate = readTemplate(PROJECT_TEMPLATE_PATH);
-  const profileTemplate = readTemplate(PROFILE_TEMPLATE_PATH);
 
   const workProjects = projects.filter((project) => !isSpeakingProject(project));
   const speakingProjects = projects.filter((project) => isSpeakingProject(project));
@@ -1156,22 +1268,16 @@ function buildSite(options = {}) {
     showTitle: false,
     cardOptions: { showDate: true, showCategory: false }
   });
-  const speakingSection = buildHomeSpeakingSection(projects, context);
   const snsCards = buildSnsCards(site, context);
-  const profileSnsLinks = buildProfileSnsLinks(site);
   const siteLeadBullets = site.leadBullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n");
   const homePath = withBasePath(basePath, "/");
   const workPath = `${homePath}#works`;
   const profilePath = withBasePath(basePath, "/profile/");
   const homeCanonical = toAbsoluteUrl(canonicalBase, homePath);
-  const profileCanonical = toAbsoluteUrl(canonicalBase, profilePath);
-  const profileDescription = toDescriptionLines(site.profile.description).join(" ");
   const defaultOgImage = toAbsoluteUrl(canonicalBase, withBasePath(basePath, site.ogImageDefault));
   const homeMetaDescription = truncate(context.siteDescription, 160);
-  const profileMetaDescription = truncate(profileDescription, 160);
 
   const indexJsonLd = buildIndexJsonLd(context, homeCanonical);
-  const profileJsonLd = buildProfileJsonLd(context, homeCanonical, profileCanonical, site, basePath);
 
   const personSubNameMarkup = context.personSubName
     ? `<p class="masthead-subname">${escapeHtml(context.personSubName)}</p>`
@@ -1197,38 +1303,12 @@ function buildSite(options = {}) {
     PERSON_NAME: escapeHtml(context.personName),
     PERSON_SUBNAME: personSubNameMarkup,
     PROFILE_IMAGE: escapeAttr(withBasePath(basePath, site.profileImage)),
+    PROFILE_DESCRIPTION: buildProfileDescriptionMarkup(site.profile.description, site.profile.descriptionSpans),
+    CAREER_ITEMS: buildCareerItems(site.profile.career),
     SITE_DESCRIPTION: escapeHtml(context.siteDescription),
     SITE_LEAD_BULLETS: siteLeadBullets,
     SNS_CARDS: snsCards,
-    PROJECT_SECTIONS: projectSections,
-    SPEAKING_SECTION: speakingSection
-  });
-
-  const profileTitle = `Profile | ${context.siteTitle}`;
-  const profileLikes = buildProfileInlineText(site.profile.likes);
-  const profileHtml = renderTemplate(profileTemplate, {
-    PAGE_TITLE: escapeHtml(profileTitle),
-    META_DESCRIPTION: escapeAttr(profileMetaDescription),
-    CANONICAL_URL: escapeAttr(profileCanonical),
-    OG_TITLE: escapeAttr(profileTitle),
-    OG_DESCRIPTION: escapeAttr(profileMetaDescription),
-    OG_IMAGE: escapeAttr(toAbsoluteUrl(canonicalBase, withBasePath(basePath, site.profileImage))),
-    OG_URL: escapeAttr(profileCanonical),
-    ASSET_PREFIX: basePath,
-    ASSET_VERSION: escapeAttr(assetVersion),
-    JSON_LD: safeJsonLd(profileJsonLd),
-    GRID_TOGGLE: GRID_TOGGLE_HTML,
-    GRID_COLUMNS: GRID_COLUMNS_HTML,
-    HOME_URL: escapeAttr(homePath),
-    WORK_URL: escapeAttr(workPath),
-    PROFILE_URL: escapeAttr(profilePath),
-    PERSON_NAME: escapeHtml(context.personName),
-    PERSON_SUBNAME: personSubNameMarkup,
-    PROFILE_IMAGE: escapeAttr(withBasePath(basePath, site.profileImage)),
-    PROFILE_DESCRIPTION: buildProfileDescriptionMarkup(site.profile.description),
-    CAREER_ITEMS: buildCareerItems(site.profile.career),
-    PROFILE_LIKES: profileLikes,
-    PROFILE_SNS_CARDS: profileSnsLinks
+    PROJECT_SECTIONS: projectSections
   });
 
   fs.writeFileSync(OUTPUT_INDEX_PATH, indexHtml, "utf8");
@@ -1237,8 +1317,6 @@ function buildSite(options = {}) {
   fs.mkdirSync(OUTPUT_PROJECTS_DIR, { recursive: true });
 
   fs.rmSync(OUTPUT_PROFILE_DIR, { recursive: true, force: true });
-  fs.mkdirSync(OUTPUT_PROFILE_DIR, { recursive: true });
-  fs.writeFileSync(OUTPUT_PROFILE_INDEX_PATH, profileHtml, "utf8");
 
   projects.forEach((project) => {
     const navigationProjects = isSpeakingProject(project) ? navigationSpeakingProjects : navigationWorkProjects;
@@ -1251,7 +1329,6 @@ function buildSite(options = {}) {
 
   logger.log(`Built ${projects.length} projects.`);
   logger.log(`- ${path.relative(ROOT, OUTPUT_INDEX_PATH)}`);
-  logger.log(`- ${path.relative(ROOT, OUTPUT_PROFILE_INDEX_PATH)}`);
   projects.forEach((project) => {
     logger.log(`- projects/${project.slug}/index.html`);
   });
@@ -1260,7 +1337,6 @@ function buildSite(options = {}) {
     projectCount: projects.length,
     outputs: [
       OUTPUT_INDEX_PATH,
-      OUTPUT_PROFILE_INDEX_PATH,
       ...projects.map((project) => path.join(OUTPUT_PROJECTS_DIR, project.slug, "index.html"))
     ]
   };

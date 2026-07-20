@@ -237,83 +237,6 @@
     window.addEventListener("resize", alignInk);
   }
 
-  function setupGreetingScramble() {
-    var greeting = document.querySelector(".about-teaser__greeting");
-
-    if (!greeting) {
-      return;
-    }
-
-    var source = greeting.getAttribute("data-greetings") || "";
-    var greetings = source
-      .split("|")
-      .map(function (item) {
-        return item.trim();
-      })
-      .filter(Boolean);
-
-    if (greetings.length < 2) {
-      return;
-    }
-
-    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    var scrambleCharacters = "abcdefghijklmnopqrstuvwxyz0123456789@#$%&*+=?";
-    var index = 0;
-    var frame = 0;
-    var frameCount = reduceMotion ? 6 : 12;
-    var frameDelay = reduceMotion ? 70 : 42;
-    var holdDelay = reduceMotion ? 2800 : 2200;
-    var timerId = 0;
-
-    function randomCharacter() {
-      return scrambleCharacters.charAt(Math.floor(Math.random() * scrambleCharacters.length));
-    }
-
-    function scrambleToward(target) {
-      var targetCharacters = Array.from(target);
-      var revealCount = Math.floor((frame / frameCount) * targetCharacters.length);
-
-      greeting.textContent = targetCharacters
-        .map(function (character, characterIndex) {
-          if (characterIndex < revealCount || character === " " || character === ".") {
-            return character;
-          }
-
-          return randomCharacter();
-        })
-        .join("");
-
-      greeting.classList.add("is-scrambling");
-      frame += 1;
-
-      if (frame <= frameCount) {
-        timerId = window.setTimeout(function () {
-          scrambleToward(target);
-        }, frameDelay);
-        return;
-      }
-
-      greeting.textContent = target;
-      greeting.classList.remove("is-scrambling");
-      frame = 0;
-      timerId = window.setTimeout(nextGreeting, holdDelay);
-    }
-
-    function nextGreeting() {
-      index = (index + 1) % greetings.length;
-      scrambleToward(greetings[index]);
-    }
-
-    timerId = window.setTimeout(nextGreeting, holdDelay);
-
-    window.addEventListener("pagehide", function () {
-      if (timerId) {
-        window.clearTimeout(timerId);
-      }
-    });
-  }
-
   function setupScrollReveal() {
     var body = document.body;
 
@@ -331,7 +254,10 @@
     if (body.classList.contains("page-home")) {
       selectors = [
         ".about-teaser__title",
-        ".about-teaser__copy",
+        ".about-teaser__name",
+        ".about-teaser__description",
+        ".about-teaser__career-title",
+        ".about-teaser .career-item",
         ".page-home .bento-card__body",
         ".page-home .bento-card__media",
         ".home-speaking__heading",
@@ -353,7 +279,8 @@
         ".detail-module__list",
         ".project-main-media",
         ".description-block--text",
-        ".description-block--image"
+        ".description-block--image",
+        ".description-block--video"
       ];
     }
 
@@ -420,18 +347,79 @@
     var cursor = document.createElement("div");
     var cursorSize = 48;
     var cursorHalf = cursorSize / 2;
+    var closeSyncFrame = 0;
 
     cursor.className = "inverting-cursor";
     cursor.setAttribute("aria-hidden", "true");
     document.body.appendChild(cursor);
     document.documentElement.classList.add("has-inverting-cursor");
 
-    function moveCursor(event) {
+    var closeTargetSelector = ".project-close, .project-detail-nav__link:not(.project-detail-nav__link--disabled)";
+
+    function snapCursorToCloseTarget(closeTarget) {
+      var closeRect = closeTarget.getBoundingClientRect();
+      var isExpanded = closeRect.width > 40.5;
+      var cursorGap = 2;
+      var closeRadius = Math.min(closeRect.width, closeRect.height) / 2;
+      var cursorWidth = closeRect.width + cursorGap * 2;
+      var cursorHeight = closeRect.height + cursorGap * 2;
+
+      cursor.classList.add("is-visible", "is-close-target");
+      cursor.classList.remove("is-interactive");
+      cursor.classList.toggle("is-close-target-expanded", isExpanded);
+      cursor.style.width = cursorWidth + "px";
+      cursor.style.height = cursorHeight + "px";
+      cursor.style.margin = "0";
+      cursor.style.borderRadius = closeRadius + cursorGap + "px";
       cursor.style.transform = [
         "translate3d(",
-        event.clientX - cursorHalf,
+        closeRect.left - cursorGap,
         "px, ",
-        event.clientY - cursorHalf,
+        closeRect.top - cursorGap,
+        "px, 0)"
+      ].join("");
+
+      var expandedWidth = closeTarget.matches(".project-detail-nav__link") ? 47.9 : 79.9;
+      if (
+        closeTarget.matches(":hover") &&
+        (closeRect.width < expandedWidth || closeRect.height < 47.9)
+      ) {
+        closeSyncFrame = window.requestAnimationFrame(function () {
+          closeSyncFrame = 0;
+          snapCursorToCloseTarget(closeTarget);
+        });
+      }
+    }
+
+    function clearCloseTargetState() {
+      if (closeSyncFrame) {
+        window.cancelAnimationFrame(closeSyncFrame);
+        closeSyncFrame = 0;
+      }
+
+      cursor.classList.remove("is-close-target", "is-close-target-expanded");
+      cursor.style.removeProperty("width");
+      cursor.style.removeProperty("height");
+      cursor.style.removeProperty("margin");
+      cursor.style.removeProperty("border-radius");
+    }
+
+    function moveCursor(event) {
+      var closeTarget = event.target && event.target.closest && event.target.closest(closeTargetSelector);
+      var cursorX = event.clientX;
+      var cursorY = event.clientY;
+
+      if (closeTarget) {
+        snapCursorToCloseTarget(closeTarget);
+        return;
+      }
+
+      clearCloseTargetState();
+      cursor.style.transform = [
+        "translate3d(",
+        cursorX - cursorHalf,
+        "px, ",
+        cursorY - cursorHalf,
         "px, 0)"
       ].join("");
       cursor.classList.add("is-visible");
@@ -442,6 +430,19 @@
       var interactive = target && target.closest && target.closest("a, button, select, summary, [role='button']");
       cursor.classList.toggle("is-interactive", Boolean(interactive));
     }
+
+    document.addEventListener("focusin", function (event) {
+      var closeTarget = event.target && event.target.closest && event.target.closest(closeTargetSelector);
+
+      if (!closeTarget) {
+        return;
+      }
+
+      snapCursorToCloseTarget(closeTarget);
+      window.requestAnimationFrame(function () {
+        snapCursorToCloseTarget(closeTarget);
+      });
+    });
 
     document.addEventListener("pointermove", function (event) {
       if (event.pointerType && event.pointerType !== "mouse") {
@@ -465,7 +466,68 @@
     });
 
     document.addEventListener("pointerleave", function () {
+      clearCloseTargetState();
       cursor.classList.remove("is-visible", "is-interactive", "is-pressed");
+    });
+  }
+
+  function setupScrollVideos() {
+    var videos = Array.prototype.slice.call(document.querySelectorAll("video[data-scroll-video]"));
+
+    if (!videos.length) {
+      return;
+    }
+
+    function resetVideo(video) {
+      video.pause();
+
+      try {
+        video.currentTime = 0;
+      } catch (_error) {
+        // Metadata may not be available yet. The video is already paused.
+      }
+    }
+
+    videos.forEach(function (video) {
+      video.defaultMuted = true;
+      video.muted = true;
+      video.volume = 0;
+      resetVideo(video);
+    });
+
+    if (!("IntersectionObserver" in window)) {
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          var video = entry.target;
+          var isFullyVisible = entry.isIntersecting && entry.intersectionRatio >= 0.999;
+
+          if (isFullyVisible && document.visibilityState === "visible") {
+            var playPromise = video.play();
+
+            if (playPromise && typeof playPromise.catch === "function") {
+              playPromise.catch(function () {});
+            }
+            return;
+          }
+
+          resetVideo(video);
+        });
+      },
+      { threshold: [0, 0.999, 1] }
+    );
+
+    videos.forEach(function (video) {
+      observer.observe(video);
+    });
+
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState !== "visible") {
+        videos.forEach(resetVideo);
+      }
     });
   }
 
@@ -473,7 +535,7 @@
   setupGridOverlay();
   setupThemeSwitcher();
   setupOpticalAlignment();
-  setupGreetingScramble();
   setupScrollReveal();
+  setupScrollVideos();
   setupInvertingCursor();
 })();

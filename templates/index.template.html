@@ -27,48 +27,32 @@
     <script type="application/ld+json">{{JSON_LD}}</script>
   </head>
   <body class="swiss-page page-home">
-    <div class="site-header-shell">
-      <header class="site-header">
-        <a class="site-header__link site-header__home" href="{{HOME_URL}}">Home</a>
-        <nav class="site-header__nav" aria-label="Primary">
-          <label class="theme-switcher">
-            <select class="theme-switcher__select" data-theme-select aria-label="Color theme">
-              <option value="system">System</option>
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
-          </label>
-        </nav>
-      </header>
-    </div>
     {{GRID_TOGGLE}}
     <div class="site-shell swiss-wrap">
       <div class="grid-guides" aria-hidden="true">{{GRID_COLUMNS}}</div>
-      <aside class="side-nav" aria-label="Page navigation">
-        <nav class="side-nav__links" aria-label="Primary">
-          <a class="side-nav__link" href="{{HOME_URL}}">Home</a>
-          <label class="theme-switcher theme-switcher--side">
-            <select class="theme-switcher__select" data-theme-select aria-label="Color theme">
-              <option value="system">System</option>
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
-          </label>
-        </nav>
-      </aside>
-
       <main>
         <section class="about-teaser" aria-labelledby="about-teaser-title">
           <div class="about-teaser__inner">
-            <h2 id="about-teaser-title" class="about-teaser__title"><span class="about-teaser__greeting" data-greetings="hi.|hey.|hola.|ciao.|ola.|hej.|はじめまして|你好。|안녕.">hi.</span><br />i'm Chashi.</h2>
-            <p class="about-teaser__copy">I’m a designer working across UI/UX design and front-end implementation, shaping experiences from information architecture to interface detail.</p>
-            <a class="about-teaser__link" href="{{PROFILE_URL}}">About Me</a>
+            <h2 id="about-teaser-title" class="about-teaser__title">
+              <span class="about-teaser__name"><span class="about-teaser__name-prefix">I'm</span> <span class="about-teaser__name-value">{{PERSON_NAME}}.</span></span>
+              <span class="about-teaser__role">Digital Product Designer</span>
+            </h2>
+            <div class="about-teaser__description">
+              {{PROFILE_DESCRIPTION}}
+            </div>
+            <section class="about-teaser__career" aria-labelledby="home-career-title">
+              <h3 id="home-career-title" class="about-teaser__career-title">Work Experience</h3>
+              <div class="career-list">
+                {{CAREER_ITEMS}}
+              </div>
+            </section>
           </div>
         </section>
-        <div class="project-sections" id="works">
-          {{PROJECT_SECTIONS}}
+        <div class="home-work-column">
+          <div class="project-sections" id="works">
+            {{PROJECT_SECTIONS}}
+          </div>
         </div>
-        {{SPEAKING_SECTION}}
       </main>
 
     </div>
