@@ -1702,6 +1702,7 @@ h3 {
 }
 
 .grid-toggle {
+  display: none;
   position: fixed;
   right: calc(var(--bl, 8px) * 3);
   bottom: calc(var(--bl, 8px) * 3);
