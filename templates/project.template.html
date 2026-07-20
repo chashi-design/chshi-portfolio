@@ -17,38 +17,29 @@
     <meta name="twitter:description" content="{{OG_DESCRIPTION}}" />
     <meta name="twitter:image" content="{{OG_IMAGE}}" />
 
+    <script>
+      (function () {
+        document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
     <link rel="stylesheet" href="{{ASSET_PREFIX}}/assets/styles.css?v={{ASSET_VERSION}}" />
     <script defer src="{{ASSET_PREFIX}}/assets/app.js?v={{ASSET_VERSION}}"></script>
     <script type="application/ld+json">{{JSON_LD}}</script>
   </head>
-  <body>
-    <div class="site-header-shell">
-      <header class="site-header">
-        <a class="site-header__link site-header__home" href="{{HOME_URL}}">Home</a>
-        <nav class="site-header__nav" aria-label="Primary">
-          <a class="site-header__link" href="{{WORK_URL}}">Work</a>
-          <a class="site-header__link" href="{{PROFILE_URL}}">About</a>
-        </nav>
-      </header>
-    </div>
-    <div class="site-shell site-shell--project">
-      <aside class="side-nav" aria-label="Page navigation">
-        <nav class="side-nav__links" aria-label="Primary">
-          <a class="side-nav__link" href="{{HOME_URL}}">Home</a>
-          <a class="side-nav__link" href="{{WORK_URL}}">Work</a>
-          <a class="side-nav__link" href="{{PROFILE_URL}}">About</a>
-        </nav>
-      </aside>
-
+  <body class="swiss-page page-detail">
+    <a class="project-close" href="{{HOME_URL}}" aria-label="Homeへ戻る">
+      <svg class="project-close__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </a>
+    {{GRID_TOGGLE}}
+    <div class="site-shell site-shell--project swiss-wrap">
+      <div class="grid-guides" aria-hidden="true">{{GRID_COLUMNS}}</div>
       <main class="project-layout project-layout--detail">
         <section class="card detail-module" aria-labelledby="detail-module-title">
-          <h1 id="detail-module-title" class="detail-module__title">{{PROJECT_SUBTITLE}}</h1>
+          <h1 id="detail-module-title" class="detail-module__title">{{PROJECT_TITLE}}</h1>
           <dl class="detail-module__list">
             <div class="detail-module__row detail-module__row--meta">
-              <div class="detail-module__meta-item">
-                <dt>Service</dt>
-                <dd>{{PROJECT_SERVICE}}</dd>
-              </div>
               <div class="detail-module__meta-item">
                 <dt>Role</dt>
                 <dd>{{PROJECT_ROLE}}</dd>
@@ -77,6 +68,9 @@
           </div>
         </section>
       </main>
+      <div class="project-floating-nav">
+        {{PROJECT_NAV}}
+      </div>
     </div>
   </body>
 </html>

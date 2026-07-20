@@ -17,38 +17,21 @@
     <meta name="twitter:description" content="{{OG_DESCRIPTION}}" />
     <meta name="twitter:image" content="{{OG_IMAGE}}" />
 
+    <script>
+      (function () {
+        document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
     <link rel="stylesheet" href="{{ASSET_PREFIX}}/assets/styles.css?v={{ASSET_VERSION}}" />
     <script defer src="{{ASSET_PREFIX}}/assets/app.js?v={{ASSET_VERSION}}"></script>
     <script type="application/ld+json">{{JSON_LD}}</script>
   </head>
-  <body>
-    <div class="site-header-shell">
-      <header class="site-header">
-        <a class="site-header__link site-header__home" href="{{HOME_URL}}">Home</a>
-        <nav class="site-header__nav" aria-label="Primary">
-          <a class="site-header__link" href="{{WORK_URL}}">Work</a>
-          <a class="site-header__link" href="{{PROFILE_URL}}">About</a>
-        </nav>
-      </header>
-    </div>
-    <div class="site-shell site-shell--project">
-      <aside class="side-nav" aria-label="Page navigation">
-        <nav class="side-nav__links" aria-label="Primary">
-          <a class="side-nav__link" href="{{HOME_URL}}">Home</a>
-          <a class="side-nav__link" href="{{WORK_URL}}">Work</a>
-          <a class="side-nav__link" href="{{PROFILE_URL}}">About</a>
-        </nav>
-      </aside>
-
+  <body class="swiss-page page-profile">
+    {{GRID_TOGGLE}}
+    <div class="site-shell site-shell--project swiss-wrap">
+      <div class="grid-guides" aria-hidden="true">{{GRID_COLUMNS}}</div>
       <main class="profile-layout">
         <section class="profile-section" aria-labelledby="about-title">
-          <div class="profile-section__body">
-            <h1 id="about-title" class="profile-page-title">About Me</h1>
-            <p class="profile-page-copy">わたしについて</p>
-          </div>
-        </section>
-
-        <section class="profile-section" aria-labelledby="profile-name">
           <div class="profile-section__body">
             <img
               class="profile-avatar"
@@ -59,6 +42,7 @@
               loading="eager"
               decoding="async"
             />
+            <h1 id="about-title" class="profile-page-title">hey</h1>
             <h2 id="profile-name" class="profile-section__title">{{PERSON_NAME}}</h2>
             {{PERSON_SUBNAME}}
             <div class="profile-description">
@@ -71,32 +55,6 @@
           <h2 id="career-title" class="profile-section__title">キャリア</h2>
           <div class="career-list">
             {{CAREER_ITEMS}}
-          </div>
-        </section>
-
-        <section class="profile-section" aria-labelledby="speaking-title">
-          <h2 id="speaking-title" class="profile-section__title">登壇</h2>
-          <div class="profile-link-list">
-            {{SPEAKING_ITEMS}}
-          </div>
-        </section>
-
-        <section class="profile-section" aria-labelledby="skills-title">
-          <h2 id="skills-title" class="profile-section__title">スキル</h2>
-          {{PROFILE_SKILLS}}
-        </section>
-
-        <section class="profile-section" aria-labelledby="likes-title">
-          <h2 id="likes-title" class="profile-section__title">ライク</h2>
-          {{PROFILE_LIKES}}
-        </section>
-
-        <section class="profile-section" aria-labelledby="sns-title">
-          <h2 id="sns-title" class="profile-section__title">SNS</h2>
-          <div class="sns-links profile-sns-links" aria-label="SNS links">
-            <div class="sns-grid">
-              {{PROFILE_SNS_CARDS}}
-            </div>
           </div>
         </section>
       </main>
