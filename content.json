@@ -10,12 +10,12 @@
       "🇯🇵 Japan",
       "💻 LY Corporation"
     ],
-    "canonicalBase": "https://portfolio.example.com",
+    "canonicalBase": "https://chashi-design.github.io",
     "ogImageDefault": "/assets/img/og-default.svg",
     "profileImage": "/assets/img/profile-avatar.png",
     "basePath": "",
     "personName": "Takanori Hirohashi",
-    "personUrl": "https://portfolio.example.com/profile/",
+    "personUrl": "https://chashi-design.github.io/chshi-portfolio/",
     "profile": {
       "description": [
         "広島生まれのデジタルプロダクトデザイナー。現在はLINEヤフーにてデザイン業務を従事。",
