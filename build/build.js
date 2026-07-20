@@ -1238,8 +1238,10 @@ function buildSite(options = {}) {
   validateContent(content);
 
   const site = content.site;
-  const basePath = normalizeBasePath(site.basePath || "");
-  const canonicalBase = toText(site.canonicalBase).replace(/\/+$/, "");
+  const configuredBasePath = options.basePath ?? process.env.SITE_BASE_PATH ?? site.basePath ?? "";
+  const configuredCanonicalBase = options.canonicalBase ?? process.env.SITE_CANONICAL_BASE ?? site.canonicalBase;
+  const basePath = normalizeBasePath(configuredBasePath);
+  const canonicalBase = toText(configuredCanonicalBase).replace(/\/+$/, "");
   const assetVersion = buildAssetVersion();
   const context = {
     basePath,
