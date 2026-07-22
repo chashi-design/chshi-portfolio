@@ -354,23 +354,70 @@
     document.body.appendChild(cursor);
     document.documentElement.classList.add("has-inverting-cursor");
 
-    var closeTargetSelector = ".project-close, .project-detail-nav__link:not(.project-detail-nav__link--disabled)";
+    var closeTargetSelector = [
+      ".project-close",
+      ".project-detail-nav__link:not(.project-detail-nav__link--disabled)",
+      ".page-home .project-sections .bento-card",
+      ".description-link-card"
+    ].join(", ");
+    var textLinkSelector = [
+      "a:not(.card)",
+      ":not(.description-link-card)",
+      ":not(.project-close)",
+      ":not(.project-detail-nav__link)"
+    ].join("");
+
+    function radiusPartToPixels(value, basis) {
+      var numericValue = parseFloat(value) || 0;
+      return value.indexOf("%") >= 0 ? (numericValue / 100) * basis : numericValue;
+    }
+
+    function getCardRadius(card) {
+      var previewImage = card.querySelector(".bento-card__media img");
+      var radiusTarget = previewImage || card;
+
+      var targetRect = radiusTarget.getBoundingClientRect();
+      var radiusParts = window
+        .getComputedStyle(radiusTarget)
+        .borderTopLeftRadius
+        .split(/\s+/);
+
+      return {
+        x: radiusPartToPixels(radiusParts[0], targetRect.width),
+        y: radiusPartToPixels(radiusParts[1] || radiusParts[0], targetRect.height)
+      };
+    }
 
     function snapCursorToCloseTarget(closeTarget) {
       var closeRect = closeTarget.getBoundingClientRect();
+      var isWorkCardTarget = closeTarget.matches(".page-home .project-sections .bento-card");
+      var isLinkCardTarget = closeTarget.matches(".description-link-card");
+      var isCardTarget = isWorkCardTarget || isLinkCardTarget;
       var isExpanded = closeRect.width > 40.5;
-      var cursorGap = 2;
-      var closeRadius = Math.min(closeRect.width, closeRect.height) / 2;
+      var cursorGap = isCardTarget ? 8 : 2;
+      var cardRadius = isCardTarget ? getCardRadius(closeTarget) : null;
+      var closeRadiusX = isCardTarget
+        ? cardRadius.x
+        : Math.min(closeRect.width, closeRect.height) / 2;
+      var closeRadiusY = isCardTarget
+        ? cardRadius.y
+        : Math.min(closeRect.width, closeRect.height) / 2;
       var cursorWidth = closeRect.width + cursorGap * 2;
       var cursorHeight = closeRect.height + cursorGap * 2;
 
       cursor.classList.add("is-visible", "is-close-target");
       cursor.classList.remove("is-interactive");
       cursor.classList.toggle("is-close-target-expanded", isExpanded);
+      cursor.classList.toggle("is-work-card-target", isCardTarget);
       cursor.style.width = cursorWidth + "px";
       cursor.style.height = cursorHeight + "px";
       cursor.style.margin = "0";
-      cursor.style.borderRadius = closeRadius + cursorGap + "px";
+      cursor.style.borderRadius = [
+        closeRadiusX + cursorGap,
+        "px / ",
+        closeRadiusY + cursorGap,
+        "px"
+      ].join("");
       cursor.style.transform = [
         "translate3d(",
         closeRect.left - cursorGap,
@@ -380,15 +427,41 @@
       ].join("");
 
       var expandedWidth = closeTarget.matches(".project-detail-nav__link") ? 47.9 : 79.9;
-      if (
+      var shouldSyncWorkCard = isWorkCardTarget && closeTarget.matches(":hover");
+      var shouldSyncExpandedTarget =
         closeTarget.matches(":hover") &&
-        (closeRect.width < expandedWidth || closeRect.height < 47.9)
-      ) {
+        (closeRect.width < expandedWidth || closeRect.height < 47.9);
+
+      if ((shouldSyncWorkCard || shouldSyncExpandedTarget) && !closeSyncFrame) {
         closeSyncFrame = window.requestAnimationFrame(function () {
           closeSyncFrame = 0;
           snapCursorToCloseTarget(closeTarget);
         });
       }
+    }
+
+    function snapCursorToTextLink(textLink, cursorX, cursorY) {
+      var linkRects = Array.prototype.slice.call(textLink.getClientRects());
+      var linkRect = linkRects.find(function (rect) {
+        return cursorX >= rect.left && cursorX <= rect.right && cursorY >= rect.top && cursorY <= rect.bottom;
+      }) || textLink.getBoundingClientRect();
+      var cursorGap = 4;
+      var cursorWidth = linkRect.width + cursorGap * 2;
+      var cursorHeight = linkRect.height + cursorGap * 2;
+
+      cursor.classList.add("is-visible", "is-text-link-target");
+      cursor.classList.remove("is-interactive", "is-text-target");
+      cursor.style.width = cursorWidth + "px";
+      cursor.style.height = cursorHeight + "px";
+      cursor.style.margin = "0";
+      cursor.style.borderRadius = Math.min(8, cursorHeight / 2) + "px";
+      cursor.style.transform = [
+        "translate3d(",
+        linkRect.left - cursorGap,
+        "px, ",
+        linkRect.top - cursorGap,
+        "px, 0)"
+      ].join("");
     }
 
     function clearCloseTargetState() {
@@ -397,7 +470,12 @@
         closeSyncFrame = 0;
       }
 
-      cursor.classList.remove("is-close-target", "is-close-target-expanded");
+      cursor.classList.remove(
+        "is-close-target",
+        "is-close-target-expanded",
+        "is-work-card-target",
+        "is-text-link-target"
+      );
       cursor.style.removeProperty("width");
       cursor.style.removeProperty("height");
       cursor.style.removeProperty("margin");
@@ -406,11 +484,18 @@
 
     function moveCursor(event) {
       var closeTarget = event.target && event.target.closest && event.target.closest(closeTargetSelector);
+      var textLink = event.target && event.target.closest && event.target.closest(textLinkSelector);
       var cursorX = event.clientX;
       var cursorY = event.clientY;
 
       if (closeTarget) {
         snapCursorToCloseTarget(closeTarget);
+        return;
+      }
+
+      if (textLink) {
+        clearCloseTargetState();
+        snapCursorToTextLink(textLink, cursorX, cursorY);
         return;
       }
 
@@ -428,20 +513,34 @@
     function updateInteractiveState(event) {
       var target = event.target;
       var interactive = target && target.closest && target.closest("a, button, select, summary, [role='button']");
-      cursor.classList.toggle("is-interactive", Boolean(interactive));
+      var textLink = target && target.closest && target.closest(textLinkSelector);
+      var textTarget =
+        !interactive &&
+        target &&
+        target.closest &&
+        target.closest("p, h1, h2, h3, h4, li, dt, dd, figcaption, blockquote, time, address, small, label");
+      cursor.classList.toggle("is-interactive", Boolean(interactive && !textLink));
+      cursor.classList.toggle("is-text-target", Boolean(textTarget));
     }
 
-    document.addEventListener("focusin", function (event) {
-      var closeTarget = event.target && event.target.closest && event.target.closest(closeTargetSelector);
+    function enterKeyboardNavigation() {
+      document.documentElement.classList.add("is-keyboard-navigation");
+      clearCloseTargetState();
+      cursor.classList.remove("is-visible", "is-interactive", "is-text-target", "is-pressed");
+    }
 
-      if (!closeTarget) {
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "Tab") {
         return;
       }
 
-      snapCursorToCloseTarget(closeTarget);
-      window.requestAnimationFrame(function () {
-        snapCursorToCloseTarget(closeTarget);
-      });
+      enterKeyboardNavigation();
+    });
+
+    document.addEventListener("focusin", function (event) {
+      if (event.target && event.target.matches && event.target.matches(":focus-visible")) {
+        enterKeyboardNavigation();
+      }
     });
 
     document.addEventListener("pointermove", function (event) {
@@ -449,12 +548,23 @@
         return;
       }
 
+      document.documentElement.classList.remove("is-keyboard-navigation");
       moveCursor(event);
       updateInteractiveState(event);
     });
 
     document.addEventListener("pointerdown", function (event) {
       if (event.pointerType && event.pointerType !== "mouse") {
+        return;
+      }
+
+      document.documentElement.classList.remove("is-keyboard-navigation");
+
+      if (
+        cursor.classList.contains("is-text-target") ||
+        cursor.classList.contains("is-text-link-target")
+      ) {
+        cursor.classList.remove("is-pressed");
         return;
       }
 
@@ -467,7 +577,7 @@
 
     document.addEventListener("pointerleave", function () {
       clearCloseTargetState();
-      cursor.classList.remove("is-visible", "is-interactive", "is-pressed");
+      cursor.classList.remove("is-visible", "is-interactive", "is-text-target", "is-pressed");
     });
   }
 
@@ -531,11 +641,104 @@
     });
   }
 
+  function setupHomeSegmentedControl() {
+    var control = document.querySelector(".home-segmented-control");
+
+    if (!control) {
+      return;
+    }
+
+    var buttons = Array.prototype.slice.call(
+      control.querySelectorAll("[data-home-segment-target]")
+    );
+    if (!buttons.length) {
+      return;
+    }
+
+    var sections = buttons
+      .map(function (button) {
+        var selector = button.getAttribute("data-home-segment-target");
+        var section = selector ? document.querySelector(selector) : null;
+        return section ? { button: button, section: section } : null;
+      })
+      .filter(Boolean);
+
+    if (!sections.length) {
+      return;
+    }
+
+    var ticking = false;
+    var activeButton = null;
+
+    function setActive(button) {
+      if (activeButton === button) {
+        return;
+      }
+
+      activeButton = button;
+      buttons.forEach(function (item) {
+        var isActive = item === button;
+        item.classList.toggle("is-active", isActive);
+        item.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
+      control.classList.toggle("is-work-active", button === buttons[1]);
+    }
+
+    function updateActiveSegment() {
+      ticking = false;
+
+      var referenceLine = window.innerHeight * 0.45;
+      var active = sections[0];
+
+      sections.forEach(function (item) {
+        if (item.section.getBoundingClientRect().top <= referenceLine) {
+          active = item;
+        }
+      });
+
+      setActive(active.button);
+    }
+
+    function requestActiveUpdate() {
+      if (ticking) {
+        return;
+      }
+
+      ticking = true;
+      window.requestAnimationFrame(updateActiveSegment);
+    }
+
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var selector = button.getAttribute("data-home-segment-target");
+        var target = selector ? document.querySelector(selector) : null;
+
+        if (!target) {
+          return;
+        }
+
+        var prefersReducedMotion =
+          window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        target.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "start"
+        });
+      });
+    });
+
+    requestActiveUpdate();
+    window.addEventListener("scroll", requestActiveUpdate, { passive: true });
+    window.addEventListener("resize", requestActiveUpdate);
+
+  }
+
   setupPressFeedback();
   setupGridOverlay();
   setupThemeSwitcher();
   setupOpticalAlignment();
   setupScrollReveal();
   setupScrollVideos();
+  setupHomeSegmentedControl();
   setupInvertingCursor();
 })();

@@ -4,6 +4,22 @@
   "scripts": {
     "build": "node build/build.js",
     "build:pages": "SITE_BASE_PATH=/chshi-portfolio node build/build.js",
-    "dev:remote": "node build/dev-remote.js"
-  }
+    "dev:remote": "node build/dev-remote.js",
+    "optimize:images": "python3 build/optimize-images.py assets --webp-lossless"
+  },
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chashi-design/chshi-portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/chashi-design/chshi-portfolio/issues"
+  },
+  "homepage": "https://github.com/chashi-design/chshi-portfolio#readme"
 }

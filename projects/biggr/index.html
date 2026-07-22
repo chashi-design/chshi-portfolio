@@ -22,12 +22,12 @@
         document.documentElement.dataset.theme = "dark";
       })();
     </script>
-    <link rel="stylesheet" href="/assets/styles.css?v=59b6b54fa8c1" />
-    <script defer src="/assets/app.js?v=59b6b54fa8c1"></script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://chashi-design.github.io/chshi-portfolio/"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UXデザインとフロントエンド実装のケーススタディをBento Gridで紹介するポートフォリオ。","url":"https://chashi-design.github.io/"},{"@type":"CreativeWork","name":"Biggr","description":"Biggr は、筋トレの記録と振り返りをシンプルに行うための iOS アプリです。","image":"https://chashi-design.github.io/assets/img/biggr/biggr-hero.png","url":"https://chashi-design.github.io/projects/biggr/","keywords":"UI Design, Case Study","creator":{"@type":"Person","name":"Takanori Hirohashi"}}]}</script>
+    <link rel="stylesheet" href="/assets/styles.css?v=064e5f3c2080" />
+    <script defer src="/assets/app.js?v=064e5f3c2080"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://chashi-design.github.io/chshi-portfolio/"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UX デザインとフロントエンド実装のケーススタディを Bento Grid で紹介するポートフォリオ。","url":"https://chashi-design.github.io/"},{"@type":"CreativeWork","name":"Biggr","description":"Biggr は、筋トレの記録と振り返りをシンプルに行うための iOS アプリです。","image":"https://chashi-design.github.io/assets/img/biggr/biggr-hero.png","url":"https://chashi-design.github.io/projects/biggr/","keywords":"UI Design, Case Study","creator":{"@type":"Person","name":"Takanori Hirohashi"}}]}</script>
   </head>
   <body class="swiss-page page-detail">
-    <a class="project-close" href="/" aria-label="Homeへ戻る">
+    <a class="project-close" href="/" aria-label="Home へ戻る">
       <svg class="project-close__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <path d="M6 6l12 12M18 6L6 18" />
       </svg>
@@ -71,7 +71,10 @@
 
         <section class="card project-main">
           <figure class="project-main-media">
-            <img src="/assets/img/biggr/biggr-hero.png" alt="Biggr hero image" loading="eager" decoding="async" />
+            <picture>
+  <source srcset="/assets/img/biggr/biggr-hero.webp" type="image/webp" />
+  <img src="/assets/img/biggr/biggr-hero.png" alt="Biggr hero image" loading="eager" decoding="async" />
+</picture>
           </figure>
         </section>
 
@@ -85,7 +88,7 @@
   <section class="description-block description-block--text">
   <div class="description-body-group">
   <p class="description-body">Biggr は、筋トレの記録と振り返りをシンプルに行うための iOS アプリです。</p>
-  <p class="description-body">個人プロジェクトとして、企画、UI/UXデザイン、App Storeへのリリースまでを一貫して担当しました。</p>
+  <p class="description-body">個人プロジェクトとして、企画、UI/UX デザイン、App Store へのリリースまでを一貫して担当しました。</p>
   <p class="description-body">また開発に関しては、Codex を活用し、非エンジニアながら開発も一人で行い、リリース後もユーザーからのフィードバックをもとに改善を続けています。</p>
 </div>
 </section>
@@ -100,7 +103,6 @@
   <div class="description-body-group">
   <p class="description-body">自身が筋トレを続ける中で、トレーニング内容を記録するために複数の既存アプリを使用しました。</p>
   <p class="description-body">しかし、種目の選択からセット内容を保存するまでの操作が多く、トレーニング中に記録すること自体を負担に感じる場面がありました。また、自分が求めていた iOS らしいシンプルで操作性に優れたアプリも見つけられませんでした。</p>
-  <p class="description-body">そこで、機能を増やすことではなく、記録を始めるまでの操作と、繰り返し入力する手間を減らすことを重視した筋トレ記録アプリを企画しました。</p>
 </div>
 </section>
 </div>
@@ -112,26 +114,20 @@
 <div class="description-item__content">
   <section class="description-block description-block--text">
   <div class="description-body-group">
-  <p class="description-body">筋トレ中でも記録に意識を取られず、トレーニングへ集中できるよう、以下の3つを重視して体験を設計しました。</p>
+  <p class="description-body">筋トレ中でも記録に意識を取られず、トレーニングへ集中できるよう、以下の 4 つを重視して体験を設計しました。</p>
 </div>
 </section>
-  <section class="description-block description-block--text">
-  <ul class="description-body-group description-list">
-  <li class="description-body description-list__item">記録を始めるまでの操作を減らす</li>
-  <li class="description-body description-list__item">繰り返し入力する手間を減らす</li>
-  <li class="description-body description-list__item">日付と種目の2つの切り口から記録を振り返れるようにする</li>
-</ul>
-</section>
-  <section class="description-block description-block--text">
-  <div class="description-body-group">
-  <p class="description-body">また、iOS標準の画面遷移や端末設定に沿って、迷わず操作できることを基本方針としました。</p>
-</div>
-</section>
+  <figure class="description-block description-block--image description-item__media">
+  <picture>
+  <source srcset="/assets/img/biggr/biggr-concept.webp" type="image/webp" />
+  <img src="/assets/img/biggr/biggr-concept.png" alt="Biggr の4つの設計方針" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
+</picture>
+</figure>
   <section class="description-block description-block--text">
   <h3 class="description-block__title">1. 記録を始めるまでの操作を減らす</h3>
   <div class="description-body-group">
-  <p class="description-body">1種目のみを追加した場合、選択後に同じ種目を再び選ぶ操作は不要です。</p>
-  <p class="description-body">そこで、1種目だけを追加した場合は、そのまま入力画面へ遷移するようにしました。複数種目を追加した場合とは遷移を分け、追加した種目数に応じて次の操作を最適化しています。</p>
+  <p class="description-body">1 種目のみを追加した場合、選択後に同じ種目を再び選ぶ操作は不要です。</p>
+  <p class="description-body">そこで、1 種目だけを追加した場合は、そのまま入力画面へ遷移するようにしました。複数種目を追加した場合とは遷移を分け、追加した種目数に応じて次の操作を最適化しています。</p>
 </div>
 </section>
   <figure class="description-block description-block--video description-item__media">
@@ -158,17 +154,23 @@
 </div>
 </section>
   <figure class="description-block description-block--image description-item__media">
+  <picture>
+  <source srcset="/assets/img/biggr/biggr-activity.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-activity.png" alt="Biggr 記録の振り返り" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
+</picture>
 </figure>
   <section class="description-block description-block--text">
-  <h3 class="description-block__title">iOSの設定に沿った体験</h3>
+  <h3 class="description-block__title">iOS の設定に沿った体験</h3>
   <div class="description-body-group">
-  <p class="description-body">アプリはiOSのみで提供するため、SwiftUIを中心に実装しました。</p>
-  <p class="description-body">端末の設定に合わせて利用できるよう、ライト・ダークなどの外観モード、Dynamic Typeによる文字サイズの変更、週の開始曜日に対応しています。</p>
+  <p class="description-body">アプリは iOS のみで提供するため、SwiftUI を中心に実装しました。</p>
+  <p class="description-body">端末の設定に合わせて利用できるよう、ライト・ダークなどの外観モード、Dynamic Type による文字サイズの変更、週の開始曜日に対応しています。</p>
 </div>
 </section>
   <figure class="description-block description-block--image description-item__media">
-  <img src="/assets/img/biggr/biggr-setting.png" alt="Biggr iOS設定に沿った体験" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
+  <picture>
+  <source srcset="/assets/img/biggr/biggr-setting.webp" type="image/webp" />
+  <img src="/assets/img/biggr/biggr-setting.png" alt="Biggr iOS 設定に沿った体験" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
+</picture>
 </figure>
 </div>
 </article>
@@ -179,12 +181,15 @@
 <div class="description-item__content">
   <section class="description-block description-block--text">
   <div class="description-body-group">
-  <p class="description-body">アプリアイコンは、Biggrの頭文字である「B」を右上に向かって大きくし、記録の継続による成長を表現しました。また、全体に傾きをつけることで、筋トレらしい力強さと前進感を持たせています。</p>
-  <p class="description-body">また、iOS 26で提供されたクリア表示を含め、ライト、ダークなど各外観モードで適切に見えるよう、Icon Composerを使用して調整しました。</p>
+  <p class="description-body">アプリアイコンは、Biggr の頭文字である「B」を右上に向かって大きくし、記録の継続による成長を表現しました。また、全体に傾きをつけることで、筋トレらしい力強さと前進感を持たせています。</p>
+  <p class="description-body">また、iOS 26 で提供されたクリア表示を含め、ライト、ダークなど各外観モードで適切に見えるよう、Icon Composer を使用して調整しました。</p>
 </div>
 </section>
   <figure class="description-block description-block--image description-item__media">
+  <picture>
+  <source srcset="/assets/img/biggr/biggr-logo.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-logo.png" alt="Biggr logo" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
+</picture>
 </figure>
 </div>
 </article>
@@ -196,19 +201,25 @@
   <section class="description-block description-block--text">
   <div class="description-body-group">
   <p class="description-body">初めて行う種目や、動きを理解しにくい種目でも取り組みやすくするため、各種目の動作を表すキャラクターを制作しました。</p>
-  <p class="description-body">まずベースとなるキャラクターのイメージを作成し、3D化。その後、OSS化された各種目のイラストデータを参照し、種目ごとに表現がばらつかないよう、キャラクターの外見、服装、視点、背景、ポーズなど細かくプロンプトを作成した後、種目ごとの3Dイラストを量産しました。</p>
+  <p class="description-body">まずベースとなるキャラクターのイメージを作成し、3D 化。その後、OSS 化された各種目のイラストデータを参照し、種目ごとに表現がばらつかないよう、キャラクターの外見、服装、視点、背景、ポーズなど細かくプロンプトを作成した後、種目ごとの 3D イラストを量産しました。</p>
 </div>
 </section>
   <figure class="description-block description-block--image description-item__media">
+  <picture>
+  <source srcset="/assets/img/biggr/biggr-character.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-character.png" alt="Biggr キャラクター" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
+</picture>
 </figure>
   <figure class="description-block description-block--image description-item__media">
+  <picture>
+  <source srcset="/assets/img/biggr/biggr-character-creative-process.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-character-creative-process.png" alt="Biggr キャラクター制作プロセス" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
+</picture>
 </figure>
   <section class="description-block description-block--link">
   <a class="description-link-card" href="https://github.com/hasaneyldrm/exercises-dataset" target="_blank" rel="noreferrer noopener">
     <span class="description-link-card__content">
-      <span class="description-link-card__label">参照OSS: exercises-dataset</span>
+      <span class="description-link-card__label">参照 OSS: exercises-dataset</span>
       <span class="description-link-card__note">GitHub</span>
     </span>
     <span class="description-link-card__arrow" aria-hidden="true">↗</span>
@@ -223,7 +234,7 @@
 <div class="description-item__content">
   <section class="description-block description-block--text">
   <div class="description-body-group">
-  <p class="description-body">アプリの認知とApp Storeへの導線を増やすため、ランディングページも制作しました。</p>
+  <p class="description-body">アプリの認知と App Store への導線を増やすため、ランディングページも制作しました。</p>
   <p class="description-body">アプリの特徴を網羅的に説明するのではなく、筋トレを記録したいユーザーが、自分に必要なアプリかを短時間で判断できる情報構成を目指しました。</p>
   <p class="description-body">また、以下の条件にも対応しています。</p>
 </div>
@@ -234,14 +245,20 @@
   <li class="description-body description-list__item">ライトモード・ダークモード</li>
   <li class="description-body description-list__item">画面幅に応じた文字組み</li>
   <li class="description-body description-list__item">表示速度の最適化</li>
-  <li class="description-body description-list__item">App Storeへのインストール導線</li>
+  <li class="description-body description-list__item">App Store へのインストール導線</li>
 </ul>
 </section>
   <figure class="description-block description-block--image description-item__media">
+  <picture>
+  <source srcset="/assets/img/biggr/biggr-lp.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-lp.png" alt="Biggr ランディングページ" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
+</picture>
 </figure>
   <figure class="description-block description-block--image description-item__media">
+  <picture>
+  <source srcset="/assets/img/biggr/biggr-lp-speed.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-lp-speed.png" alt="Biggr ランディングページの表示速度" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
+</picture>
 </figure>
   <section class="description-block description-block--link">
   <a class="description-link-card" href="https://biggrapp.com/" target="_blank" rel="noreferrer noopener">
@@ -261,7 +278,7 @@
         <div class="project-detail-nav" role="navigation" aria-label="Project navigation">
 <a class="project-detail-nav__link project-detail-nav__link--prev" href="/projects/maply/" aria-label="Previous: Maply"><svg class="project-detail-nav__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M12 19l-7-7 7-7" /></svg></a>
 <span class="project-detail-nav__count" aria-label="Project 2 of 8">2/8</span>
-<a class="project-detail-nav__link project-detail-nav__link--next" href="/projects/yahoo-carnavi/" aria-label="Next: Yahoo!カーナビ"><svg class="project-detail-nav__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>
+<a class="project-detail-nav__link project-detail-nav__link--next" href="/projects/yahoo-carnavi/" aria-label="Next: Yahoo! カーナビ"><svg class="project-detail-nav__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>
 </div>
       </div>
     </div>

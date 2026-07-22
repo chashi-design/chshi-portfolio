@@ -97,6 +97,63 @@ function withBasePath(basePath, urlPath) {
   return `${basePath}${pathValue}`;
 }
 
+function localAssetPath(urlPath) {
+  const raw = toText(urlPath);
+  if (!raw.startsWith("/") || /^\/\//.test(raw)) {
+    return null;
+  }
+
+  const cleanPath = raw.split(/[?#]/)[0];
+  const filePath = path.join(ROOT, cleanPath);
+  const relative = path.relative(ROOT, filePath);
+  if (relative.startsWith("..") || path.isAbsolute(relative)) {
+    return null;
+  }
+
+  return filePath;
+}
+
+function webpSidecarUrl(urlPath) {
+  const raw = toText(urlPath);
+  if (!/\.png(?:[?#].*)?$/i.test(raw)) {
+    return "";
+  }
+
+  const webpUrl = raw.replace(/\.png(?=([?#]|$))/i, ".webp");
+  const webpPath = localAssetPath(webpUrl);
+  if (!webpPath || !fs.existsSync(webpPath)) {
+    return "";
+  }
+
+  return webpUrl;
+}
+
+function buildImageMarkup(src, alt, attrs = {}, context = { basePath: "" }) {
+  const rawSrc = toText(src);
+  const imageAttrs = {
+    src: withBasePath(context.basePath, rawSrc),
+    alt,
+    ...attrs
+  };
+  const attrText = Object.entries(imageAttrs)
+    .filter(([, value]) => value !== undefined && value !== null && String(value).length > 0)
+    .map(([key, value]) => `${key}="${escapeAttr(value)}"`)
+    .join(" ");
+  const img = `<img ${attrText} />`;
+  const webpUrl = webpSidecarUrl(rawSrc);
+
+  if (!webpUrl) {
+    return img;
+  }
+
+  return [
+    "<picture>",
+    `  <source srcset="${escapeAttr(withBasePath(context.basePath, webpUrl))}" type="image/webp" />`,
+    `  ${img}`,
+    "</picture>"
+  ].join("\n");
+}
+
 function toAbsoluteUrl(canonicalBase, urlPath) {
   if (/^https?:\/\//i.test(urlPath)) {
     return urlPath;
@@ -197,6 +254,9 @@ function validateContent(content) {
     assert(item && typeof item === "object", `site.profile.career[${index}] must be an object.`);
     assert(toText(item.period).length > 0, `site.profile.career[${index}].period is required.`);
     assert(toText(item.title).length > 0, `site.profile.career[${index}].title is required.`);
+    if (item.note !== undefined) {
+      assert(toText(item.note).length > 0, `site.profile.career[${index}].note must not be empty.`);
+    }
     if (item.url !== undefined) {
       assert(/^https?:\/\//i.test(toText(item.url)), `site.profile.career[${index}].url must be an http(s) URL.`);
     }
@@ -378,7 +438,6 @@ function buildProjectCard(project, context, options = {}) {
   ].join(";");
 
   const projectPath = withBasePath(context.basePath, `/projects/${project.slug}/`);
-  const heroImage = withBasePath(context.basePath, toText(project.heroImage));
   const date = toText(project.date);
   const category = toText(project.category) || "UI Design";
   const linkLabel = [project.title, showCategory ? category : ""]
@@ -394,7 +453,7 @@ function buildProjectCard(project, context, options = {}) {
     showCategory ? `    <p class="bento-card__category">${escapeHtml(category)}</p>` : "",
     `  </div>`,
     `  <figure class="bento-card__media">`,
-    `    <img src="${escapeAttr(heroImage)}" alt="${escapeAttr(project.title)} preview" loading="lazy" decoding="async" />`,
+    `    ${buildImageMarkup(project.heroImage, `${project.title} preview`, { loading: "lazy", decoding: "async" }, context)}`,
     `  </figure>`,
     `</a>`
   ]
@@ -497,7 +556,6 @@ function buildSnsCards(site, context) {
       const name = toText(item.name);
       const accountName = toText(item.accountName);
       const url = toText(item.url);
-      const icon = withBasePath(context.basePath, toText(item.icon));
       const bgColor = toText(item.bgColor);
       const textColor = toText(item.textColor) || "#ffffff";
       const style = `--sns-bg:${bgColor};--sns-fg:${textColor};`;
@@ -505,7 +563,7 @@ function buildSnsCards(site, context) {
       return [
         `<a class="card sns-card clothoid-corner" href="${escapeAttr(url)}" style="${escapeAttr(style)}"${maybeExternalAttrs(url)}>`,
         `  <span class="sns-card__icon" aria-hidden="true">`,
-        `    <img src="${escapeAttr(icon)}" alt="" loading="lazy" decoding="async" />`,
+        `    ${buildImageMarkup(item.icon, "", { loading: "lazy", decoding: "async" }, context)}`,
         `  </span>`,
         `  <span class="sns-card__meta">`,
         `    <span class="sns-card__name">${escapeHtml(name)}</span>`,
@@ -649,7 +707,16 @@ function validateDetailContentBlocks(blocks, pointer) {
     assert(block && typeof block === "object", `${blockPointer} must be an object.`);
 
     const type = toText(block.type).toLowerCase();
-    assert(type === "image" || type === "video" || type === "text" || type === "link" || type === "docswell" || type === "youtube", `${blockPointer}.type must be "image", "video", "text", "link", "docswell", or "youtube".`);
+    assert(
+      type === "image" ||
+        type === "video" ||
+        type === "text" ||
+        type === "link" ||
+        type === "docswell" ||
+        type === "youtube" ||
+        type === "instagram",
+      `${blockPointer}.type must be "image", "video", "text", "link", "docswell", "youtube", or "instagram".`
+    );
 
     if (type === "image" || type === "video") {
       assert(toText(block.src).length > 0, `${blockPointer}.src is required for ${type} blocks.`);
@@ -673,6 +740,10 @@ function validateDetailContentBlocks(blocks, pointer) {
 
     if (type === "youtube") {
       assert(toText(block.src).length > 0, `${blockPointer}.src is required for youtube blocks.`);
+    }
+
+    if (type === "instagram") {
+      assert(toText(block.url).length > 0, `${blockPointer}.url is required for instagram blocks.`);
     }
   });
 }
@@ -718,6 +789,14 @@ function normalizeDetailBlock(block) {
       type: "youtube",
       src: toText(block.src),
       title: toText(block.title) || "YouTube video player"
+    };
+  }
+
+  if (type === "instagram") {
+    return {
+      type: "instagram",
+      url: toText(block.url),
+      label: toText(block.label) || "Instagramで投稿を見る"
     };
   }
 
@@ -884,12 +963,11 @@ function normalizeDetailSections(project) {
 function buildDescriptionBlockMarkup(block, project, sectionTitle, context, blockIndex) {
   if (block.type === "image" && block.image) {
     const image = block.image;
-    const imageSrc = escapeAttr(withBasePath(context.basePath, image.src));
-    const imageAlt = escapeAttr(toText(image.alt) || `${project.title} ${sectionTitle} ${blockIndex + 1}`);
+    const imageAlt = toText(image.alt) || `${project.title} ${sectionTitle} ${blockIndex + 1}`;
 
     return [
       '<figure class="description-block description-block--image description-item__media">',
-      `  <img src="${imageSrc}" alt="${imageAlt}" loading="lazy" decoding="async" style="--aspect:${escapeAttr(normalizeAspect(image.aspect))};--fit:contain;" />`,
+      `  ${buildImageMarkup(image.src, imageAlt, { loading: "lazy", decoding: "async", style: `--aspect:${normalizeAspect(image.aspect)};--fit:contain;` }, context)}`,
       toText(image.caption).length > 0 ? `  <figcaption class="description-image__caption">${escapeHtml(image.caption)}</figcaption>` : "",
       "</figure>"
     ]
@@ -946,6 +1024,17 @@ function buildDescriptionBlockMarkup(block, project, sectionTitle, context, bloc
     return [
       '<section class="description-block description-block--embed description-block--youtube">',
       `  <iframe src="${escapeAttr(block.src)}" title="${escapeAttr(block.title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+      "</section>"
+    ].join("\n");
+  }
+
+  if (block.type === "instagram") {
+    return [
+      '<section class="description-block description-block--embed description-block--instagram">',
+      `  <blockquote class="instagram-media" data-instgrm-permalink="${escapeAttr(block.url)}" data-instgrm-version="14">`,
+      `    <a href="${escapeAttr(block.url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(block.label)}</a>`,
+      "  </blockquote>",
+      '  <script async src="https://www.instagram.com/embed.js"></script>',
       "</section>"
     ].join("\n");
   }
@@ -1181,8 +1270,12 @@ function buildProjectPage(project, index, projects, template, context) {
     PROJECT_DATE: buildDetailMetaList(project.date),
     PROJECT_PLATFORM: buildDetailMetaList(platformValue),
     PROJECT_ROLE: buildDetailMetaList(roleValue),
-    HERO_IMAGE: escapeAttr(withBasePath(context.basePath, project.heroImage)),
-    HERO_ALT: escapeAttr(`${project.title} hero image`),
+    HERO_IMAGE_MARKUP: buildImageMarkup(
+      project.heroImage,
+      `${project.title} hero image`,
+      { loading: "eager", decoding: "async" },
+      context
+    ),
     DESCRIPTION_SECTIONS: descriptionSections
   });
 }
@@ -1210,16 +1303,20 @@ function buildCareerItems(careerItems) {
     .map((item) => {
       const titleText = toText(item.title);
       const linkText = toText(item.linkText);
+      const noteText = toText(item.note);
       const titleSuffix = linkText && titleText.length > linkText.length
         ? ` ${escapeHtml(titleText.slice(linkText.length).trim())}`
         : "";
       const title = item.url
         ? `<a href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(linkText || titleText)}</a>${titleSuffix}`
         : escapeHtml(titleText);
+      const note = noteText
+        ? `<span class="career-item__note">${escapeHtml(noteText)}</span>`
+        : "";
       return [
         '<article class="career-item">',
         `  <p class="career-item__period">${escapeHtml(item.period)}</p>`,
-        `  <p class="career-item__title">${title}</p>`,
+        `  <p class="career-item__title">${title}${note}</p>`,
         "</article>"
       ].join("\n");
     })

@@ -31,7 +31,7 @@
     <div class="site-shell swiss-wrap">
       <div class="grid-guides" aria-hidden="true">{{GRID_COLUMNS}}</div>
       <main>
-        <section class="about-teaser" aria-labelledby="about-teaser-title">
+        <section class="about-teaser" id="about" aria-labelledby="about-teaser-title">
           <div class="about-teaser__inner">
             <h2 id="about-teaser-title" class="about-teaser__title">
               <span class="about-teaser__name"><span class="about-teaser__name-prefix">I'm</span> <span class="about-teaser__name-value">{{PERSON_NAME}}.</span></span>
@@ -49,12 +49,19 @@
           </div>
         </section>
         <div class="home-work-column">
-          <div class="project-sections" id="works">
-            {{PROJECT_SECTIONS}}
-          </div>
+          <section class="home-selected-work" id="works" aria-labelledby="home-selected-work-title">
+            <h3 id="home-selected-work-title" class="home-selected-work__title">Selected Work</h3>
+            <div class="project-sections">
+              {{PROJECT_SECTIONS}}
+            </div>
+          </section>
         </div>
       </main>
 
     </div>
+    <nav class="home-segmented-control" aria-label="Home section navigation">
+      <button class="home-segmented-control__button" type="button" data-home-segment-target="#about">About</button>
+      <button class="home-segmented-control__button" type="button" data-home-segment-target="#works">Work</button>
+    </nav>
   </body>
 </html>
