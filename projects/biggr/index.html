@@ -22,8 +22,8 @@
         document.documentElement.dataset.theme = "dark";
       })();
     </script>
-    <link rel="stylesheet" href="/assets/styles.css?v=064e5f3c2080" />
-    <script defer src="/assets/app.js?v=064e5f3c2080"></script>
+    <link rel="stylesheet" href="/assets/styles.css?v=296b12eb38dd" />
+    <script defer src="/assets/app.js?v=296b12eb38dd"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://chashi-design.github.io/chshi-portfolio/"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UX デザインとフロントエンド実装のケーススタディを Bento Grid で紹介するポートフォリオ。","url":"https://chashi-design.github.io/"},{"@type":"CreativeWork","name":"Biggr","description":"Biggr は、筋トレの記録と振り返りをシンプルに行うための iOS アプリです。","image":"https://chashi-design.github.io/assets/img/biggr/biggr-hero.png","url":"https://chashi-design.github.io/projects/biggr/","keywords":"UI Design, Case Study","creator":{"@type":"Person","name":"Takanori Hirohashi"}}]}</script>
   </head>
   <body class="swiss-page page-detail">
@@ -32,22 +32,7 @@
         <path d="M6 6l12 12M18 6L6 18" />
       </svg>
     </a>
-    <button class="grid-toggle" type="button" aria-pressed="false" aria-label="Toggle grid overlay">Grid</button>
     <div class="site-shell site-shell--project swiss-wrap">
-      <div class="grid-guides" aria-hidden="true"><span class="grid-guides__margin grid-guides__margin--left"></span>
-        <span class="grid-guides__margin grid-guides__margin--right"></span>
-        <span class="grid-guides__col">01</span>
-        <span class="grid-guides__col">02</span>
-        <span class="grid-guides__col">03</span>
-        <span class="grid-guides__col">04</span>
-        <span class="grid-guides__col">05</span>
-        <span class="grid-guides__col">06</span>
-        <span class="grid-guides__col">07</span>
-        <span class="grid-guides__col">08</span>
-        <span class="grid-guides__col">09</span>
-        <span class="grid-guides__col">10</span>
-        <span class="grid-guides__col">11</span>
-        <span class="grid-guides__col">12</span></div>
       <main class="project-layout project-layout--detail">
         <section class="card detail-module" aria-labelledby="detail-module-title">
           <h1 id="detail-module-title" class="detail-module__title">Biggr</h1>
@@ -59,7 +44,7 @@
               </div>
               <div class="detail-module__meta-item">
                 <dt>Date</dt>
-                <dd>2026 - PRESENT</dd>
+                <dd>2026</dd>
               </div>
               <div class="detail-module__meta-item">
                 <dt>Platform</dt>
@@ -71,7 +56,7 @@
 
         <section class="card project-main">
           <figure class="project-main-media">
-            <picture>
+            <picture class="media-skeleton" aria-busy="true">
   <source srcset="/assets/img/biggr/biggr-hero.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-hero.png" alt="Biggr hero image" loading="eager" decoding="async" />
 </picture>
@@ -118,7 +103,7 @@
 </div>
 </section>
   <figure class="description-block description-block--image description-item__media">
-  <picture>
+  <picture class="media-skeleton" aria-busy="true" style="--aspect:16 / 9;--fit:contain;">
   <source srcset="/assets/img/biggr/biggr-concept.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-concept.png" alt="Biggr の4つの設計方針" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
 </picture>
@@ -137,7 +122,7 @@
   <h3 class="description-block__title">2. 繰り返し入力する手間を減らす</h3>
   <div class="description-body-group">
   <p class="description-body">筋トレでは、前回と同じ重量や回数を基準に記録することが多くあります。</p>
-  <p class="description-body">ユーザーから寄せられた「要確認：実際のフィードバック」をもとに、前回の記録内容を初期値として入力する機能と、直前のセットを複製する機能を追加しました。入力内容を一から作るのではなく、必要な箇所だけを変更できるようにしています。</p>
+  <p class="description-body">トレーニングを行なっているユーザにヒアリングする中で、前回の記録内容を初期値として入力する機能と、直前のセットを複製する機能が必要だとわかり設計しました。</p>
 </div>
 </section>
   <figure class="description-block description-block--video description-item__media">
@@ -150,11 +135,11 @@
   <h3 class="description-block__title">3. 日付と種目から記録を振り返れるようにする</h3>
   <div class="description-body-group">
   <p class="description-body">カレンダーでは、記録のある日とない日を一覧で確認し、日付から過去のトレーニングへアクセスできます。</p>
-  <p class="description-body">また、種目ごとの画面では「要確認：表示できる履歴や数値」を確認でき、次回の重量や回数を決める際の参考にできます。</p>
+  <p class="description-body">また、種目ごとの画面では前回記録に対して、筋ボリュームや最大重量、1RM 推定値など確認でき、重量や回数を決める際の参考にできます。</p>
 </div>
 </section>
   <figure class="description-block description-block--image description-item__media">
-  <picture>
+  <picture class="media-skeleton" aria-busy="true" style="--aspect:16 / 9;--fit:contain;">
   <source srcset="/assets/img/biggr/biggr-activity.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-activity.png" alt="Biggr 記録の振り返り" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
 </picture>
@@ -167,7 +152,7 @@
 </div>
 </section>
   <figure class="description-block description-block--image description-item__media">
-  <picture>
+  <picture class="media-skeleton" aria-busy="true" style="--aspect:16 / 9;--fit:contain;">
   <source srcset="/assets/img/biggr/biggr-setting.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-setting.png" alt="Biggr iOS 設定に沿った体験" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
 </picture>
@@ -186,7 +171,7 @@
 </div>
 </section>
   <figure class="description-block description-block--image description-item__media">
-  <picture>
+  <picture class="media-skeleton" aria-busy="true" style="--aspect:16 / 9;--fit:contain;">
   <source srcset="/assets/img/biggr/biggr-logo.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-logo.png" alt="Biggr logo" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
 </picture>
@@ -205,13 +190,13 @@
 </div>
 </section>
   <figure class="description-block description-block--image description-item__media">
-  <picture>
+  <picture class="media-skeleton" aria-busy="true" style="--aspect:16 / 9;--fit:contain;">
   <source srcset="/assets/img/biggr/biggr-character.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-character.png" alt="Biggr キャラクター" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
 </picture>
 </figure>
   <figure class="description-block description-block--image description-item__media">
-  <picture>
+  <picture class="media-skeleton" aria-busy="true" style="--aspect:16 / 9;--fit:contain;">
   <source srcset="/assets/img/biggr/biggr-character-creative-process.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-character-creative-process.png" alt="Biggr キャラクター制作プロセス" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
 </picture>
@@ -249,13 +234,13 @@
 </ul>
 </section>
   <figure class="description-block description-block--image description-item__media">
-  <picture>
+  <picture class="media-skeleton" aria-busy="true" style="--aspect:16 / 9;--fit:contain;">
   <source srcset="/assets/img/biggr/biggr-lp.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-lp.png" alt="Biggr ランディングページ" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
 </picture>
 </figure>
   <figure class="description-block description-block--image description-item__media">
-  <picture>
+  <picture class="media-skeleton" aria-busy="true" style="--aspect:16 / 9;--fit:contain;">
   <source srcset="/assets/img/biggr/biggr-lp-speed.webp" type="image/webp" />
   <img src="/assets/img/biggr/biggr-lp-speed.png" alt="Biggr ランディングページの表示速度" loading="lazy" decoding="async" style="--aspect:16 / 9;--fit:contain;" />
 </picture>
@@ -277,8 +262,8 @@
       <div class="project-floating-nav">
         <div class="project-detail-nav" role="navigation" aria-label="Project navigation">
 <a class="project-detail-nav__link project-detail-nav__link--prev" href="/projects/maply/" aria-label="Previous: Maply"><svg class="project-detail-nav__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M12 19l-7-7 7-7" /></svg></a>
-<span class="project-detail-nav__count" aria-label="Project 2 of 8">2/8</span>
-<a class="project-detail-nav__link project-detail-nav__link--next" href="/projects/yahoo-carnavi/" aria-label="Next: Yahoo! カーナビ"><svg class="project-detail-nav__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>
+<span class="project-detail-nav__count" aria-label="Project 6 of 8">6/8</span>
+<a class="project-detail-nav__link project-detail-nav__link--next" href="/projects/ginco/" aria-label="Next: Ginco"><svg class="project-detail-nav__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>
 </div>
       </div>
     </div>

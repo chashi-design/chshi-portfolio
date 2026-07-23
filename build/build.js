@@ -8,22 +8,11 @@ const ROOT = path.resolve(__dirname, "..");
 const CONTENT_PATH = path.join(ROOT, "content.json");
 const INDEX_TEMPLATE_PATH = path.join(ROOT, "templates", "index.template.html");
 const PROJECT_TEMPLATE_PATH = path.join(ROOT, "templates", "project.template.html");
-const PROFILE_TEMPLATE_PATH = path.join(ROOT, "templates", "profile.template.html");
 const OUTPUT_INDEX_PATH = path.join(ROOT, "index.html");
 const OUTPUT_PROJECTS_DIR = path.join(ROOT, "projects");
 const OUTPUT_PROFILE_DIR = path.join(ROOT, "profile");
-const OUTPUT_PROFILE_INDEX_PATH = path.join(OUTPUT_PROFILE_DIR, "index.html");
 const BUILD_DIR = path.join(ROOT, "build");
 const WATCH_TARGETS = [CONTENT_PATH, path.join(ROOT, "templates"), path.join(ROOT, "assets"), BUILD_DIR];
-const GRID_TOGGLE_HTML = '<button class="grid-toggle" type="button" aria-pressed="false" aria-label="Toggle grid overlay">Grid</button>';
-const GRID_COLUMNS_HTML = [
-  '<span class="grid-guides__margin grid-guides__margin--left"></span>',
-  '<span class="grid-guides__margin grid-guides__margin--right"></span>',
-  ...Array.from({ length: 12 }, (_, index) => {
-    const label = String(index + 1).padStart(2, "0");
-    return `<span class="grid-guides__col">${label}</span>`;
-  })
-].join("\n        ");
 
 const DETAIL_SECTION_CONFIG = [
   { key: "overview", title: "概要" },
@@ -141,13 +130,15 @@ function buildImageMarkup(src, alt, attrs = {}, context = { basePath: "" }) {
     .join(" ");
   const img = `<img ${attrText} />`;
   const webpUrl = webpSidecarUrl(rawSrc);
+  const skeletonStyle = toText(attrs.style);
+  const pictureOpen = `<picture class="media-skeleton" aria-busy="true"${skeletonStyle ? ` style="${escapeAttr(skeletonStyle)}"` : ""}>`;
 
   if (!webpUrl) {
-    return img;
+    return [pictureOpen, `  ${img}`, "</picture>"].join("\n");
   }
 
   return [
-    "<picture>",
+    pictureOpen,
     `  <source srcset="${escapeAttr(withBasePath(context.basePath, webpUrl))}" type="image/webp" />`,
     `  ${img}`,
     "</picture>"
@@ -290,8 +281,8 @@ function validateContent(content) {
       assert(toText(project[field]).length > 0, `${pointer}.${field} is required.`);
     });
     assert(
-      /^\d{4}(?:(?:\s*[〜~-]\s*(?:\d{4}|present))|(?:\s*,\s*\d{4})*)?$/i.test(toText(project.date)),
-      `${pointer}.date must use yyyy, yyyy, yyyy, yyyy〜yyyy, or yyyy - PRESENT format.`
+      /^\d{4}(?:(?:\s*[〜~-]\s*(?:\d{4}|present|現在)?)|(?:\s*,\s*\d{4})*)?$/i.test(toText(project.date)),
+      `${pointer}.date must use yyyy, yyyy -, yyyy, yyyy, yyyy〜yyyy, yyyy - PRESENT, or yyyy - 現在 format.`
     );
 
     assert(
@@ -510,46 +501,6 @@ function buildIndexJsonLd(context, homeCanonical) {
   };
 }
 
-function buildProfileJsonLd(context, homeCanonical, profileCanonical, site, basePath) {
-  const profileDescription = toDescriptionLines(site.profile.description).join(" ");
-  const sameAs = Array.isArray(site.snsLinks)
-    ? site.snsLinks
-        .map((item) => toText(item.url))
-        .filter((url) => /^https?:\/\//i.test(url))
-    : [];
-
-  return {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        name: context.personName,
-        alternateName: context.personSubName || undefined,
-        description: profileDescription,
-        url: profileCanonical,
-        image: toAbsoluteUrl(context.canonicalBase, withBasePath(basePath, site.profileImage)),
-        sameAs
-      },
-      {
-        "@type": "WebSite",
-        name: context.siteTitle,
-        description: context.siteDescription,
-        url: homeCanonical
-      },
-      {
-        "@type": "AboutPage",
-        name: `${context.personName} Profile`,
-        description: truncate(profileDescription, 160),
-        url: profileCanonical,
-        about: {
-          "@type": "Person",
-          name: context.personName
-        }
-      }
-    ]
-  };
-}
-
 function buildSnsCards(site, context) {
   return site.snsLinks
     .map((item) => {
@@ -573,17 +524,6 @@ function buildSnsCards(site, context) {
       ].join("\n");
     })
     .join("\n");
-}
-
-function buildProfileSnsLinks(site) {
-  return site.snsLinks
-    .map((item) => {
-      const name = toText(item.name);
-      const url = toText(item.url);
-
-      return `<a class="profile-sns-link" href="${escapeAttr(url)}"${maybeExternalAttrs(url)}>${escapeHtml(name)}</a>`;
-    })
-    .join('<span class="profile-sns-separator" aria-hidden="true">・</span>');
 }
 
 function buildFactCards(project) {
@@ -1022,7 +962,7 @@ function buildDescriptionBlockMarkup(block, project, sectionTitle, context, bloc
 
   if (block.type === "youtube") {
     return [
-      '<section class="description-block description-block--embed description-block--youtube">',
+      '<section class="description-block description-block--embed description-block--youtube media-embed-skeleton" aria-busy="true">',
       `  <iframe src="${escapeAttr(block.src)}" title="${escapeAttr(block.title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
       "</section>"
     ].join("\n");
@@ -1031,9 +971,11 @@ function buildDescriptionBlockMarkup(block, project, sectionTitle, context, bloc
   if (block.type === "instagram") {
     return [
       '<section class="description-block description-block--embed description-block--instagram">',
-      `  <blockquote class="instagram-media" data-instgrm-permalink="${escapeAttr(block.url)}" data-instgrm-version="14">`,
-      `    <a href="${escapeAttr(block.url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(block.label)}</a>`,
-      "  </blockquote>",
+      '  <div class="instagram-embed-frame media-embed-skeleton" aria-busy="true">',
+      `    <blockquote class="instagram-media" data-instgrm-permalink="${escapeAttr(block.url)}" data-instgrm-version="14">`,
+      `      <a href="${escapeAttr(block.url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(block.label)}</a>`,
+      "    </blockquote>",
+      "  </div>",
       '  <script async src="https://www.instagram.com/embed.js"></script>',
       "</section>"
     ].join("\n");
@@ -1237,7 +1179,6 @@ function buildProjectPage(project, index, projects, template, context) {
   const projectPath = withBasePath(context.basePath, `/projects/${project.slug}/`);
   const homePath = withBasePath(context.basePath, "/");
   const workPath = `${homePath}#works`;
-  const profilePath = withBasePath(context.basePath, "/profile/");
   const canonicalUrl = toAbsoluteUrl(context.canonicalBase, projectPath);
   const ogImageUrl = toAbsoluteUrl(context.canonicalBase, withBasePath(context.basePath, project.heroImage));
   const serviceValue = resolveServiceLabel(project);
@@ -1259,11 +1200,8 @@ function buildProjectPage(project, index, projects, template, context) {
     ASSET_PREFIX: context.basePath,
     ASSET_VERSION: escapeAttr(context.assetVersion),
     JSON_LD: safeJsonLd(buildProjectJsonLd(project, context)),
-    GRID_TOGGLE: GRID_TOGGLE_HTML,
-    GRID_COLUMNS: GRID_COLUMNS_HTML,
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(workPath),
-    PROFILE_URL: escapeAttr(profilePath),
     PROJECT_TITLE: escapeHtml(project.title),
     PROJECT_NAV: buildPagination(projects, index, context),
     PROJECT_SERVICE: buildDetailMetaList(serviceValue),
@@ -1291,8 +1229,16 @@ function buildProfileDescriptionMarkup(value, spanLines) {
       const candidateSpans = Array.isArray(spanLines?.[index])
         ? spanLines[index].map((item) => toText(item)).filter(Boolean)
         : [];
-      const spans = candidateSpans.join("") === paragraph ? candidateSpans : [paragraph];
-      const body = spans.map((span) => `<span>${escapeHtml(span)}</span>`).join("");
+      const spans = candidateSpans.map(stripMarkdownLinks).join("") === paragraph ? candidateSpans : [paragraph];
+      const body = spans
+        .map((span) => {
+          const markup = escapeHtml(span).replace(
+            /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+            (_match, label, url) => `<a href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(label)}</a>`
+          );
+          return `<span>${markup}</span>`;
+        })
+        .join("");
       return `<p class="profile-description__body">${body}</p>`;
     })
     .join("\n");
@@ -1320,6 +1266,27 @@ function buildCareerItems(careerItems) {
         "</article>"
       ].join("\n");
     })
+    .join("\n");
+}
+
+function buildPersonNameMarkup(name) {
+  return escapeHtml(toText(name));
+}
+
+function buildSpeakingLinks(items, context) {
+  return [...items]
+    .sort((a, b) => Number(b.date) - Number(a.date))
+    .map((item) => [
+      `<a class="card bento-card home-speaking__item clothoid-corner" href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer noopener">`,
+      '  <div class="bento-card__body">',
+      `    <h2 class="bento-card__title">${escapeHtml(item.title)}</h2>`,
+      `    <p class="bento-card__date">${escapeHtml(item.date)}</p>`,
+      "  </div>",
+      '  <figure class="bento-card__media home-speaking__media">',
+      `    ${buildImageMarkup(item.image, `${item.title} OGP`, { loading: "lazy", decoding: "async", width: item.imageWidth, height: item.imageHeight }, context)}`,
+      "  </figure>",
+      "</a>"
+    ].join("\n"))
     .join("\n");
 }
 
@@ -1358,7 +1325,7 @@ function buildSite(options = {}) {
 
   const workProjects = projects.filter((project) => !isSpeakingProject(project));
   const speakingProjects = projects.filter((project) => isSpeakingProject(project));
-  const homeWorkProjects = sortByDateDescThenOrderAsc(workProjects);
+  const homeWorkProjects = workProjects;
   const navigationWorkProjects = homeWorkProjects;
   const navigationSpeakingProjects = sortByDateDescThenOrderAsc(speakingProjects);
   const projectSections = buildProjectSections(homeWorkProjects, context, {
@@ -1371,7 +1338,6 @@ function buildSite(options = {}) {
   const siteLeadBullets = site.leadBullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n");
   const homePath = withBasePath(basePath, "/");
   const workPath = `${homePath}#works`;
-  const profilePath = withBasePath(basePath, "/profile/");
   const homeCanonical = toAbsoluteUrl(canonicalBase, homePath);
   const defaultOgImage = toAbsoluteUrl(canonicalBase, withBasePath(basePath, site.ogImageDefault));
   const homeMetaDescription = truncate(context.siteDescription, 160);
@@ -1393,13 +1359,11 @@ function buildSite(options = {}) {
     ASSET_PREFIX: basePath,
     ASSET_VERSION: escapeAttr(assetVersion),
     JSON_LD: safeJsonLd(indexJsonLd),
-    GRID_TOGGLE: GRID_TOGGLE_HTML,
-    GRID_COLUMNS: GRID_COLUMNS_HTML,
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(workPath),
-    PROFILE_URL: escapeAttr(profilePath),
     SITE_TITLE: escapeHtml(context.siteTitle),
     PERSON_NAME: escapeHtml(context.personName),
+    PERSON_NAME_MARKUP: buildPersonNameMarkup(context.personName),
     PERSON_SUBNAME: personSubNameMarkup,
     PROFILE_IMAGE: escapeAttr(withBasePath(basePath, site.profileImage)),
     PROFILE_DESCRIPTION: buildProfileDescriptionMarkup(site.profile.description, site.profile.descriptionSpans),
@@ -1407,7 +1371,8 @@ function buildSite(options = {}) {
     SITE_DESCRIPTION: escapeHtml(context.siteDescription),
     SITE_LEAD_BULLETS: siteLeadBullets,
     SNS_CARDS: snsCards,
-    PROJECT_SECTIONS: projectSections
+    PROJECT_SECTIONS: projectSections,
+    SPEAKING_LINKS: buildSpeakingLinks(site.speakingLinks || [], context)
   });
 
   fs.writeFileSync(OUTPUT_INDEX_PATH, indexHtml, "utf8");

@@ -81,39 +81,6 @@
     });
   }
 
-  function setupGridOverlay() {
-    var button = document.querySelector(".grid-toggle");
-
-    if (!button) {
-      return;
-    }
-
-    function setGridState(enabled) {
-      document.body.classList.toggle("grid-on", enabled);
-      button.setAttribute("aria-pressed", enabled ? "true" : "false");
-    }
-
-    button.addEventListener("click", function () {
-      setGridState(!document.body.classList.contains("grid-on"));
-    });
-
-    document.addEventListener("keydown", function (event) {
-      var target = event.target;
-      var isTyping =
-        target &&
-        (target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.tagName === "SELECT" ||
-          target.isContentEditable);
-
-      if (isTyping || event.key.toLowerCase() !== "g") {
-        return;
-      }
-
-      setGridState(!document.body.classList.contains("grid-on"));
-    });
-  }
-
   function setupThemeSwitcher() {
     var selects = document.querySelectorAll("[data-theme-select]");
 
@@ -358,6 +325,7 @@
       ".project-close",
       ".project-detail-nav__link:not(.project-detail-nav__link--disabled)",
       ".page-home .project-sections .bento-card",
+      ".page-home .home-speaking__item",
       ".description-link-card"
     ].join(", ");
     var textLinkSelector = [
@@ -373,7 +341,7 @@
     }
 
     function getCardRadius(card) {
-      var previewImage = card.querySelector(".bento-card__media img");
+      var previewImage = card.querySelector(".bento-card__media img, .home-speaking__media img");
       var radiusTarget = previewImage || card;
 
       var targetRect = radiusTarget.getBoundingClientRect();
@@ -390,7 +358,9 @@
 
     function snapCursorToCloseTarget(closeTarget) {
       var closeRect = closeTarget.getBoundingClientRect();
-      var isWorkCardTarget = closeTarget.matches(".page-home .project-sections .bento-card");
+      var isWorkCardTarget = closeTarget.matches(
+        ".page-home .project-sections .bento-card, .page-home .home-speaking__item"
+      );
       var isLinkCardTarget = closeTarget.matches(".description-link-card");
       var isCardTarget = isWorkCardTarget || isLinkCardTarget;
       var isExpanded = closeRect.width > 40.5;
@@ -641,6 +611,80 @@
     });
   }
 
+  function setupMediaSkeletons() {
+    function markLoaded(frame) {
+      frame.classList.add("is-loaded");
+      frame.setAttribute("aria-busy", "false");
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll("picture.media-skeleton"), function (picture) {
+      var image = picture.querySelector("img");
+
+      if (!image) {
+        markLoaded(picture);
+        return;
+      }
+
+      if (image.complete) {
+        markLoaded(picture);
+        return;
+      }
+
+      image.addEventListener("load", function () {
+        markLoaded(picture);
+      }, { once: true });
+      image.addEventListener("error", function () {
+        markLoaded(picture);
+      }, { once: true });
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll(".description-block--youtube.media-embed-skeleton"), function (frame) {
+      var iframe = frame.querySelector("iframe");
+
+      if (!iframe) {
+        markLoaded(frame);
+        return;
+      }
+
+      iframe.addEventListener("load", function () {
+        markLoaded(frame);
+      }, { once: true });
+      window.setTimeout(function () {
+        markLoaded(frame);
+      }, 10000);
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll(".instagram-embed-frame.media-embed-skeleton"), function (frame) {
+      var observer;
+
+      function bindInstagramIframe() {
+        var iframe = frame.querySelector("iframe");
+
+        if (!iframe || iframe.dataset.skeletonLoadBound === "true") {
+          return Boolean(iframe);
+        }
+
+        iframe.dataset.skeletonLoadBound = "true";
+        iframe.addEventListener("load", function () {
+          markLoaded(frame);
+          observer.disconnect();
+        }, { once: true });
+        return true;
+      }
+
+      observer = new MutationObserver(function () {
+        bindInstagramIframe();
+      });
+
+      observer.observe(frame, { childList: true, subtree: true });
+      bindInstagramIframe();
+      window.setTimeout(function () {
+        markLoaded(frame);
+        observer.disconnect();
+      }, 10000);
+    });
+  }
+
   function setupHomeSegmentedControl() {
     var control = document.querySelector(".home-segmented-control");
 
@@ -682,6 +726,7 @@
         item.setAttribute("aria-pressed", isActive ? "true" : "false");
       });
       control.classList.toggle("is-work-active", button === buttons[1]);
+      control.classList.toggle("is-speaking-active", button === buttons[2]);
     }
 
     function updateActiveSegment() {
@@ -733,12 +778,90 @@
 
   }
 
+  function setupNameScramble() {
+    var nameValue = document.querySelector(".about-teaser__name-value");
+
+    if (!nameValue) {
+      return;
+    }
+
+    var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reducedMotion) {
+      return;
+    }
+
+    var originalText = nameValue.textContent;
+    var displayStates = [originalText, "thirohas.", "chashi."];
+    var scrambleCharacters = "!@#$%^&*?<>/[]{}+=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    var animationDuration = 900;
+    var frameDuration = 55;
+    var timer = 0;
+    var stateIndex = 0;
+
+    function randomCharacter() {
+      return scrambleCharacters[Math.floor(Math.random() * scrambleCharacters.length)];
+    }
+
+    function animateText(targetText, onComplete) {
+      var startText = nameValue.textContent;
+      var longestLength = Math.max(startText.length, targetText.length);
+      var frameCount = Math.ceil(animationDuration / frameDuration);
+      var frame = 0;
+
+      function renderFrame() {
+        var progress = Math.min(1, frame / frameCount);
+        var result = "";
+
+        for (var index = 0; index < longestLength; index += 1) {
+          if (index >= targetText.length) {
+            if (progress < 0.8 && index < startText.length) {
+              result += randomCharacter();
+            }
+            continue;
+          }
+
+          if (index < startText.length && progress < 0.18) {
+            result += randomCharacter();
+          } else if (progress < (index + 1) / targetText.length) {
+            result += randomCharacter();
+          } else {
+            result += targetText[index];
+          }
+        }
+
+        nameValue.textContent = result;
+        frame += 1;
+
+        if (frame <= frameCount) {
+          timer = window.setTimeout(renderFrame, frameDuration);
+          return;
+        }
+
+        nameValue.textContent = targetText;
+        onComplete();
+      }
+
+      renderFrame();
+    }
+
+    function scheduleNext() {
+      timer = window.setTimeout(function () {
+        stateIndex = (stateIndex + 1) % displayStates.length;
+        animateText(displayStates[stateIndex], scheduleNext);
+      }, 7000);
+    }
+
+    scheduleNext();
+  }
+
   setupPressFeedback();
-  setupGridOverlay();
   setupThemeSwitcher();
   setupOpticalAlignment();
   setupScrollReveal();
+  setupMediaSkeletons();
   setupScrollVideos();
   setupHomeSegmentedControl();
+  setupNameScramble();
   setupInvertingCursor();
 })();

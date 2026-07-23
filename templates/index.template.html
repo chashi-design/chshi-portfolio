@@ -27,14 +27,12 @@
     <script type="application/ld+json">{{JSON_LD}}</script>
   </head>
   <body class="swiss-page page-home">
-    {{GRID_TOGGLE}}
     <div class="site-shell swiss-wrap">
-      <div class="grid-guides" aria-hidden="true">{{GRID_COLUMNS}}</div>
       <main>
         <section class="about-teaser" id="about" aria-labelledby="about-teaser-title">
           <div class="about-teaser__inner">
             <h2 id="about-teaser-title" class="about-teaser__title">
-              <span class="about-teaser__name"><span class="about-teaser__name-prefix">I'm</span> <span class="about-teaser__name-value">{{PERSON_NAME}}.</span></span>
+              <span class="about-teaser__name"><span class="about-teaser__name-prefix">I'm</span> <span class="about-teaser__name-value">{{PERSON_NAME_MARKUP}}.</span></span>
               <span class="about-teaser__role">Digital Product Designer</span>
             </h2>
             <div class="about-teaser__description">
@@ -55,6 +53,12 @@
               {{PROJECT_SECTIONS}}
             </div>
           </section>
+          <section class="home-speaking" id="speaking" aria-labelledby="home-speaking-title">
+            <h3 id="home-speaking-title" class="home-speaking__heading">Speaking</h3>
+            <div class="home-speaking__list bento-grid">
+              {{SPEAKING_LINKS}}
+            </div>
+          </section>
         </div>
       </main>
 
@@ -62,6 +66,7 @@
     <nav class="home-segmented-control" aria-label="Home section navigation">
       <button class="home-segmented-control__button" type="button" data-home-segment-target="#about">About</button>
       <button class="home-segmented-control__button" type="button" data-home-segment-target="#works">Work</button>
+      <button class="home-segmented-control__button" type="button" data-home-segment-target="#speaking">Speaking</button>
     </nav>
   </body>
 </html>

@@ -18,13 +18,13 @@
     "personUrl": "https://chashi-design.github.io/chshi-portfolio/",
     "profile": {
       "description": [
-        "広島生まれのデジタルプロダクトデザイナー。現在は LINE ヤフーにてデザイン業務を従事。",
-        "ユーザー中心設計と、シンプルで美しく、心地よく使えるインターフェースを軸に、関係者との合意形成を図りながら、ユーザー体験と事業目的をつなぐプロダクトづくりを得意とする。"
+        "広島生まれのデジタルプロダクトデザイナー。現在は LINE ヤフーにてデザイン業務に従事しています。",
+        "ユーザー中心設計と、シンプルで美しく、心地よく使えるインターフェースを軸に、関係者との合意形成を図りながら、ユーザー体験と事業目的をつなぐプロダクトづくりを得意としています。"
       ],
       "descriptionSpans": [
         [
           "広島生まれのデジタルプロダクトデザイナー。",
-          "現在は LINE ヤフーにてデザイン業務を従事。"
+          "現在は [LINE ヤフー](https://www.lycorp.co.jp/)にてデザイン業務に従事しています。"
         ],
         [
           "ユーザー中心設計と、",
@@ -32,7 +32,7 @@
           "心地よく使えるインターフェースを軸に、",
           "関係者との合意形成を図りながら、",
           "ユーザー体験と事業目的をつなぐ",
-          "プロダクトづくりが得意です。"
+          "プロダクトづくりを得意としています。"
         ]
       ],
       "skills": [
@@ -50,35 +50,61 @@
       ],
       "career": [
         {
-          "period": "2023 - 現在",
-          "title": "LINE ヤフー株式会社",
+          "period": "2017 -",
+          "title": "LINE ヤフー株式会社（旧ヤフー株式会社）",
           "url": "https://www.lycorp.co.jp"
         },
         {
           "period": "2020 - 2021",
-          "title": "株式会社 KabuK Style 副業",
-          "linkText": "株式会社 KabuK Style",
+          "title": "株式会社 KabuK Style",
           "url": "https://kabuk.co.jp/"
         },
         {
           "period": "2019",
           "title": "株式会社タイミー",
-          "note": "副業",
           "url": "https://corp.timee.co.jp/"
         },
         {
           "period": "2018",
-          "title": "株式会社 Ginco 副業",
-          "linkText": "株式会社 Ginco",
+          "title": "株式会社 Ginco",
           "url": "https://www.ginco.co.jp/"
-        },
-        {
-          "period": "2017 - 2023",
-          "title": "ヤフー株式会社",
-          "url": "https://www.lycorp.co.jp/ja/company/history/yahoo/"
         }
       ]
     },
+    "speakingLinks": [
+      {
+        "title": "Schema by Figma Tokyo 2022",
+        "date": "2022",
+        "url": "https://www.designsystems.com/schema-tokyo-2022/",
+        "image": "/assets/img/speaking/schema-tokyo-2022.png",
+        "imageWidth": 1200,
+        "imageHeight": 630
+      },
+      {
+        "title": "Designship 2021 Open Session",
+        "date": "2021",
+        "url": "https://design-ship.jp/2021/open-session/#about",
+        "image": "/assets/img/speaking/designship-2021.webp",
+        "imageWidth": 1200,
+        "imageHeight": 630
+      },
+      {
+        "title": "AR Designer Meetup #1",
+        "date": "2018",
+        "url": "https://ar-japan.connpass.com/event/104067/",
+        "image": "/assets/img/speaking/ar-designer-meetup-1.png",
+        "imageWidth": 660,
+        "imageHeight": 346
+      },
+      {
+        "title": "Yahoo! JAPAN Tech Conference 2019",
+        "date": "2019",
+        "url": "https://www.docswell.com/s/ydnjp/KGVXNK-2019-01-25-155122",
+        "image": "/assets/img/speaking/yahoo-japan-tech-conference-2019.png",
+        "imageWidth": 1200,
+        "imageHeight": 630
+      }
+    ],
     "snsLinks": [
       {
         "name": "Dribbble",
@@ -113,7 +139,7 @@
       "date": "2026",
       "category": "UI Design",
       "featured": false,
-      "order": 1,
+      "order": 5,
       "bento": {
         "colSpan": 6,
         "rowSpan": 1,
@@ -349,10 +375,10 @@
     {
       "slug": "riff",
       "title": "RIFF Design System",
-      "date": "2020 - PRESENT",
+      "date": "2020 - 2026",
       "category": "UI Design",
       "featured": false,
-      "order": 2,
+      "order": 4,
       "bento": {
         "colSpan": 4,
         "rowSpan": 1,
@@ -378,7 +404,7 @@
         },
         {
           "label": "Year",
-          "value": "2020 - PRESENT"
+          "value": "2020 - 2026"
         }
       ],
       "screens": [],
@@ -473,7 +499,7 @@
       "date": "2025",
       "category": "UI Design",
       "featured": false,
-      "order": 3,
+      "order": 1,
       "bento": {
         "colSpan": 6,
         "rowSpan": 1,
@@ -678,7 +704,7 @@
       "date": "2023",
       "category": "UI Design",
       "featured": false,
-      "order": 4,
+      "order": 2,
       "bento": {
         "colSpan": 6,
         "rowSpan": 1,
@@ -696,7 +722,7 @@
       "facts": [
         {
           "label": "Role",
-          "value": "UI Design / Concept Making"
+          "value": "UI Design / Design Concept"
         },
         {
           "label": "Platform",
@@ -718,7 +744,7 @@
               "type": "text",
               "body": [
                 "Yahoo! 乗換案内のサービス開始 15 周年企画として、「[トレインキャスト](https://blog-transit.yahoo.co.jp/info/20230831_train_cast.html)」と「[運行情報キャスト](https://blog-transit.yahoo.co.jp/info/20240806_train-info.html)」のデザインに約 1 年間取り組みました。",
-                "PdM1 名、デザイナー 2 名、開発 2 名のチームで、私はデザインコンセプトの策定、主要画面の UI 検討、デザインレビューを担当しました。"
+                "PdM1 名、デザイナー 3 名、開発 2 名のチームで、主にデザインコンセプトの策定、主要画面の UI 検討、デザインレビューを担当しました。"
               ]
             },
             {
@@ -872,7 +898,7 @@
       "date": "2017, 2022",
       "category": "UI Design",
       "featured": false,
-      "order": 5,
+      "order": 3,
       "bento": {
         "colSpan": 6,
         "rowSpan": 1,
@@ -890,7 +916,7 @@
       "facts": [
         {
           "label": "Role",
-          "value": "Product Designer"
+          "value": "UI Design"
         },
         {
           "label": "Platform",
@@ -911,7 +937,7 @@
             {
               "type": "text",
               "body": [
-                "Yahoo! Maps アプリにおいて、防災モードと AR モードの UI デザインを担当しました。",
+                "Yahoo! Maps アプリにおいて、防災モードと AR モードの情報設計やユーザフロー、プロトタイピング、UI デザインなどを担当しました。",
                 "防災モードでは、複数の災害情報を確認する体験と、通信できない状況に備えた地図ダウンロード機能を設計。AR モードでは、ARKit の登場初期に、徒歩ナビゲーションの開始から到着までの体験設計に取り組みました。"
               ]
             }
@@ -925,8 +951,7 @@
               "list": true,
               "body": [
                 "AR モード：2017 年／約半年",
-                "防災モード：2022 年／約半年",
-                "担当範囲：情報設計、ユーザーフロー、プロトタイプ、UI・ビジュアルデザイン"
+                "防災モード：2022 年／約半年"
               ]
             }
           ]
@@ -1052,7 +1077,7 @@
     {
       "slug": "biggr",
       "title": "Biggr",
-      "date": "2026 - PRESENT",
+      "date": "2026",
       "category": "UI Design",
       "featured": false,
       "order": 6,
@@ -1081,7 +1106,7 @@
         },
         {
           "label": "Year",
-          "value": "2026 - PRESENT"
+          "value": "2026"
         }
       ],
       "screens": [],
@@ -1149,7 +1174,7 @@
               "heading": "2. 繰り返し入力する手間を減らす",
               "body": [
                 "筋トレでは、前回と同じ重量や回数を基準に記録することが多くあります。",
-                "ユーザーから寄せられた「要確認：実際のフィードバック」をもとに、前回の記録内容を初期値として入力する機能と、直前のセットを複製する機能を追加しました。入力内容を一から作るのではなく、必要な箇所だけを変更できるようにしています。"
+                "トレーニングを行なっているユーザにヒアリングする中で、前回の記録内容を初期値として入力する機能と、直前のセットを複製する機能が必要だとわかり設計しました。"
               ]
             },
             {
@@ -1171,7 +1196,7 @@
               "heading": "3. 日付と種目から記録を振り返れるようにする",
               "body": [
                 "カレンダーでは、記録のある日とない日を一覧で確認し、日付から過去のトレーニングへアクセスできます。",
-                "また、種目ごとの画面では「要確認：表示できる履歴や数値」を確認でき、次回の重量や回数を決める際の参考にできます。"
+                "また、種目ごとの画面では前回記録に対して、筋ボリュームや最大重量、1RM 推定値など確認でき、重量や回数を決める際の参考にできます。"
               ]
             },
             {
@@ -1302,7 +1327,7 @@
       "date": "2018",
       "category": "UI Design",
       "featured": false,
-      "order": 8,
+      "order": 7,
       "bento": {
         "colSpan": 4,
         "rowSpan": 1,
@@ -1434,7 +1459,7 @@
       "date": "2019",
       "category": "UI Design",
       "featured": false,
-      "order": 9,
+      "order": 8,
       "bento": {
         "colSpan": 4,
         "rowSpan": 1,
