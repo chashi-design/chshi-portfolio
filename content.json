@@ -19,7 +19,7 @@
     "profile": {
       "description": [
         "広島生まれのデジタルプロダクトデザイナー。現在は LINE ヤフーにてデザイン業務に従事しています。",
-        "ユーザー中心設計と、シンプルで美しく、心地よく使えるインターフェースを軸に、関係者との合意形成を図りながら、ユーザー体験と事業目的をつなぐプロダクトづくりを得意としています。"
+        "ユーザー中心設計と、シンプルで心地よく使えるインターフェースを軸に、関係者との合意形成を図りながら、ユーザー体験と事業目的を結びつけるプロダクトづくりを得意としています。"
       ],
       "descriptionSpans": [
         [
@@ -28,10 +28,9 @@
         ],
         [
           "ユーザー中心設計と、",
-          "シンプルで美しく、",
-          "心地よく使えるインターフェースを軸に、",
+          "シンプルで心地よく使えるインターフェースを軸に、",
           "関係者との合意形成を図りながら、",
-          "ユーザー体験と事業目的をつなぐ",
+          "ユーザー体験と事業目的を結びつける",
           "プロダクトづくりを得意としています。"
         ]
       ],
@@ -137,9 +136,10 @@
       "slug": "maply",
       "title": "Maply",
       "date": "2026",
+      "company": "LINE ヤフー株式会社",
       "category": "UI Design",
       "featured": false,
-      "order": 5,
+      "order": 4,
       "bento": {
         "colSpan": 6,
         "rowSpan": 1,
@@ -376,9 +376,10 @@
       "slug": "riff",
       "title": "RIFF Design System",
       "date": "2020 - 2026",
+      "company": "LINE ヤフー株式会社",
       "category": "UI Design",
       "featured": false,
-      "order": 4,
+      "order": 5,
       "bento": {
         "colSpan": 4,
         "rowSpan": 1,
@@ -497,6 +498,7 @@
       "slug": "yahoo-carnavi",
       "title": "Yahoo! カーナビ",
       "date": "2025",
+      "company": "LINE ヤフー株式会社",
       "category": "UI Design",
       "featured": false,
       "order": 1,
@@ -702,6 +704,7 @@
       "slug": "yahoo-transit",
       "title": "Yahoo! 乗換案内",
       "date": "2023",
+      "company": "LINE ヤフー株式会社",
       "category": "UI Design",
       "featured": false,
       "order": 2,
@@ -823,8 +826,8 @@
               ]
             },
             {
-              "type": "image",
-              "src": "/assets/img/transit/transit-traincast-ui-detail.png",
+              "type": "video",
+              "src": "/assets/img/transit/transit-traincast-ui-detail.mp4",
               "alt": "トレインキャスト UI 列車詳細",
               "aspect": "16 / 9",
               "fit": "contain"
@@ -843,8 +846,8 @@
               ]
             },
             {
-              "type": "image",
-              "src": "/assets/img/transit/transit-traincast-ui-train-status.png",
+              "type": "video",
+              "src": "/assets/img/transit/transit-traincast-ui-train-status.MP4",
               "alt": "トレインキャスト UI 運行情報",
               "aspect": "16 / 9",
               "fit": "contain"
@@ -896,6 +899,7 @@
       "slug": "yahoo-maps",
       "title": "Yahoo! Maps",
       "date": "2017, 2022",
+      "company": "LINE ヤフー株式会社",
       "category": "UI Design",
       "featured": false,
       "order": 3,
@@ -1078,6 +1082,7 @@
       "slug": "biggr",
       "title": "Biggr",
       "date": "2026",
+      "cardCompany": "個人制作",
       "category": "UI Design",
       "featured": false,
       "order": 6,
@@ -1098,7 +1103,7 @@
       "facts": [
         {
           "label": "Role",
-          "value": "Personal Development"
+          "value": "個人制作"
         },
         {
           "label": "Platform",
@@ -1179,7 +1184,7 @@
             },
             {
               "type": "video",
-              "src": "/assets/img/biggr/biggrlast-time.mp4",
+              "src": "/assets/img/biggr/biggr-last-time.MP4",
               "alt": "Biggr 前回の記録内容を入力",
               "aspect": "16 / 9",
               "fit": "contain"
@@ -1325,6 +1330,7 @@
       "slug": "ginco",
       "title": "Ginco",
       "date": "2018",
+      "company": "株式会社 Ginco",
       "category": "UI Design",
       "featured": false,
       "order": 7,
@@ -1457,6 +1463,7 @@
       "slug": "timee-travel",
       "title": "タイミートラベル",
       "date": "2019",
+      "company": "株式会社タイミー",
       "category": "UI Design",
       "featured": false,
       "order": 8,

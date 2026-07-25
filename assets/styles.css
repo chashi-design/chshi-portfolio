@@ -570,8 +570,9 @@ h3 {
 }
 
 .page-home .home-speaking .bento-card__title {
-  font-size: 26px;
-  line-height: calc(var(--bl) * 4);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: var(--lh);
 }
 
 .home-speaking__media {
@@ -2179,7 +2180,7 @@ picture.media-skeleton {
 .page-home .about-teaser .career-item__period,
 .page-home .about-teaser .career-item__title {
   color: var(--ink);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
   line-height: var(--lh);
 }
@@ -2218,6 +2219,17 @@ picture.media-skeleton {
   font-size: 20px;
   font-weight: 400;
   line-height: var(--lh);
+}
+
+.page-home .home-selected-work .bento-card__title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: var(--lh);
+}
+
+.page-home .home-selected-work .bento-card__body,
+.page-home .home-speaking .bento-card__body {
+  row-gap: 0;
 }
 
 .page-home .home-selected-work {
@@ -2405,33 +2417,42 @@ picture.media-skeleton {
   grid-column: 1 / -1;
   grid-row: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  column-gap: 0;
-  row-gap: var(--bl);
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--bl);
+  row-gap: 0;
   align-items: start;
-  padding: calc(var(--lh) - 1px) 0 0;
+  padding: 0;
 }
 
 .page-home .bento-card__title {
-  grid-row: 2;
+  grid-column: 1;
+  grid-row: 1;
   margin: 0;
   min-width: 0;
   color: var(--ink);
-  font-size: 30px;
+  font-size: 14px;
   font-weight: 400;
-  line-height: calc(var(--bl) * 5);
+  line-height: var(--lh);
 }
 
-.page-home .bento-card__date {
-  grid-row: 1;
+.page-home .bento-card__date,
+.page-home .bento-card__company {
+  grid-column: 2;
+  grid-row: 1 / span 2;
   margin: 0;
   color: var(--muted-ink);
   font-size: 15px;
   font-weight: 400;
   line-height: var(--lh);
   letter-spacing: 0;
-  text-align: left;
+  text-align: right;
   white-space: nowrap;
+}
+
+.page-home .bento-card__company {
+  grid-column: 1;
+  grid-row: 2;
+  text-align: left;
 }
 
 .page-home .bento-card__subtitle {
@@ -2515,7 +2536,7 @@ picture.media-skeleton {
   .page-home .site-shell {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     row-gap: calc(var(--lh) * 2);
-    padding-bottom: calc((var(--margin) / 2) + (var(--bl) * 9) + env(safe-area-inset-bottom));
+    padding-bottom: calc(var(--bottom-module-height) + (var(--bl) * 4) + env(safe-area-inset-bottom, 0px));
   }
 
   .page-home .grid-guides {
@@ -3441,6 +3462,17 @@ html:not(.is-keyboard-navigation) .page-profile .profile-sns-link:hover,
   text-wrap: auto;
 }
 
+.page-detail .description-body__span {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.page-detail .description-body__span--flexible {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .page-detail .description-item__media img {
   height: auto;
   object-fit: var(--fit, contain);
@@ -3516,20 +3548,22 @@ html:not(.is-keyboard-navigation) .page-profile .profile-sns-link:hover,
   }
 
   .page-home .bento-card__body {
-    row-gap: var(--bl);
-    padding-top: calc(var(--bl) - 1px);
+    row-gap: calc(var(--bl) / 2);
+    padding-top: 0;
   }
 
   .page-home .bento-card__title {
-    grid-row: 2;
-    font-size: 20px;
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 15px;
     font-weight: 400;
     line-height: calc(var(--bl) * 3);
   }
 
   .page-home .bento-card__date {
-    grid-row: 1;
-    text-align: left;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    text-align: right;
   }
 
   .page-home .bento-card__subtitle {
@@ -3857,7 +3891,7 @@ html:not(.is-keyboard-navigation) .page-profile .profile-sns-link:hover,
 }
 
 .page-detail .project-layout--detail {
-  padding-bottom: calc(var(--lh) * 6);
+  padding-bottom: calc(var(--bottom-module-height) + (var(--bl) * 4) + env(safe-area-inset-bottom, 0px));
 }
 
 .page-detail .project-floating-nav .project-detail-nav {
@@ -4196,8 +4230,8 @@ html:not(.is-keyboard-navigation) .page-detail .project-floating-nav .project-de
   }
 
   .page-home .home-speaking .bento-card__title {
-    font-size: 18px;
-    line-height: calc(var(--bl) * 3);
+    font-size: 15px;
+    line-height: var(--lh);
   }
 }
 
@@ -4304,6 +4338,14 @@ html:not(.is-keyboard-navigation) .page-detail .project-floating-nav .project-de
 @media (max-width: 768px) {
   .page-detail .site-shell {
     padding-top: calc(var(--margin) + var(--lh) + (var(--bl) * 5));
+  }
+}
+
+/* Keep fixed bottom navigation clear of the final media on small screens. */
+@media (max-width: 768px) {
+  .page-home.swiss-page .site-shell,
+  .page-detail.swiss-page .project-layout--detail {
+    padding-bottom: calc(var(--bottom-module-height) + (var(--bl) * 4) + env(safe-area-inset-bottom, 0px));
   }
 }
 

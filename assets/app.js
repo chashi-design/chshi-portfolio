@@ -225,8 +225,7 @@
         ".about-teaser__description",
         ".about-teaser__career-title",
         ".about-teaser .career-item",
-        ".page-home .bento-card__body",
-        ".page-home .bento-card__media",
+        ".page-home .home-selected-work .bento-card",
         ".home-speaking__heading",
         ".home-speaking__item"
       ];

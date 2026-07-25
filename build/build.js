@@ -430,6 +430,7 @@ function buildProjectCard(project, context, options = {}) {
 
   const projectPath = withBasePath(context.basePath, `/projects/${project.slug}/`);
   const date = toText(project.date);
+  const company = toText(project.cardCompany || project.company);
   const category = toText(project.category) || "UI Design";
   const linkLabel = [project.title, showCategory ? category : ""]
     .map((item) => toText(item))
@@ -440,6 +441,7 @@ function buildProjectCard(project, context, options = {}) {
     `<a class="card bento-card clothoid-corner" href="${escapeAttr(projectPath)}" style="${escapeAttr(style)}" aria-label="${escapeAttr(linkLabel)}">`,
     `  <div class="bento-card__body">`,
     showServiceTitle ? `    <h2 class="bento-card__title">${escapeHtml(project.title)}</h2>` : "",
+    company ? `    <p class="bento-card__company">${escapeHtml(company)}</p>` : "",
     showDate ? `    <p class="bento-card__date">${escapeHtml(date)}</p>` : "",
     showCategory ? `    <p class="bento-card__category">${escapeHtml(category)}</p>` : "",
     `  </div>`,
@@ -581,6 +583,10 @@ function resolveRoleLabel(project) {
   return roleFact ? roleFact.value : "-";
 }
 
+function resolveCompanyLabel(project) {
+  return toText(project.company);
+}
+
 function resolveServiceLabel(project) {
   const serviceValue = project && project.service !== undefined ? project.service : project.title;
   return serviceValue == null ? "-" : serviceValue;
@@ -667,6 +673,7 @@ function validateDetailContentBlocks(blocks, pointer) {
         toDescriptionLines(block.body).length > 0 || toText(block.heading).length > 0,
         `${blockPointer}.body or ${blockPointer}.heading is required for text blocks.`
       );
+      validateDescriptionBodySpans(block.body, block.bodySpans, blockPointer);
     }
 
     if (type === "link") {
@@ -744,6 +751,7 @@ function normalizeDetailBlock(block) {
     type: "text",
     title: toText(block.heading),
     body: block.body,
+    bodySpans: block.bodySpans,
     list: block.list === true
   };
 }
@@ -764,6 +772,169 @@ function toDescriptionLines(value) {
     .filter(Boolean);
 }
 
+const DESCRIPTION_SPAN_MAX_LENGTH = 18;
+
+function getInlineTextLength(value) {
+  return Array.from(stripMarkdownLinks(value)).length;
+}
+
+function isDescriptionSpanBreak(characters, index) {
+  const character = characters[index];
+  const previous = characters[index - 1] || "";
+  const next = characters[index + 1] || "";
+
+  if (/[、。！？：；]/.test(character)) {
+    return true;
+  }
+
+  if (!/[はがをにへとでやも]/.test(character)) {
+    return false;
+  }
+
+  // Keep Japanese conjugations such as "できる" and "ながら" together.
+  if ((character === "で" && /[きしす]/.test(next)) || (character === "が" && previous === "な" && next === "ら")) {
+    return false;
+  }
+
+  return true;
+}
+
+function splitLongDescriptionText(value, maxLength = DESCRIPTION_SPAN_MAX_LENGTH) {
+  const segments = [];
+  let remaining = Array.from(value);
+
+  while (remaining.length > maxLength) {
+    let breakIndex = -1;
+
+    for (let index = maxLength - 1; index >= 0; index -= 1) {
+      if (isDescriptionSpanBreak(remaining, index)) {
+        breakIndex = index + 1;
+        break;
+      }
+    }
+
+    if (breakIndex === -1) {
+      for (let index = maxLength; index < remaining.length; index += 1) {
+        if (isDescriptionSpanBreak(remaining, index)) {
+          breakIndex = index + 1;
+          break;
+        }
+      }
+    }
+
+    if (breakIndex === -1) {
+      segments.push(remaining.join(""));
+      return segments;
+    }
+
+    while (
+      breakIndex < remaining.length &&
+      /[A-Za-z0-9!#$%&'*+\-.^_`|~]/.test(remaining[breakIndex - 1]) &&
+      /[A-Za-z0-9!#$%&'*+\-.^_`|~]/.test(remaining[breakIndex])
+    ) {
+      breakIndex += 1;
+    }
+
+    segments.push(remaining.slice(0, breakIndex).join(""));
+    remaining = remaining.slice(breakIndex);
+  }
+
+  if (remaining.length > 0) {
+    segments.push(remaining.join(""));
+  }
+
+  return segments;
+}
+
+function splitDescriptionText(value) {
+  const source = String(value == null ? "" : value);
+  const units = source.match(/[^、。！？：；]+[、。！？：；]?/g) || [];
+  return units.flatMap((unit) => splitLongDescriptionText(unit));
+}
+
+function getDescriptionSpanSegments(line) {
+  const source = String(line == null ? "" : line);
+  const tokens = [];
+  const linkPattern = /\[[^\]]+\]\(https?:\/\/[^)\s]+\)/g;
+  let cursor = 0;
+  let match;
+
+  while ((match = linkPattern.exec(source))) {
+    if (match.index > cursor) {
+      tokens.push({ value: source.slice(cursor, match.index), atomic: false });
+    }
+    tokens.push({ value: match[0], atomic: true });
+    cursor = match.index + match[0].length;
+  }
+
+  if (cursor < source.length) {
+    tokens.push({ value: source.slice(cursor), atomic: false });
+  }
+
+  const segments = [];
+  let current = "";
+
+  function pushCurrent() {
+    if (current) {
+      segments.push(current);
+      current = "";
+    }
+  }
+
+  tokens.forEach((token) => {
+    const pieces = token.atomic ? [token.value] : splitDescriptionText(token.value);
+
+    pieces.forEach((piece) => {
+      if (!piece) {
+        return;
+      }
+
+      if (current && getInlineTextLength(current) + getInlineTextLength(piece) > DESCRIPTION_SPAN_MAX_LENGTH) {
+        pushCurrent();
+      }
+
+      current += piece;
+
+      if (/[、。！？：；]$/.test(piece)) {
+        pushCurrent();
+      }
+    });
+  });
+
+  pushCurrent();
+  return segments.length > 0 ? segments : [source];
+}
+
+function getManualDescriptionSpanSegments(line, spanLines, index) {
+  const candidate = Array.isArray(spanLines?.[index])
+    ? spanLines[index].map((item) => String(item == null ? "" : item)).filter((item) => item.length > 0)
+    : [];
+
+  return candidate.map(stripMarkdownLinks).join("") === stripMarkdownLinks(line)
+    ? candidate
+    : getDescriptionSpanSegments(line);
+}
+
+function validateDescriptionBodySpans(value, spanLines, pointer) {
+  if (spanLines === undefined) {
+    return;
+  }
+
+  const lines = toDescriptionLines(value);
+  assert(Array.isArray(spanLines), `${pointer}.bodySpans must be an array when provided.`);
+  assert(spanLines.length === lines.length, `${pointer}.bodySpans must have one entry for each body paragraph.`);
+
+  spanLines.forEach((spanLine, index) => {
+    assert(Array.isArray(spanLine) && spanLine.length > 0, `${pointer}.bodySpans[${index}] must be a non-empty array.`);
+    const spans = spanLine.map((item) => String(item == null ? "" : item));
+    assert(spans.every((item) => item.length > 0), `${pointer}.bodySpans[${index}] must not contain empty spans.`);
+    assert(
+      spans.map(stripMarkdownLinks).join("") === stripMarkdownLinks(lines[index]),
+      `${pointer}.bodySpans[${index}] must join to the matching body paragraph.`
+    );
+  });
+}
+
 function buildDescriptionBodyMarkup(value, options = {}) {
   const lines = toDescriptionLines(value);
   if (lines.length === 0) {
@@ -776,17 +947,27 @@ function buildDescriptionBodyMarkup(value, options = {}) {
       (_match, label, url) => `<a href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(label)}</a>`
     );
 
+  const renderLine = (line, index) =>
+    getManualDescriptionSpanSegments(line, options.spanLines, index)
+      .map((span) => {
+        const className = getInlineTextLength(span) > DESCRIPTION_SPAN_MAX_LENGTH
+          ? "description-body__span description-body__span--flexible"
+          : "description-body__span";
+        return `<span class="${className}">${renderInline(span)}</span>`;
+      })
+      .join("");
+
   if (options.list === true) {
     return [
       '<ul class="description-body-group description-list">',
-      lines.map((line) => `  <li class="description-body description-list__item">${renderInline(line)}</li>`).join("\n"),
+      lines.map((line, index) => `  <li class="description-body description-list__item">${renderLine(line, index)}</li>`).join("\n"),
       "</ul>"
     ].join("\n");
   }
 
   return [
     '<div class="description-body-group">',
-    lines.map((line) => `  <p class="description-body">${renderInline(line)}</p>`).join("\n"),
+    lines.map((line, index) => `  <p class="description-body">${renderLine(line, index)}</p>`).join("\n"),
     "</div>"
   ].join("\n");
 }
@@ -986,7 +1167,7 @@ function buildDescriptionBlockMarkup(block, project, sectionTitle, context, bloc
   return [
     '<section class="description-block description-block--text">',
     block.title ? `  <h3 class="description-block__title">${escapeHtml(block.title)}</h3>` : "",
-    bodyLines.length > 0 ? `  ${buildDescriptionBodyMarkup(block.body, { list: block.list })}` : "",
+    bodyLines.length > 0 ? `  ${buildDescriptionBodyMarkup(block.body, { list: block.list, spanLines: block.bodySpans })}` : "",
     "</section>"
   ]
     .filter(Boolean)
@@ -1184,6 +1365,7 @@ function buildProjectPage(project, index, projects, template, context) {
   const serviceValue = resolveServiceLabel(project);
   const platformValue = resolvePlatformLabel(project);
   const roleValue = resolveRoleLabel(project);
+  const companyValue = resolveCompanyLabel(project);
   const descriptionSections = buildDescriptionSections(project, context);
 
   const pageTitle = `${project.title} | ${context.siteTitle}`;
@@ -1208,6 +1390,14 @@ function buildProjectPage(project, index, projects, template, context) {
     PROJECT_DATE: buildDetailMetaList(project.date),
     PROJECT_PLATFORM: buildDetailMetaList(platformValue),
     PROJECT_ROLE: buildDetailMetaList(roleValue),
+    PROJECT_COMPANY_ROW: companyValue
+      ? [
+          '<div class="detail-module__meta-item">',
+          "  <dt>Co.</dt>",
+          `  <dd>${buildDetailMetaList(companyValue)}</dd>`,
+          "</div>"
+        ].join("\n")
+      : "",
     HERO_IMAGE_MARKUP: buildImageMarkup(
       project.heroImage,
       `${project.title} hero image`,
