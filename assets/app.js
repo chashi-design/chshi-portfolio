@@ -189,7 +189,7 @@
     }
 
     elements.forEach(function (element, index) {
-      element.classList.add("scroll-reveal");
+      element.classList.add("scroll-reveal", "is-reveal-preparing");
       element.style.setProperty("--reveal-delay", Math.min(index % 6, 5) * 45 + "ms");
     });
 
@@ -228,7 +228,13 @@
       window.requestAnimationFrame(updateVisibility);
     }
 
-    requestUpdate();
+    // Commit the hidden state without animating from the page's default visible state.
+    void body.offsetWidth;
+    elements.forEach(function (element) {
+      element.classList.remove("is-reveal-preparing");
+    });
+    void body.offsetWidth;
+    window.setTimeout(updateVisibility, 32);
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate);
     window.setTimeout(requestUpdate, 120);
