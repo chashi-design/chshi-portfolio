@@ -3,19 +3,13 @@
 const fs = require("node:fs");
 const http = require("node:http");
 const path = require("node:path");
-const { spawnSync } = require("node:child_process");
 
 const ROOT = path.resolve(__dirname, "..");
 const BUILD_MODULE_PATH = path.join(__dirname, "build.js");
-const IMAGE_ASSET_DIR = path.join(ROOT, "assets", "img");
-const IMAGE_OPTIMIZER_PATH = path.join(__dirname, "optimize-images.py");
 const WATCH_TARGETS = [path.join(ROOT, "content.json"), path.join(ROOT, "templates"), path.join(ROOT, "assets"), path.join(ROOT, "build")];
 const DEFAULT_PORT = 4173;
 const REBUILD_DEBOUNCE_MS = 250;
-const IMAGE_OPTIMIZE_DEBOUNCE_MS = 800;
-const GENERATED_IMAGE_EVENT_TTL_MS = 5000;
 const MIN_REBUILD_INTERVAL_MS = 500;
-const OPTIMIZABLE_IMAGE_SUFFIXES = new Set([".png"]);
 const MIME_TYPES = {
   ".css": "text/css; charset=utf-8",
   ".gif": "image/gif",
@@ -29,7 +23,6 @@ const MIME_TYPES = {
   ".png": "image/png",
   ".svg": "image/svg+xml",
   ".txt": "text/plain; charset=utf-8",
-  ".webp": "image/webp",
   ".woff": "font/woff",
   ".woff2": "font/woff2",
   ".xml": "application/xml; charset=utf-8"
@@ -70,43 +63,6 @@ function loadBuildModule() {
 function runBuild() {
   const { buildSite } = loadBuildModule();
   return buildSite();
-}
-
-function isOptimizableImage(filePath) {
-  const relative = path.relative(IMAGE_ASSET_DIR, filePath);
-  return (
-    relative !== "" &&
-    !relative.startsWith("..") &&
-    !path.isAbsolute(relative) &&
-    OPTIMIZABLE_IMAGE_SUFFIXES.has(path.extname(filePath).toLowerCase())
-  );
-}
-
-function optimizeImage(filePath) {
-  if (!fs.existsSync(filePath)) {
-    return;
-  }
-
-  const result = spawnSync(
-    process.env.PYTHON || "python3",
-    [IMAGE_OPTIMIZER_PATH, filePath, "--webp-quality", "90", "--webp-max-width", "2048"],
-    { cwd: ROOT, encoding: "utf8" }
-  );
-
-  if (result.status !== 0) {
-    const detail = String(result.stderr || result.stdout || "Unknown optimizer error").trim();
-    throw new Error(`Image optimization failed for ${path.relative(ROOT, filePath)}: ${detail}`);
-  }
-
-  const summary = String(result.stdout || "")
-    .split("\n")
-    .filter((line) => /^(optimized|created|Result:|Optimized:|WebP sidecars:)/.test(line))
-    .join(" | ");
-  console.log(`[images] ${path.relative(ROOT, filePath)}${summary ? ` | ${summary}` : ""}`);
-
-  return /^created .*\.webp:/m.test(String(result.stdout || ""))
-    ? filePath.slice(0, -path.extname(filePath).length) + ".webp"
-    : null;
 }
 
 function getContentType(filePath) {
@@ -308,57 +264,32 @@ function main() {
   const lastBuiltFingerprints = new Map();
   const pendingFingerprints = new Map();
   const pendingReasons = new Set();
-  const pendingImagePaths = new Set();
-  const generatedImageEvents = new Map();
   let rebuildTimer = null;
   let lastBuildAt = Date.now();
   let watchers = [];
 
   function scheduleBuild(reason) {
-    if (reason.path && path.basename(reason.path).includes(".optimize-tmp")) {
-      return;
-    }
-
-    const generatedEventExpiresAt = reason.path ? generatedImageEvents.get(reason.path) : null;
-    if (generatedEventExpiresAt && generatedEventExpiresAt > Date.now()) {
-      return;
-    }
-    if (reason.path && generatedEventExpiresAt) {
-      generatedImageEvents.delete(reason.path);
-    }
-
     if (lastBuiltFingerprints.get(reason.label) === reason.fingerprint) {
       return;
     }
 
     pendingFingerprints.set(reason.label, reason.fingerprint);
     pendingReasons.add(reason.label);
-    if (reason.path && isOptimizableImage(reason.path)) {
-      pendingImagePaths.add(reason.path);
-    }
     if (rebuildTimer) {
       clearTimeout(rebuildTimer);
     }
 
     const waitMs = Math.max(
-      pendingImagePaths.size ? IMAGE_OPTIMIZE_DEBOUNCE_MS : REBUILD_DEBOUNCE_MS,
+      REBUILD_DEBOUNCE_MS,
       MIN_REBUILD_INTERVAL_MS - (Date.now() - lastBuildAt)
     );
 
     rebuildTimer = setTimeout(function rebuildFromWatch() {
       rebuildTimer = null;
       const reasons = Array.from(pendingReasons);
-      const imagePaths = Array.from(pendingImagePaths);
       pendingReasons.clear();
-      pendingImagePaths.clear();
       console.log(`[watch] Rebuilding due to: ${reasons.join(", ")}`);
       try {
-        imagePaths.forEach((imagePath) => {
-          const generatedPath = optimizeImage(imagePath);
-          if (generatedPath) {
-            generatedImageEvents.set(generatedPath, Date.now() + GENERATED_IMAGE_EVENT_TTL_MS);
-          }
-        });
         runBuild();
         lastBuildAt = Date.now();
         reasons.forEach((label) => {

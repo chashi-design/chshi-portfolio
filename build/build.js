@@ -97,37 +97,6 @@ function withBasePath(basePath, urlPath) {
   return `${basePath}${pathValue}`;
 }
 
-function localAssetPath(urlPath) {
-  const raw = toText(urlPath);
-  if (!raw.startsWith("/") || /^\/\//.test(raw)) {
-    return null;
-  }
-
-  const cleanPath = raw.split(/[?#]/)[0];
-  const filePath = path.join(ROOT, cleanPath);
-  const relative = path.relative(ROOT, filePath);
-  if (relative.startsWith("..") || path.isAbsolute(relative)) {
-    return null;
-  }
-
-  return filePath;
-}
-
-function webpSidecarUrl(urlPath) {
-  const raw = toText(urlPath);
-  if (!/\.png(?:[?#].*)?$/i.test(raw)) {
-    return "";
-  }
-
-  const webpUrl = raw.replace(/\.png(?=([?#]|$))/i, ".webp");
-  const webpPath = localAssetPath(webpUrl);
-  if (!webpPath || !fs.existsSync(webpPath)) {
-    return "";
-  }
-
-  return webpUrl;
-}
-
 function buildImageMarkup(src, alt, attrs = {}, context = { basePath: "" }) {
   const rawSrc = toText(src);
   const imageAttrs = {
@@ -140,20 +109,9 @@ function buildImageMarkup(src, alt, attrs = {}, context = { basePath: "" }) {
     .map(([key, value]) => `${key}="${escapeAttr(value)}"`)
     .join(" ");
   const img = `<img ${attrText} />`;
-  const webpUrl = webpSidecarUrl(rawSrc);
   const skeletonStyle = toText(attrs.style);
   const pictureOpen = `<picture class="media-skeleton" aria-busy="true"${skeletonStyle ? ` style="${escapeAttr(skeletonStyle)}"` : ""}>`;
-
-  if (!webpUrl) {
-    return [pictureOpen, `  ${img}`, "</picture>"].join("\n");
-  }
-
-  return [
-    pictureOpen,
-    `  <source srcset="${escapeAttr(withBasePath(context.basePath, webpUrl))}" type="image/webp" />`,
-    `  ${img}`,
-    "</picture>"
-  ].join("\n");
+  return [pictureOpen, `  ${img}`, "</picture>"].join("\n");
 }
 
 function toAbsoluteUrl(canonicalBase, urlPath) {
