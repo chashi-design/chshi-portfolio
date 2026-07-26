@@ -89,7 +89,7 @@ function optimizeImage(filePath) {
 
   const result = spawnSync(
     process.env.PYTHON || "python3",
-    [IMAGE_OPTIMIZER_PATH, filePath, "--webp-lossless"],
+    [IMAGE_OPTIMIZER_PATH, filePath, "--webp-quality", "90", "--webp-max-width", "2048"],
     { cwd: ROOT, encoding: "utf8" }
   );
 
