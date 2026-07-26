@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,24 +17,15 @@
     <meta name="twitter:description" content="{{OG_DESCRIPTION}}" />
     <meta name="twitter:image" content="{{OG_IMAGE}}" />
 
-    <script>
-      (function () {
-        document.documentElement.dataset.theme = "dark";
-      })();
-    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ASSET_PREFIX}}/assets/styles.css?v={{ASSET_VERSION}}" />
     <script defer src="{{ASSET_PREFIX}}/assets/app.js?v={{ASSET_VERSION}}"></script>
     <script type="application/ld+json">{{JSON_LD}}</script>
   </head>
   <body class="swiss-page page-detail">
-    <a class="project-close" href="{{HOME_URL}}" aria-label="Homeへ戻る">
-      <svg class="project-close__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M6 6l12 12M18 6L6 18" />
-      </svg>
-    </a>
-    {{GRID_TOGGLE}}
     <div class="site-shell site-shell--project swiss-wrap">
-      <div class="grid-guides" aria-hidden="true">{{GRID_COLUMNS}}</div>
       <main class="project-layout project-layout--detail">
         <section class="card detail-module" aria-labelledby="detail-module-title">
           <h1 id="detail-module-title" class="detail-module__title">{{PROJECT_TITLE}}</h1>
@@ -52,13 +43,14 @@
                 <dt>Platform</dt>
                 <dd>{{PROJECT_PLATFORM}}</dd>
               </div>
+{{PROJECT_COMPANY_ROW}}
             </div>
           </dl>
         </section>
 
         <section class="card project-main">
           <figure class="project-main-media">
-            <img src="{{HERO_IMAGE}}" alt="{{HERO_ALT}}" loading="eager" decoding="async" />
+            {{HERO_IMAGE_MARKUP}}
           </figure>
         </section>
 
@@ -68,9 +60,12 @@
           </div>
         </section>
       </main>
-      <div class="project-floating-nav">
-        {{PROJECT_NAV}}
-      </div>
+      <nav class="home-segmented-control project-floating-nav" aria-label="Project navigation">
+        <div class="home-segmented-control__inner">
+          <a class="home-segmented-control__logo" href="{{HOME_URL}}">chashi.</a>
+          {{PROJECT_NAV}}
+        </div>
+      </nav>
     </div>
   </body>
 </html>

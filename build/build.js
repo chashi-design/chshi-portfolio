@@ -8,22 +8,11 @@ const ROOT = path.resolve(__dirname, "..");
 const CONTENT_PATH = path.join(ROOT, "content.json");
 const INDEX_TEMPLATE_PATH = path.join(ROOT, "templates", "index.template.html");
 const PROJECT_TEMPLATE_PATH = path.join(ROOT, "templates", "project.template.html");
-const PROFILE_TEMPLATE_PATH = path.join(ROOT, "templates", "profile.template.html");
 const OUTPUT_INDEX_PATH = path.join(ROOT, "index.html");
 const OUTPUT_PROJECTS_DIR = path.join(ROOT, "projects");
 const OUTPUT_PROFILE_DIR = path.join(ROOT, "profile");
-const OUTPUT_PROFILE_INDEX_PATH = path.join(OUTPUT_PROFILE_DIR, "index.html");
 const BUILD_DIR = path.join(ROOT, "build");
 const WATCH_TARGETS = [CONTENT_PATH, path.join(ROOT, "templates"), path.join(ROOT, "assets"), BUILD_DIR];
-const GRID_TOGGLE_HTML = '<button class="grid-toggle" type="button" aria-pressed="false" aria-label="Toggle grid overlay">Grid</button>';
-const GRID_COLUMNS_HTML = [
-  '<span class="grid-guides__margin grid-guides__margin--left"></span>',
-  '<span class="grid-guides__margin grid-guides__margin--right"></span>',
-  ...Array.from({ length: 12 }, (_, index) => {
-    const label = String(index + 1).padStart(2, "0");
-    return `<span class="grid-guides__col">${label}</span>`;
-  })
-].join("\n        ");
 
 const DETAIL_SECTION_CONFIG = [
   { key: "overview", title: "概要" },
@@ -95,6 +84,65 @@ function withBasePath(basePath, urlPath) {
   }
   const pathValue = urlPath.startsWith("/") ? urlPath : `/${urlPath}`;
   return `${basePath}${pathValue}`;
+}
+
+function localAssetPath(urlPath) {
+  const raw = toText(urlPath);
+  if (!raw.startsWith("/") || /^\/\//.test(raw)) {
+    return null;
+  }
+
+  const cleanPath = raw.split(/[?#]/)[0];
+  const filePath = path.join(ROOT, cleanPath);
+  const relative = path.relative(ROOT, filePath);
+  if (relative.startsWith("..") || path.isAbsolute(relative)) {
+    return null;
+  }
+
+  return filePath;
+}
+
+function webpSidecarUrl(urlPath) {
+  const raw = toText(urlPath);
+  if (!/\.png(?:[?#].*)?$/i.test(raw)) {
+    return "";
+  }
+
+  const webpUrl = raw.replace(/\.png(?=([?#]|$))/i, ".webp");
+  const webpPath = localAssetPath(webpUrl);
+  if (!webpPath || !fs.existsSync(webpPath)) {
+    return "";
+  }
+
+  return webpUrl;
+}
+
+function buildImageMarkup(src, alt, attrs = {}, context = { basePath: "" }) {
+  const rawSrc = toText(src);
+  const imageAttrs = {
+    src: withBasePath(context.basePath, rawSrc),
+    alt,
+    ...attrs
+  };
+  const attrText = Object.entries(imageAttrs)
+    .filter(([, value]) => value !== undefined && value !== null && String(value).length > 0)
+    .map(([key, value]) => `${key}="${escapeAttr(value)}"`)
+    .join(" ");
+  const img = `<img ${attrText} />`;
+  const webpUrl = webpSidecarUrl(rawSrc);
+  const skeletonStyle = toText(attrs.style);
+  const pictureOpen = `<picture class="media-skeleton" aria-busy="true"${skeletonStyle ? ` style="${escapeAttr(skeletonStyle)}"` : ""}>`;
+
+  if (!webpUrl) {
+    return [pictureOpen, `  ${img}`, "</picture>"].join("\n");
+  }
+
+  return [
+    pictureOpen,
+    `  <source srcset="${escapeAttr(withBasePath(context.basePath, webpUrl))}" type="image/webp" />`,
+    `  ${img}`,
+    "</picture>"
+  ].join("\n");
 }
 
 function toAbsoluteUrl(canonicalBase, urlPath) {
@@ -197,6 +245,9 @@ function validateContent(content) {
     assert(item && typeof item === "object", `site.profile.career[${index}] must be an object.`);
     assert(toText(item.period).length > 0, `site.profile.career[${index}].period is required.`);
     assert(toText(item.title).length > 0, `site.profile.career[${index}].title is required.`);
+    if (item.note !== undefined) {
+      assert(toText(item.note).length > 0, `site.profile.career[${index}].note must not be empty.`);
+    }
     if (item.url !== undefined) {
       assert(/^https?:\/\//i.test(toText(item.url)), `site.profile.career[${index}].url must be an http(s) URL.`);
     }
@@ -230,8 +281,8 @@ function validateContent(content) {
       assert(toText(project[field]).length > 0, `${pointer}.${field} is required.`);
     });
     assert(
-      /^\d{4}(?:(?:\s*[〜~-]\s*(?:\d{4}|present))|(?:\s*,\s*\d{4})*)?$/i.test(toText(project.date)),
-      `${pointer}.date must use yyyy, yyyy, yyyy, yyyy〜yyyy, or yyyy - PRESENT format.`
+      /^\d{4}(?:(?:\s*[〜~-]\s*(?:\d{4}|present|現在)?)|(?:\s*,\s*\d{4})*)?$/i.test(toText(project.date)),
+      `${pointer}.date must use yyyy, yyyy -, yyyy, yyyy, yyyy〜yyyy, yyyy - PRESENT, or yyyy - 現在 format.`
     );
 
     assert(
@@ -378,8 +429,8 @@ function buildProjectCard(project, context, options = {}) {
   ].join(";");
 
   const projectPath = withBasePath(context.basePath, `/projects/${project.slug}/`);
-  const heroImage = withBasePath(context.basePath, toText(project.heroImage));
   const date = toText(project.date);
+  const company = toText(project.cardCompany || project.company);
   const category = toText(project.category) || "UI Design";
   const linkLabel = [project.title, showCategory ? category : ""]
     .map((item) => toText(item))
@@ -390,11 +441,12 @@ function buildProjectCard(project, context, options = {}) {
     `<a class="card bento-card clothoid-corner" href="${escapeAttr(projectPath)}" style="${escapeAttr(style)}" aria-label="${escapeAttr(linkLabel)}">`,
     `  <div class="bento-card__body">`,
     showServiceTitle ? `    <h2 class="bento-card__title">${escapeHtml(project.title)}</h2>` : "",
+    company ? `    <p class="bento-card__company">${escapeHtml(company)}</p>` : "",
     showDate ? `    <p class="bento-card__date">${escapeHtml(date)}</p>` : "",
     showCategory ? `    <p class="bento-card__category">${escapeHtml(category)}</p>` : "",
     `  </div>`,
     `  <figure class="bento-card__media">`,
-    `    <img src="${escapeAttr(heroImage)}" alt="${escapeAttr(project.title)} preview" loading="lazy" decoding="async" />`,
+    `    ${buildImageMarkup(project.heroImage, `${project.title} preview`, { loading: "lazy", decoding: "async" }, context)}`,
     `  </figure>`,
     `</a>`
   ]
@@ -451,53 +503,12 @@ function buildIndexJsonLd(context, homeCanonical) {
   };
 }
 
-function buildProfileJsonLd(context, homeCanonical, profileCanonical, site, basePath) {
-  const profileDescription = toDescriptionLines(site.profile.description).join(" ");
-  const sameAs = Array.isArray(site.snsLinks)
-    ? site.snsLinks
-        .map((item) => toText(item.url))
-        .filter((url) => /^https?:\/\//i.test(url))
-    : [];
-
-  return {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        name: context.personName,
-        alternateName: context.personSubName || undefined,
-        description: profileDescription,
-        url: profileCanonical,
-        image: toAbsoluteUrl(context.canonicalBase, withBasePath(basePath, site.profileImage)),
-        sameAs
-      },
-      {
-        "@type": "WebSite",
-        name: context.siteTitle,
-        description: context.siteDescription,
-        url: homeCanonical
-      },
-      {
-        "@type": "AboutPage",
-        name: `${context.personName} Profile`,
-        description: truncate(profileDescription, 160),
-        url: profileCanonical,
-        about: {
-          "@type": "Person",
-          name: context.personName
-        }
-      }
-    ]
-  };
-}
-
 function buildSnsCards(site, context) {
   return site.snsLinks
     .map((item) => {
       const name = toText(item.name);
       const accountName = toText(item.accountName);
       const url = toText(item.url);
-      const icon = withBasePath(context.basePath, toText(item.icon));
       const bgColor = toText(item.bgColor);
       const textColor = toText(item.textColor) || "#ffffff";
       const style = `--sns-bg:${bgColor};--sns-fg:${textColor};`;
@@ -505,7 +516,7 @@ function buildSnsCards(site, context) {
       return [
         `<a class="card sns-card clothoid-corner" href="${escapeAttr(url)}" style="${escapeAttr(style)}"${maybeExternalAttrs(url)}>`,
         `  <span class="sns-card__icon" aria-hidden="true">`,
-        `    <img src="${escapeAttr(icon)}" alt="" loading="lazy" decoding="async" />`,
+        `    ${buildImageMarkup(item.icon, "", { loading: "lazy", decoding: "async" }, context)}`,
         `  </span>`,
         `  <span class="sns-card__meta">`,
         `    <span class="sns-card__name">${escapeHtml(name)}</span>`,
@@ -515,17 +526,6 @@ function buildSnsCards(site, context) {
       ].join("\n");
     })
     .join("\n");
-}
-
-function buildProfileSnsLinks(site) {
-  return site.snsLinks
-    .map((item) => {
-      const name = toText(item.name);
-      const url = toText(item.url);
-
-      return `<a class="profile-sns-link" href="${escapeAttr(url)}"${maybeExternalAttrs(url)}>${escapeHtml(name)}</a>`;
-    })
-    .join('<span class="profile-sns-separator" aria-hidden="true">・</span>');
 }
 
 function buildFactCards(project) {
@@ -581,6 +581,10 @@ function resolveRoleLabel(project) {
     return label === "role" || label === "担当";
   });
   return roleFact ? roleFact.value : "-";
+}
+
+function resolveCompanyLabel(project) {
+  return toText(project.company);
 }
 
 function resolveServiceLabel(project) {
@@ -649,7 +653,16 @@ function validateDetailContentBlocks(blocks, pointer) {
     assert(block && typeof block === "object", `${blockPointer} must be an object.`);
 
     const type = toText(block.type).toLowerCase();
-    assert(type === "image" || type === "video" || type === "text" || type === "link" || type === "docswell" || type === "youtube", `${blockPointer}.type must be "image", "video", "text", "link", "docswell", or "youtube".`);
+    assert(
+      type === "image" ||
+        type === "video" ||
+        type === "text" ||
+        type === "link" ||
+        type === "docswell" ||
+        type === "youtube" ||
+        type === "instagram",
+      `${blockPointer}.type must be "image", "video", "text", "link", "docswell", "youtube", or "instagram".`
+    );
 
     if (type === "image" || type === "video") {
       assert(toText(block.src).length > 0, `${blockPointer}.src is required for ${type} blocks.`);
@@ -660,6 +673,7 @@ function validateDetailContentBlocks(blocks, pointer) {
         toDescriptionLines(block.body).length > 0 || toText(block.heading).length > 0,
         `${blockPointer}.body or ${blockPointer}.heading is required for text blocks.`
       );
+      validateDescriptionBodySpans(block.body, block.bodySpans, blockPointer);
     }
 
     if (type === "link") {
@@ -673,6 +687,10 @@ function validateDetailContentBlocks(blocks, pointer) {
 
     if (type === "youtube") {
       assert(toText(block.src).length > 0, `${blockPointer}.src is required for youtube blocks.`);
+    }
+
+    if (type === "instagram") {
+      assert(toText(block.url).length > 0, `${blockPointer}.url is required for instagram blocks.`);
     }
   });
 }
@@ -721,10 +739,19 @@ function normalizeDetailBlock(block) {
     };
   }
 
+  if (type === "instagram") {
+    return {
+      type: "instagram",
+      url: toText(block.url),
+      label: toText(block.label) || "Instagramで投稿を見る"
+    };
+  }
+
   return {
     type: "text",
     title: toText(block.heading),
     body: block.body,
+    bodySpans: block.bodySpans,
     list: block.list === true
   };
 }
@@ -745,6 +772,146 @@ function toDescriptionLines(value) {
     .filter(Boolean);
 }
 
+const DESCRIPTION_SPAN_MAX_LENGTH = 24;
+
+function getInlineTextLength(value) {
+  return Array.from(stripMarkdownLinks(value)).length;
+}
+
+function isDescriptionSpanBreak(characters, index) {
+  const character = characters[index];
+  const previous = characters[index - 1] || "";
+  const next = characters[index + 1] || "";
+
+  if (/[、。！？：；]/.test(character)) {
+    return true;
+  }
+
+  if (!/[はがをにへとでやも]/.test(character)) {
+    return false;
+  }
+
+  // Keep Japanese conjugations such as "できる" and "ながら" together.
+  if ((character === "で" && /[きしす]/.test(next)) || (character === "が" && previous === "な" && next === "ら")) {
+    return false;
+  }
+
+  return true;
+}
+
+function splitLongDescriptionText(value, maxLength = DESCRIPTION_SPAN_MAX_LENGTH) {
+  const segments = [];
+  let remaining = Array.from(value);
+
+  while (remaining.length > maxLength) {
+    let breakIndex = -1;
+
+    for (let index = maxLength - 1; index >= 0; index -= 1) {
+      if (isDescriptionSpanBreak(remaining, index)) {
+        breakIndex = index + 1;
+        break;
+      }
+    }
+
+    if (breakIndex === -1) {
+      for (let index = maxLength; index < remaining.length; index += 1) {
+        if (isDescriptionSpanBreak(remaining, index)) {
+          breakIndex = index + 1;
+          break;
+        }
+      }
+    }
+
+    if (breakIndex === -1) {
+      segments.push(remaining.join(""));
+      return segments;
+    }
+
+    while (
+      breakIndex < remaining.length &&
+      /[A-Za-z0-9!#$%&'*+\-.^_`|~]/.test(remaining[breakIndex - 1]) &&
+      /[A-Za-z0-9!#$%&'*+\-.^_`|~]/.test(remaining[breakIndex])
+    ) {
+      breakIndex += 1;
+    }
+
+    segments.push(remaining.slice(0, breakIndex).join(""));
+    remaining = remaining.slice(breakIndex);
+  }
+
+  if (remaining.length > 0) {
+    segments.push(remaining.join(""));
+  }
+
+  return segments;
+}
+
+function splitDescriptionText(value) {
+  const source = String(value == null ? "" : value);
+  if (!source) {
+    return [];
+  }
+
+  // Keep conjugated Japanese words together and split only at punctuation,
+  // particles, or natural boundaries when a span becomes too long.
+  return splitLongDescriptionText(source, DESCRIPTION_SPAN_MAX_LENGTH);
+}
+
+function getDescriptionSpanSegments(line) {
+  const source = String(line == null ? "" : line);
+  const tokens = [];
+  const linkPattern = /\[[^\]]+\]\(https?:\/\/[^)\s]+\)/g;
+  let cursor = 0;
+  let match;
+
+  while ((match = linkPattern.exec(source))) {
+    if (match.index > cursor) {
+      tokens.push({ value: source.slice(cursor, match.index), atomic: false });
+    }
+    tokens.push({ value: match[0], atomic: true });
+    cursor = match.index + match[0].length;
+  }
+
+  if (cursor < source.length) {
+    tokens.push({ value: source.slice(cursor), atomic: false });
+  }
+
+  const segments = tokens.flatMap((token) =>
+    token.atomic ? [token.value] : splitDescriptionText(token.value)
+  );
+  return segments.length > 0 ? segments : [source];
+}
+
+function getManualDescriptionSpanSegments(line, spanLines, index) {
+  const candidate = Array.isArray(spanLines?.[index])
+    ? spanLines[index].map((item) => String(item == null ? "" : item)).filter((item) => item.length > 0)
+    : [];
+
+  return candidate.map(stripMarkdownLinks).join("") === stripMarkdownLinks(line)
+    ? candidate.flatMap((segment) => getDescriptionSpanSegments(segment))
+    : getDescriptionSpanSegments(line);
+}
+
+function validateDescriptionBodySpans(value, spanLines, pointer) {
+  if (spanLines === undefined) {
+    return;
+  }
+
+  const lines = toDescriptionLines(value);
+  assert(Array.isArray(spanLines), `${pointer}.bodySpans must be an array when provided.`);
+  assert(spanLines.length === lines.length, `${pointer}.bodySpans must have one entry for each body paragraph.`);
+
+  spanLines.forEach((spanLine, index) => {
+    assert(Array.isArray(spanLine) && spanLine.length > 0, `${pointer}.bodySpans[${index}] must be a non-empty array.`);
+    const spans = spanLine.map((item) => String(item == null ? "" : item));
+    assert(spans.every((item) => item.length > 0), `${pointer}.bodySpans[${index}] must not contain empty spans.`);
+    assert(
+      spans.map(stripMarkdownLinks).join("") === stripMarkdownLinks(lines[index]),
+      `${pointer}.bodySpans[${index}] must join to the matching body paragraph.`
+    );
+  });
+}
+
 function buildDescriptionBodyMarkup(value, options = {}) {
   const lines = toDescriptionLines(value);
   if (lines.length === 0) {
@@ -757,17 +924,27 @@ function buildDescriptionBodyMarkup(value, options = {}) {
       (_match, label, url) => `<a href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(label)}</a>`
     );
 
+  const renderLine = (line, index) =>
+    getManualDescriptionSpanSegments(line, options.spanLines, index)
+      .map((span) => {
+        const className = getInlineTextLength(span) > DESCRIPTION_SPAN_MAX_LENGTH
+          ? "description-body__span description-body__span--flexible"
+          : "description-body__span";
+        return `<span class="${className}">${renderInline(span)}</span>`;
+      })
+      .join("");
+
   if (options.list === true) {
     return [
       '<ul class="description-body-group description-list">',
-      lines.map((line) => `  <li class="description-body description-list__item">${renderInline(line)}</li>`).join("\n"),
+      lines.map((line, index) => `  <li class="description-body description-list__item">${renderLine(line, index)}</li>`).join("\n"),
       "</ul>"
     ].join("\n");
   }
 
   return [
     '<div class="description-body-group">',
-    lines.map((line) => `  <p class="description-body">${renderInline(line)}</p>`).join("\n"),
+    lines.map((line, index) => `  <p class="description-body">${renderLine(line, index)}</p>`).join("\n"),
     "</div>"
   ].join("\n");
 }
@@ -884,12 +1061,11 @@ function normalizeDetailSections(project) {
 function buildDescriptionBlockMarkup(block, project, sectionTitle, context, blockIndex) {
   if (block.type === "image" && block.image) {
     const image = block.image;
-    const imageSrc = escapeAttr(withBasePath(context.basePath, image.src));
-    const imageAlt = escapeAttr(toText(image.alt) || `${project.title} ${sectionTitle} ${blockIndex + 1}`);
+    const imageAlt = toText(image.alt) || `${project.title} ${sectionTitle} ${blockIndex + 1}`;
 
     return [
       '<figure class="description-block description-block--image description-item__media">',
-      `  <img src="${imageSrc}" alt="${imageAlt}" loading="lazy" decoding="async" style="--aspect:${escapeAttr(normalizeAspect(image.aspect))};--fit:contain;" />`,
+      `  ${buildImageMarkup(image.src, imageAlt, { loading: "lazy", decoding: "async", style: `--aspect:${normalizeAspect(image.aspect)};--fit:contain;` }, context)}`,
       toText(image.caption).length > 0 ? `  <figcaption class="description-image__caption">${escapeHtml(image.caption)}</figcaption>` : "",
       "</figure>"
     ]
@@ -944,8 +1120,21 @@ function buildDescriptionBlockMarkup(block, project, sectionTitle, context, bloc
 
   if (block.type === "youtube") {
     return [
-      '<section class="description-block description-block--embed description-block--youtube">',
+      '<section class="description-block description-block--embed description-block--youtube media-embed-skeleton" aria-busy="true">',
       `  <iframe src="${escapeAttr(block.src)}" title="${escapeAttr(block.title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
+      "</section>"
+    ].join("\n");
+  }
+
+  if (block.type === "instagram") {
+    return [
+      '<section class="description-block description-block--embed description-block--instagram">',
+      '  <div class="instagram-embed-frame media-embed-skeleton" aria-busy="true">',
+      `    <blockquote class="instagram-media" data-instgrm-permalink="${escapeAttr(block.url)}" data-instgrm-version="14">`,
+      `      <a href="${escapeAttr(block.url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(block.label)}</a>`,
+      "    </blockquote>",
+      "  </div>",
+      '  <script async src="https://www.instagram.com/embed.js"></script>',
       "</section>"
     ].join("\n");
   }
@@ -955,7 +1144,7 @@ function buildDescriptionBlockMarkup(block, project, sectionTitle, context, bloc
   return [
     '<section class="description-block description-block--text">',
     block.title ? `  <h3 class="description-block__title">${escapeHtml(block.title)}</h3>` : "",
-    bodyLines.length > 0 ? `  ${buildDescriptionBodyMarkup(block.body, { list: block.list })}` : "",
+    bodyLines.length > 0 ? `  ${buildDescriptionBodyMarkup(block.body, { list: block.list, spanLines: block.bodySpans })}` : "",
     "</section>"
   ]
     .filter(Boolean)
@@ -1148,12 +1337,12 @@ function buildProjectPage(project, index, projects, template, context) {
   const projectPath = withBasePath(context.basePath, `/projects/${project.slug}/`);
   const homePath = withBasePath(context.basePath, "/");
   const workPath = `${homePath}#works`;
-  const profilePath = withBasePath(context.basePath, "/profile/");
   const canonicalUrl = toAbsoluteUrl(context.canonicalBase, projectPath);
   const ogImageUrl = toAbsoluteUrl(context.canonicalBase, withBasePath(context.basePath, project.heroImage));
   const serviceValue = resolveServiceLabel(project);
   const platformValue = resolvePlatformLabel(project);
   const roleValue = resolveRoleLabel(project);
+  const companyValue = resolveCompanyLabel(project);
   const descriptionSections = buildDescriptionSections(project, context);
 
   const pageTitle = `${project.title} | ${context.siteTitle}`;
@@ -1170,19 +1359,28 @@ function buildProjectPage(project, index, projects, template, context) {
     ASSET_PREFIX: context.basePath,
     ASSET_VERSION: escapeAttr(context.assetVersion),
     JSON_LD: safeJsonLd(buildProjectJsonLd(project, context)),
-    GRID_TOGGLE: GRID_TOGGLE_HTML,
-    GRID_COLUMNS: GRID_COLUMNS_HTML,
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(workPath),
-    PROFILE_URL: escapeAttr(profilePath),
     PROJECT_TITLE: escapeHtml(project.title),
     PROJECT_NAV: buildPagination(projects, index, context),
     PROJECT_SERVICE: buildDetailMetaList(serviceValue),
     PROJECT_DATE: buildDetailMetaList(project.date),
     PROJECT_PLATFORM: buildDetailMetaList(platformValue),
     PROJECT_ROLE: buildDetailMetaList(roleValue),
-    HERO_IMAGE: escapeAttr(withBasePath(context.basePath, project.heroImage)),
-    HERO_ALT: escapeAttr(`${project.title} hero image`),
+    PROJECT_COMPANY_ROW: companyValue
+      ? [
+          '<div class="detail-module__meta-item">',
+          "  <dt>Co.</dt>",
+          `  <dd>${buildDetailMetaList(companyValue)}</dd>`,
+          "</div>"
+        ].join("\n")
+      : "",
+    HERO_IMAGE_MARKUP: buildImageMarkup(
+      project.heroImage,
+      `${project.title} hero image`,
+      { loading: "eager", decoding: "async" },
+      context
+    ),
     DESCRIPTION_SECTIONS: descriptionSections
   });
 }
@@ -1198,8 +1396,16 @@ function buildProfileDescriptionMarkup(value, spanLines) {
       const candidateSpans = Array.isArray(spanLines?.[index])
         ? spanLines[index].map((item) => toText(item)).filter(Boolean)
         : [];
-      const spans = candidateSpans.join("") === paragraph ? candidateSpans : [paragraph];
-      const body = spans.map((span) => `<span>${escapeHtml(span)}</span>`).join("");
+      const spans = candidateSpans.map(stripMarkdownLinks).join("") === paragraph ? candidateSpans : [paragraph];
+      const body = spans
+        .map((span) => {
+          const markup = escapeHtml(span).replace(
+            /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+            (_match, label, url) => `<a href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(label)}</a>`
+          );
+          return `<span>${markup}</span>`;
+        })
+        .join("");
       return `<p class="profile-description__body">${body}</p>`;
     })
     .join("\n");
@@ -1210,19 +1416,44 @@ function buildCareerItems(careerItems) {
     .map((item) => {
       const titleText = toText(item.title);
       const linkText = toText(item.linkText);
+      const noteText = toText(item.note);
       const titleSuffix = linkText && titleText.length > linkText.length
         ? ` ${escapeHtml(titleText.slice(linkText.length).trim())}`
         : "";
       const title = item.url
         ? `<a href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(linkText || titleText)}</a>${titleSuffix}`
         : escapeHtml(titleText);
+      const note = noteText
+        ? `<span class="career-item__note">${escapeHtml(noteText)}</span>`
+        : "";
       return [
         '<article class="career-item">',
         `  <p class="career-item__period">${escapeHtml(item.period)}</p>`,
-        `  <p class="career-item__title">${title}</p>`,
+        `  <p class="career-item__title">${title}${note}</p>`,
         "</article>"
       ].join("\n");
     })
+    .join("\n");
+}
+
+function buildPersonNameMarkup(name) {
+  return escapeHtml(toText(name));
+}
+
+function buildSpeakingLinks(items, context) {
+  return [...items]
+    .sort((a, b) => Number(b.date) - Number(a.date))
+    .map((item) => [
+      `<a class="card bento-card home-speaking__item clothoid-corner" href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer noopener">`,
+      '  <div class="bento-card__body">',
+      `    <h2 class="bento-card__title">${escapeHtml(item.title)}</h2>`,
+      `    <p class="bento-card__date">${escapeHtml(item.date)}</p>`,
+      "  </div>",
+      '  <figure class="bento-card__media home-speaking__media">',
+      `    ${buildImageMarkup(item.image, `${item.title} OGP`, { loading: "lazy", decoding: "async", width: item.imageWidth, height: item.imageHeight }, context)}`,
+      "  </figure>",
+      "</a>"
+    ].join("\n"))
     .join("\n");
 }
 
@@ -1261,7 +1492,7 @@ function buildSite(options = {}) {
 
   const workProjects = projects.filter((project) => !isSpeakingProject(project));
   const speakingProjects = projects.filter((project) => isSpeakingProject(project));
-  const homeWorkProjects = sortByDateDescThenOrderAsc(workProjects);
+  const homeWorkProjects = workProjects;
   const navigationWorkProjects = homeWorkProjects;
   const navigationSpeakingProjects = sortByDateDescThenOrderAsc(speakingProjects);
   const projectSections = buildProjectSections(homeWorkProjects, context, {
@@ -1274,7 +1505,6 @@ function buildSite(options = {}) {
   const siteLeadBullets = site.leadBullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n");
   const homePath = withBasePath(basePath, "/");
   const workPath = `${homePath}#works`;
-  const profilePath = withBasePath(basePath, "/profile/");
   const homeCanonical = toAbsoluteUrl(canonicalBase, homePath);
   const defaultOgImage = toAbsoluteUrl(canonicalBase, withBasePath(basePath, site.ogImageDefault));
   const homeMetaDescription = truncate(context.siteDescription, 160);
@@ -1296,13 +1526,11 @@ function buildSite(options = {}) {
     ASSET_PREFIX: basePath,
     ASSET_VERSION: escapeAttr(assetVersion),
     JSON_LD: safeJsonLd(indexJsonLd),
-    GRID_TOGGLE: GRID_TOGGLE_HTML,
-    GRID_COLUMNS: GRID_COLUMNS_HTML,
     HOME_URL: escapeAttr(homePath),
     WORK_URL: escapeAttr(workPath),
-    PROFILE_URL: escapeAttr(profilePath),
     SITE_TITLE: escapeHtml(context.siteTitle),
     PERSON_NAME: escapeHtml(context.personName),
+    PERSON_NAME_MARKUP: buildPersonNameMarkup(context.personName),
     PERSON_SUBNAME: personSubNameMarkup,
     PROFILE_IMAGE: escapeAttr(withBasePath(basePath, site.profileImage)),
     PROFILE_DESCRIPTION: buildProfileDescriptionMarkup(site.profile.description, site.profile.descriptionSpans),
@@ -1310,7 +1538,8 @@ function buildSite(options = {}) {
     SITE_DESCRIPTION: escapeHtml(context.siteDescription),
     SITE_LEAD_BULLETS: siteLeadBullets,
     SNS_CARDS: snsCards,
-    PROJECT_SECTIONS: projectSections
+    PROJECT_SECTIONS: projectSections,
+    SPEAKING_LINKS: buildSpeakingLinks(site.speakingLinks || [], context)
   });
 
   fs.writeFileSync(OUTPUT_INDEX_PATH, indexHtml, "utf8");
