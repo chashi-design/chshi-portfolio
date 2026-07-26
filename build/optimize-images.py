@@ -76,10 +76,11 @@ def optimize_png(path, dry_run=False):
         tmp_path.unlink(missing_ok=True)
 
 
-def create_webp_lossless(path, dry_run=False):
+def create_webp(path, dry_run=False, lossless=True, quality=90, max_width=0):
     original_size = path.stat().st_size
     webp_path = path.with_suffix(".webp")
     tmp_path = path.with_name(f".{path.stem}.webp.optimize-tmp")
+    was_resized = False
 
     try:
         with Image.open(path) as image:
@@ -87,15 +88,24 @@ def create_webp_lossless(path, dry_run=False):
                 return "skipped", original_size, original_size, "animated PNG"
 
             image.load()
-            image.save(tmp_path, format="WEBP", lossless=True, method=6)
+            if max_width > 0 and image.width > max_width:
+                target_height = round(image.height * max_width / image.width)
+                image = image.resize((max_width, target_height), Image.Resampling.LANCZOS)
+                was_resized = True
+
+            save_options = {"format": "WEBP", "method": 6}
+            if lossless:
+                save_options["lossless"] = True
+            else:
+                save_options["quality"] = quality
+            image.save(tmp_path, **save_options)
 
         webp_size = tmp_path.stat().st_size
         if webp_size >= original_size:
             tmp_path.unlink(missing_ok=True)
-            webp_path.unlink(missing_ok=True)
             return "unchanged", original_size, original_size, ""
 
-        if not images_match(path, tmp_path):
+        if lossless and not was_resized and not images_match(path, tmp_path):
             tmp_path.unlink(missing_ok=True)
             return "skipped", original_size, original_size, "pixel mismatch"
 
@@ -145,11 +155,30 @@ def main():
         action="store_true",
         help="Also create smaller lossless .webp sidecars for PNG files.",
     )
+    parser.add_argument(
+        "--webp-quality",
+        type=int,
+        help="Create visually lossless WebP sidecars at the specified quality (1-100).",
+    )
+    parser.add_argument(
+        "--webp-max-width",
+        type=int,
+        default=0,
+        help="Resize WebP sidecars wider than this value while preserving aspect ratio.",
+    )
     args = parser.parse_args()
 
     asset_target = Path(args.asset_dir).resolve()
     if not asset_target.exists():
         raise SystemExit(f"Asset path does not exist: {asset_target}")
+    if args.webp_lossless and args.webp_quality is not None:
+        raise SystemExit("--webp-lossless and --webp-quality cannot be used together.")
+    if args.webp_quality is not None and not 1 <= args.webp_quality <= 100:
+        raise SystemExit("--webp-quality must be between 1 and 100.")
+    if args.webp_max_width < 0:
+        raise SystemExit("--webp-max-width must be 0 or greater.")
+
+    webp_enabled = args.webp_lossless or args.webp_quality is not None
 
     optimized = []
     webp_created = []
@@ -180,10 +209,16 @@ def main():
         else:
             skipped.append((path, reason))
 
-        if args.webp_lossless and suffix in PNG_SUFFIXES:
+        if webp_enabled and suffix in PNG_SUFFIXES:
             current_size = path.stat().st_size
             webp_total_before += current_size
-            webp_status, webp_before, webp_after, webp_reason = create_webp_lossless(path, dry_run=args.dry_run)
+            webp_status, webp_before, webp_after, webp_reason = create_webp(
+                path,
+                dry_run=args.dry_run,
+                lossless=args.webp_lossless,
+                quality=args.webp_quality or 90,
+                max_width=args.webp_max_width,
+            )
             webp_total_after += webp_after
             if webp_status == "optimized":
                 webp_created.append((path.with_suffix(".webp"), webp_before, webp_after))
@@ -212,14 +247,14 @@ def main():
     print()
     print(f"Result: {mode}")
     print(f"Optimized: {len(optimized)}")
-    if args.webp_lossless:
+    if webp_enabled:
         print(f"WebP sidecars: {len(webp_created)}")
     print(f"Unchanged: {unchanged}")
-    if args.webp_lossless:
+    if webp_enabled:
         print(f"WebP unchanged: {webp_unchanged}")
     print(f"Skipped: {len(skipped)}")
     print(f"Total: {format_bytes(total_before)} -> {format_bytes(total_after)} ({format_bytes(saved_total)} saved)")
-    if args.webp_lossless:
+    if webp_enabled:
         webp_saved_total = webp_total_before - webp_total_after
         print(
             "WebP potential loaded bytes: "

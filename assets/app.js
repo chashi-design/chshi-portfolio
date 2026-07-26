@@ -232,6 +232,8 @@
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate);
     window.setTimeout(requestUpdate, 120);
+    window.setTimeout(requestUpdate, 600);
+    window.setTimeout(requestUpdate, 1200);
   }
 
   function setupInvertingCursor() {
@@ -766,6 +768,8 @@
 
     var removedText = originalText.slice(0, -(morphSourceText + remainingText).length);
     var removed = document.createElement("span");
+    var removedTextLayer = document.createElement("span");
+    var removedCharacters = document.createElement("span");
     var finalGroup = document.createElement("span");
     var morph = document.createElement("span");
     var morphSource = document.createElement("span");
@@ -773,14 +777,18 @@
     var remaining = document.createElement("span");
 
     removed.className = "about-teaser__name-removed";
+    removedTextLayer.className = "about-teaser__name-removed-text";
+    removedTextLayer.textContent = removedText;
+    removedCharacters.className = "about-teaser__name-removed-characters";
     Array.from(removedText).forEach(function (character, index) {
       var characterSpan = document.createElement("span");
 
       characterSpan.className = "about-teaser__name-removed-character";
       characterSpan.textContent = character === " " ? "\u00a0" : character;
       characterSpan.style.setProperty("--name-character-index", index);
-      removed.append(characterSpan);
+      removedCharacters.append(characterSpan);
     });
+    removed.append(removedTextLayer, removedCharacters);
     finalGroup.className = "about-teaser__name-final";
     morph.className = "about-teaser__name-morph";
     morphSource.className = "about-teaser__name-morph-source";
@@ -795,14 +803,20 @@
     nameValue.textContent = "";
     nameValue.setAttribute("aria-label", originalText);
     removed.setAttribute("aria-hidden", "true");
+    removedCharacters.setAttribute("aria-hidden", "true");
     finalGroup.setAttribute("aria-hidden", "true");
     nameValue.append(removed, finalGroup);
 
     function updateNameWidths() {
-      var removedWidth = removed.scrollWidth;
+      var removedWidth = removedTextLayer.scrollWidth;
+      var removedCharactersWidth = removedCharacters.scrollWidth;
       var morphWidth = Math.max(morphSource.scrollWidth, morphReplacement.scrollWidth);
 
       removed.style.setProperty("--name-removed-width", removedWidth + "px");
+      removedCharacters.style.setProperty(
+        "--name-character-scale",
+        removedCharactersWidth > 0 ? removedWidth / removedCharactersWidth : 1
+      );
       morph.style.setProperty("--name-morph-source-width", morphWidth + "px");
       morph.style.setProperty("--name-morph-replacement-width", morphWidth + "px");
     }

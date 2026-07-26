@@ -41,6 +41,17 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
+function escapeHtmlPreserveWhitespace(value) {
+  return String(value == null ? "" : value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+    .replace(/^ +/, (spaces) => "&nbsp;".repeat(spaces.length))
+    .replace(/ +$/, (spaces) => "&nbsp;".repeat(spaces.length));
+}
+
 function escapeAttr(value) {
   return escapeHtml(value);
 }
@@ -772,7 +783,16 @@ function toDescriptionLines(value) {
     .filter(Boolean);
 }
 
-const DESCRIPTION_SPAN_MAX_LENGTH = 24;
+const DESCRIPTION_SPAN_MAX_LENGTH = 16;
+const DESCRIPTION_SPAN_MIN_LENGTH = 6;
+const DESCRIPTION_SPAN_FLEXIBLE_LENGTH = 22;
+const DESCRIPTION_SPAN_BAD_START_PATTERN =
+  /^(?:[、。！？：；）】」』]|[がをにへとでやも]|の|こと|ため|よう|もの|など|まで|から|より|について|として|という|ともに|によって|により|において|に対して|に応じて|をもとに|した|して|します|しました|でき|され|れる|られる|ない|なく|なり|ました|ます|です|いう|ある|おいて|よって|ついて|対して|応じて|もとに|通じて|伴い|加えて|はなく|はない|はありません|は)/;
+const DESCRIPTION_POST_LINK_PARTICLE_PATTERN = /^(\s*[がはをにへとでやも](?:[、。！？：；])?)/;
+const DESCRIPTION_OPENING_PUNCTUATION_PATTERN = /[「『（【]$/;
+const DESCRIPTION_WORD_SEGMENTER = typeof Intl.Segmenter === "function"
+  ? new Intl.Segmenter("ja", { granularity: "word" })
+  : null;
 
 function getInlineTextLength(value) {
   return Array.from(stripMarkdownLinks(value)).length;
@@ -782,21 +802,65 @@ function isDescriptionSpanBreak(characters, index) {
   const character = characters[index];
   const previous = characters[index - 1] || "";
   const next = characters[index + 1] || "";
+  const precedingText = characters.slice(0, index + 1).join("");
 
-  if (/[、。！？：；]/.test(character)) {
+  if (/[、。！？：；」』）】]/.test(character)) {
     return true;
   }
 
-  if (!/[はがをにへとでやも]/.test(character)) {
+  if (character === "・" && /[A-Za-z0-9]/.test(next)) {
+    return true;
+  }
+
+  if (/(?:について|において|によって|により|に対して|に応じて|をもとに|として|という|から|まで|など|ため|よう)$/.test(precedingText)) {
+    return true;
+  }
+
+  if (!/[はがをにへとでやもの]/.test(character)) {
     return false;
   }
 
   // Keep Japanese conjugations such as "できる" and "ながら" together.
-  if ((character === "で" && /[きしす]/.test(next)) || (character === "が" && previous === "な" && next === "ら")) {
+  if (
+    (character === "で" && /[きしす]/.test(next)) ||
+    (character === "が" && previous === "な" && next === "ら") ||
+    (character === "と" && next === "し") ||
+    (character === "も" && previous === "を" && next === "と") ||
+    (character === "と" && previous === "も" && next === "に")
+  ) {
     return false;
   }
 
   return true;
+}
+
+function isNaturalDescriptionSpanBreak(characters, breakIndex) {
+  const beforeLength = breakIndex;
+  const afterLength = characters.length - breakIndex;
+  const previousCharacter = characters[breakIndex - 1] || "";
+  const nextText = characters.slice(breakIndex).join("");
+  const followsPunctuation = /[、。！？：；」』）】]/.test(previousCharacter);
+
+  if (DESCRIPTION_OPENING_PUNCTUATION_PATTERN.test(previousCharacter)) {
+    return false;
+  }
+
+  if ((!followsPunctuation && beforeLength < DESCRIPTION_SPAN_MIN_LENGTH) || afterLength < DESCRIPTION_SPAN_MIN_LENGTH) {
+    return false;
+  }
+
+  return !DESCRIPTION_SPAN_BAD_START_PATTERN.test(nextText.trimStart());
+}
+
+function getDescriptionWordBreakIndexes(characters) {
+  if (!DESCRIPTION_WORD_SEGMENTER) {
+    return [];
+  }
+
+  const text = characters.join("");
+  return Array.from(DESCRIPTION_WORD_SEGMENTER.segment(text), (part) =>
+    Array.from(text.slice(0, part.index + part.segment.length)).length
+  ).filter((index) => index > 0 && index < characters.length);
 }
 
 function splitLongDescriptionText(value, maxLength = DESCRIPTION_SPAN_MAX_LENGTH) {
@@ -807,16 +871,39 @@ function splitLongDescriptionText(value, maxLength = DESCRIPTION_SPAN_MAX_LENGTH
     let breakIndex = -1;
 
     for (let index = maxLength - 1; index >= 0; index -= 1) {
-      if (isDescriptionSpanBreak(remaining, index)) {
-        breakIndex = index + 1;
+      const candidate = index + 1;
+      if (isDescriptionSpanBreak(remaining, index) && isNaturalDescriptionSpanBreak(remaining, candidate)) {
+        breakIndex = candidate;
         break;
       }
     }
 
     if (breakIndex === -1) {
+      const wordBreakIndexes = getDescriptionWordBreakIndexes(remaining);
+      for (let index = wordBreakIndexes.length - 1; index >= 0; index -= 1) {
+        const candidate = wordBreakIndexes[index];
+        if (candidate <= maxLength && isNaturalDescriptionSpanBreak(remaining, candidate)) {
+          breakIndex = candidate;
+          break;
+        }
+      }
+    }
+
+    if (breakIndex === -1) {
       for (let index = maxLength; index < remaining.length; index += 1) {
-        if (isDescriptionSpanBreak(remaining, index)) {
-          breakIndex = index + 1;
+        const candidate = index + 1;
+        if (isDescriptionSpanBreak(remaining, index) && isNaturalDescriptionSpanBreak(remaining, candidate)) {
+          breakIndex = candidate;
+          break;
+        }
+      }
+    }
+
+    if (breakIndex === -1) {
+      const wordBreakIndexes = getDescriptionWordBreakIndexes(remaining);
+      for (const candidate of wordBreakIndexes) {
+        if (candidate > maxLength && isNaturalDescriptionSpanBreak(remaining, candidate)) {
+          breakIndex = candidate;
           break;
         }
       }
@@ -857,6 +944,73 @@ function splitDescriptionText(value) {
   return splitLongDescriptionText(source, DESCRIPTION_SPAN_MAX_LENGTH);
 }
 
+function splitLeadingDescriptionContinuation(value) {
+  const characters = Array.from(value);
+
+  for (let index = 0; index < characters.length - 1; index += 1) {
+    const breakIndex = index + 1;
+    if (isDescriptionSpanBreak(characters, index) && isNaturalDescriptionSpanBreak(characters, breakIndex)) {
+      return [
+        characters.slice(0, breakIndex).join(""),
+        characters.slice(breakIndex).join("")
+      ];
+    }
+  }
+
+  return [value, ""];
+}
+
+function attachLeadingDescriptionContinuations(segments) {
+  return segments.reduce((normalized, segment) => {
+    const plainText = String(segment == null ? "" : segment)
+      .replace(/\[([^\]]+)\]\(https?:\/\/[^)\s]+\)/g, "$1");
+    if (normalized.length === 0) {
+      normalized.push(segment);
+      return normalized;
+    }
+
+    const previousIndex = normalized.length - 1;
+    const previousHasLink = /\[[^\]]+\]\(https?:\/\/[^)\s]+\)/.test(normalized[previousIndex]);
+    const postLinkParticle = previousHasLink ? plainText.match(DESCRIPTION_POST_LINK_PARTICLE_PATTERN) : null;
+    if (postLinkParticle) {
+      normalized[previousIndex] += segment.slice(0, postLinkParticle[1].length);
+      const remainder = segment.slice(postLinkParticle[1].length);
+      if (remainder) {
+        normalized.push(...splitDescriptionText(remainder));
+      }
+      return normalized;
+    }
+
+    if (!DESCRIPTION_SPAN_BAD_START_PATTERN.test(plainText)) {
+      normalized.push(segment);
+      return normalized;
+    }
+
+    const [continuation, remainder] = splitLeadingDescriptionContinuation(segment);
+    normalized[previousIndex] += continuation;
+    if (remainder) {
+      normalized.push(...splitDescriptionText(remainder));
+    }
+    return normalized;
+  }, []);
+}
+
+function attachTrailingOpeningPunctuation(segments) {
+  const normalized = [...segments];
+
+  for (let index = 0; index < normalized.length - 1; index += 1) {
+    const match = normalized[index].match(/([「『（【]+)$/);
+    if (!match) {
+      continue;
+    }
+
+    normalized[index] = normalized[index].slice(0, -match[1].length);
+    normalized[index + 1] = match[1] + normalized[index + 1];
+  }
+
+  return normalized.filter(Boolean);
+}
+
 function getDescriptionSpanSegments(line) {
   const source = String(line == null ? "" : line);
   const tokens = [];
@@ -879,7 +1033,21 @@ function getDescriptionSpanSegments(line) {
   const segments = tokens.flatMap((token) =>
     token.atomic ? [token.value] : splitDescriptionText(token.value)
   );
-  return segments.length > 0 ? segments : [source];
+  return segments.length > 0
+    ? attachTrailingOpeningPunctuation(attachLeadingDescriptionContinuations(segments))
+    : [source];
+}
+
+function normalizeManualDescriptionSegments(segments) {
+  return segments.reduce((normalized, segment) => {
+    const plainText = stripMarkdownLinksPreserveWhitespace(segment).trimStart();
+    if (normalized.length > 0 && DESCRIPTION_SPAN_BAD_START_PATTERN.test(plainText)) {
+      normalized[normalized.length - 1] += segment;
+    } else {
+      normalized.push(segment);
+    }
+    return normalized;
+  }, []);
 }
 
 function getManualDescriptionSpanSegments(line, spanLines, index) {
@@ -887,8 +1055,8 @@ function getManualDescriptionSpanSegments(line, spanLines, index) {
     ? spanLines[index].map((item) => String(item == null ? "" : item)).filter((item) => item.length > 0)
     : [];
 
-  return candidate.map(stripMarkdownLinks).join("") === stripMarkdownLinks(line)
-    ? candidate.flatMap((segment) => getDescriptionSpanSegments(segment))
+  return candidate.map(stripMarkdownLinksPreserveWhitespace).join("") === stripMarkdownLinksPreserveWhitespace(line)
+    ? candidate
     : getDescriptionSpanSegments(line);
 }
 
@@ -906,7 +1074,7 @@ function validateDescriptionBodySpans(value, spanLines, pointer) {
     const spans = spanLine.map((item) => String(item == null ? "" : item));
     assert(spans.every((item) => item.length > 0), `${pointer}.bodySpans[${index}] must not contain empty spans.`);
     assert(
-      spans.map(stripMarkdownLinks).join("") === stripMarkdownLinks(lines[index]),
+      spans.map(stripMarkdownLinksPreserveWhitespace).join("") === stripMarkdownLinksPreserveWhitespace(lines[index]),
       `${pointer}.bodySpans[${index}] must join to the matching body paragraph.`
     );
   });
@@ -919,15 +1087,15 @@ function buildDescriptionBodyMarkup(value, options = {}) {
   }
 
   const renderInline = (line) =>
-    escapeHtml(line).replace(
+    escapeHtmlPreserveWhitespace(line).replace(
       /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
-      (_match, label, url) => `<a href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(label)}</a>`
+      (_match, label, url) => `<a href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">${escapeHtmlPreserveWhitespace(label)}</a>`
     );
 
   const renderLine = (line, index) =>
     getManualDescriptionSpanSegments(line, options.spanLines, index)
       .map((span) => {
-        const className = getInlineTextLength(span) > DESCRIPTION_SPAN_MAX_LENGTH
+        const className = getInlineTextLength(span) > DESCRIPTION_SPAN_FLEXIBLE_LENGTH
           ? "description-body__span description-body__span--flexible"
           : "description-body__span";
         return `<span class="${className}">${renderInline(span)}</span>`;
@@ -951,6 +1119,10 @@ function buildDescriptionBodyMarkup(value, options = {}) {
 
 function stripMarkdownLinks(value) {
   return toText(value).replace(/\[([^\]]+)\]\(https?:\/\/[^)\s]+\)/g, "$1");
+}
+
+function stripMarkdownLinksPreserveWhitespace(value) {
+  return String(value == null ? "" : value).replace(/\[([^\]]+)\]\(https?:\/\/[^)\s]+\)/g, "$1");
 }
 
 function buildImpactFallback(project) {
@@ -993,6 +1165,7 @@ function normalizeDetailSections(project) {
   if (Array.isArray(project.detailSections)) {
     return project.detailSections.map((section) => ({
       title: toText(section.heading),
+      titleSpans: Array.isArray(section.headingSpans) ? section.headingSpans : null,
       blocks: normalizeSectionBlocks(section)
     }));
   }
@@ -1004,6 +1177,7 @@ function normalizeDetailSections(project) {
 
       return {
         title: toText(sectionValue.heading),
+        titleSpans: Array.isArray(sectionValue.headingSpans) ? sectionValue.headingSpans : null,
         blocks: normalizeSectionBlocks(sectionValue)
       };
     });
@@ -1164,7 +1338,7 @@ function buildDescriptionSections(project, context) {
       const titleMarkup = title
         ? [
             '  <div class="description-item__copy">',
-            `    <h2 class="description-subtitle">${escapeHtml(title)}</h2>`,
+            `    <h2 class="description-subtitle">${Array.isArray(section.titleSpans) ? section.titleSpans.map((span) => `<span>${escapeHtmlPreserveWhitespace(span)}</span>`).join("") : escapeHtml(title)}</h2>`,
             "  </div>"
           ].join("\n")
         : "";
@@ -1394,14 +1568,19 @@ function buildProfileDescriptionMarkup(value, spanLines) {
   return paragraphs
     .map((paragraph, index) => {
       const candidateSpans = Array.isArray(spanLines?.[index])
-        ? spanLines[index].map((item) => toText(item)).filter(Boolean)
+        ? spanLines[index].map((item) => String(item == null ? "" : item)).filter((item) => item.length > 0)
         : [];
-      const spans = candidateSpans.map(stripMarkdownLinks).join("") === paragraph ? candidateSpans : [paragraph];
+      const candidatePlainText = candidateSpans
+        .map((span) => span.replace(/\[([^\]]+)\]\(https?:\/\/[^)\s]+\)/g, "$1"))
+        .join("");
+      const spans = candidatePlainText === paragraph
+        ? candidateSpans
+        : getDescriptionSpanSegments(paragraph);
       const body = spans
         .map((span) => {
-          const markup = escapeHtml(span).replace(
+          const markup = escapeHtmlPreserveWhitespace(span).replace(
             /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
-            (_match, label, url) => `<a href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">${escapeHtml(label)}</a>`
+            (_match, label, url) => `<a href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">${escapeHtmlPreserveWhitespace(label)}</a>`
           );
           return `<span>${markup}</span>`;
         })
