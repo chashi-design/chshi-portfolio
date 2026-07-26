@@ -7,7 +7,6 @@
         ".site-header__link",
         ".side-nav__link",
         ".project-detail-nav__link:not(.project-detail-nav__link--disabled)",
-        ".theme-switcher",
         ".about-teaser__link"
       ].join(", ")
     );
@@ -79,73 +78,6 @@
         clearPressed();
       });
     });
-  }
-
-  function setupThemeSwitcher() {
-    var selects = document.querySelectorAll("[data-theme-select]");
-
-    if (!selects.length) {
-      document.documentElement.dataset.theme = "dark";
-      return;
-    }
-
-    var visibleSelects = Array.prototype.filter.call(selects, function (select) {
-      var switcher = select.closest(".theme-switcher");
-      return switcher && window.getComputedStyle(switcher).display !== "none";
-    });
-
-    if (!visibleSelects.length) {
-      document.documentElement.dataset.theme = "dark";
-      return;
-    }
-
-    var storageKey = "color-theme";
-    var validThemes = {
-      system: true,
-      light: true,
-      dark: true
-    };
-
-    function readStoredTheme() {
-      try {
-        var storedTheme = window.localStorage.getItem(storageKey);
-        return validThemes[storedTheme] ? storedTheme : "system";
-      } catch (error) {
-        return "system";
-      }
-    }
-
-    function writeStoredTheme(theme) {
-      try {
-        window.localStorage.setItem(storageKey, theme);
-      } catch (error) {
-        return;
-      }
-    }
-
-    function applyTheme(theme) {
-      var nextTheme = validThemes[theme] ? theme : "system";
-
-      document.documentElement.dataset.theme = nextTheme;
-      writeStoredTheme(nextTheme);
-
-      selects.forEach(function (select) {
-        select.value = nextTheme;
-        var switcher = select.closest(".theme-switcher");
-
-        if (switcher) {
-          switcher.dataset.themeState = nextTheme;
-        }
-      });
-    }
-
-    selects.forEach(function (select) {
-      select.addEventListener("change", function () {
-        applyTheme(select.value);
-      });
-    });
-
-    applyTheme(readStoredTheme());
   }
 
   function setupOpticalAlignment() {
@@ -323,6 +255,8 @@
     var closeTargetSelector = [
       ".project-close",
       ".project-detail-nav__link:not(.project-detail-nav__link--disabled)",
+      ".home-segmented-control__logo",
+      ".home-segmented-control__button",
       ".page-home .project-sections .bento-card",
       ".page-home .home-speaking__item",
       ".description-link-card"
@@ -340,8 +274,11 @@
     }
 
     function getCardRadius(card) {
+      var previewFrame = card.querySelector(
+        ".bento-card__media picture.media-skeleton, .home-speaking__media picture.media-skeleton"
+      );
       var previewImage = card.querySelector(".bento-card__media img, .home-speaking__media img");
-      var radiusTarget = previewImage || card;
+      var radiusTarget = previewFrame || previewImage || card;
 
       var targetRect = radiusTarget.getBoundingClientRect();
       var radiusParts = window
@@ -359,6 +296,9 @@
       var closeRect = closeTarget.getBoundingClientRect();
       var isWorkCardTarget = closeTarget.matches(
         ".page-home .project-sections .bento-card, .page-home .home-speaking__item"
+      );
+      var isFloatingNavTarget = closeTarget.matches(
+        ".home-segmented-control__logo, .home-segmented-control__button, .project-detail-nav__link"
       );
       var isLinkCardTarget = closeTarget.matches(".description-link-card");
       var isCardTarget = isWorkCardTarget || isLinkCardTarget;
@@ -378,15 +318,28 @@
       cursor.classList.remove("is-interactive");
       cursor.classList.toggle("is-close-target-expanded", isExpanded);
       cursor.classList.toggle("is-work-card-target", isCardTarget);
+      cursor.classList.toggle("is-floating-nav-target", isFloatingNavTarget);
       cursor.style.width = cursorWidth + "px";
       cursor.style.height = cursorHeight + "px";
       cursor.style.margin = "0";
-      cursor.style.borderRadius = [
-        closeRadiusX + cursorGap,
-        "px / ",
-        closeRadiusY + cursorGap,
-        "px"
-      ].join("");
+      cursor.style.borderRadius = isWorkCardTarget
+        ? [
+            "12px 12px ",
+            closeRadiusX,
+            "px ",
+            closeRadiusX,
+            "px / 12px 12px ",
+            closeRadiusY,
+            "px ",
+            closeRadiusY,
+            "px"
+          ].join("")
+        : [
+            closeRadiusX + cursorGap,
+            "px / ",
+            closeRadiusY + cursorGap,
+            "px"
+          ].join("");
       cursor.style.transform = [
         "translate3d(",
         closeRect.left - cursorGap,
@@ -443,6 +396,7 @@
         "is-close-target",
         "is-close-target-expanded",
         "is-work-card-target",
+        "is-floating-nav-target",
         "is-text-link-target"
       );
       cursor.style.removeProperty("width");
@@ -694,6 +648,7 @@
     var buttons = Array.prototype.slice.call(
       control.querySelectorAll("[data-home-segment-target]")
     );
+    var itemGroup = control.querySelector(".home-segmented-control__items");
     if (!buttons.length) {
       return;
     }
@@ -713,7 +668,18 @@
     var ticking = false;
     var activeButton = null;
 
+    function syncActiveIndicator(button) {
+      if (!itemGroup || !button) {
+        return;
+      }
+
+      itemGroup.style.setProperty("--active-segment-left", button.offsetLeft + "px");
+      itemGroup.style.setProperty("--active-segment-width", button.offsetWidth + "px");
+    }
+
     function setActive(button) {
+      syncActiveIndicator(button);
+
       if (activeButton === button) {
         return;
       }
@@ -724,8 +690,6 @@
         item.classList.toggle("is-active", isActive);
         item.setAttribute("aria-pressed", isActive ? "true" : "false");
       });
-      control.classList.toggle("is-work-active", button === buttons[1]);
-      control.classList.toggle("is-speaking-active", button === buttons[2]);
     }
 
     function updateActiveSegment() {
@@ -774,10 +738,11 @@
     requestActiveUpdate();
     window.addEventListener("scroll", requestActiveUpdate, { passive: true });
     window.addEventListener("resize", requestActiveUpdate);
+    window.setTimeout(requestActiveUpdate, 120);
 
   }
 
-  function setupNameScramble() {
+  function setupNameTransition() {
     var nameValue = document.querySelector(".about-teaser__name-value");
 
     if (!nameValue) {
@@ -790,77 +755,187 @@
       return;
     }
 
-    var originalText = nameValue.textContent;
-    var displayStates = [originalText, "thirohas.", "chashi."];
-    var scrambleCharacters = "!@#$%^&*?<>/[]{}+=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    var animationDuration = 900;
-    var frameDuration = 55;
-    var timer = 0;
-    var stateIndex = 0;
+    var originalText = nameValue.textContent.trim();
+    var finalText = "chashi.";
+    var morphSourceText = "o";
+    var remainingText = "hashi.";
 
-    function randomCharacter() {
-      return scrambleCharacters[Math.floor(Math.random() * scrambleCharacters.length)];
+    if (!originalText.endsWith(morphSourceText + remainingText)) {
+      return;
     }
 
-    function animateText(targetText, onComplete) {
-      var startText = nameValue.textContent;
-      var longestLength = Math.max(startText.length, targetText.length);
-      var frameCount = Math.ceil(animationDuration / frameDuration);
-      var frame = 0;
+    var removedText = originalText.slice(0, -(morphSourceText + remainingText).length);
+    var removed = document.createElement("span");
+    var finalGroup = document.createElement("span");
+    var morph = document.createElement("span");
+    var morphSource = document.createElement("span");
+    var morphReplacement = document.createElement("span");
+    var remaining = document.createElement("span");
 
-      function renderFrame() {
-        var progress = Math.min(1, frame / frameCount);
-        var result = "";
+    removed.className = "about-teaser__name-removed";
+    Array.from(removedText).forEach(function (character, index) {
+      var characterSpan = document.createElement("span");
 
-        for (var index = 0; index < longestLength; index += 1) {
-          if (index >= targetText.length) {
-            if (progress < 0.8 && index < startText.length) {
-              result += randomCharacter();
-            }
-            continue;
-          }
+      characterSpan.className = "about-teaser__name-removed-character";
+      characterSpan.textContent = character === " " ? "\u00a0" : character;
+      characterSpan.style.setProperty("--name-character-index", index);
+      removed.append(characterSpan);
+    });
+    finalGroup.className = "about-teaser__name-final";
+    morph.className = "about-teaser__name-morph";
+    morphSource.className = "about-teaser__name-morph-source";
+    morphSource.textContent = morphSourceText;
+    morphReplacement.className = "about-teaser__name-morph-replacement";
+    morphReplacement.textContent = "c";
+    remaining.className = "about-teaser__name-remaining";
+    remaining.textContent = remainingText;
+    morph.append(morphSource, morphReplacement);
+    finalGroup.append(morph, remaining);
 
-          if (index < startText.length && progress < 0.18) {
-            result += randomCharacter();
-          } else if (progress < (index + 1) / targetText.length) {
-            result += randomCharacter();
-          } else {
-            result += targetText[index];
-          }
+    nameValue.textContent = "";
+    nameValue.setAttribute("aria-label", originalText);
+    removed.setAttribute("aria-hidden", "true");
+    finalGroup.setAttribute("aria-hidden", "true");
+    nameValue.append(removed, finalGroup);
+
+    function updateNameWidths() {
+      var removedWidth = removed.scrollWidth;
+      var morphWidth = Math.max(morphSource.scrollWidth, morphReplacement.scrollWidth);
+
+      removed.style.setProperty("--name-removed-width", removedWidth + "px");
+      morph.style.setProperty("--name-morph-source-width", morphWidth + "px");
+      morph.style.setProperty("--name-morph-replacement-width", morphWidth + "px");
+    }
+
+    var nameResizeFrame = 0;
+    var nameResizeReleaseFrame = 0;
+
+    function scheduleNameWidthUpdate() {
+      window.cancelAnimationFrame(nameResizeFrame);
+      window.cancelAnimationFrame(nameResizeReleaseFrame);
+
+      nameResizeFrame = window.requestAnimationFrame(function () {
+        var isMovingLeft = nameValue.classList.contains("is-collapsing")
+          && !nameValue.classList.contains("is-complete");
+        var isMovingRight = nameValue.classList.contains("is-returning")
+          && !nameValue.classList.contains("is-returned");
+        var shouldUpdateWithoutTransition = !isMovingLeft && !isMovingRight;
+
+        if (shouldUpdateWithoutTransition) {
+          nameValue.classList.add("is-recalculating");
         }
 
-        nameValue.textContent = result;
-        frame += 1;
+        updateNameWidths();
 
-        if (frame <= frameCount) {
-          timer = window.setTimeout(renderFrame, frameDuration);
-          return;
+        if (shouldUpdateWithoutTransition) {
+          nameValue.offsetWidth;
+          nameResizeReleaseFrame = window.requestAnimationFrame(function () {
+            nameValue.classList.remove("is-recalculating");
+          });
         }
-
-        nameValue.textContent = targetText;
-        onComplete();
-      }
-
-      renderFrame();
+      });
     }
 
-    function scheduleNext() {
-      timer = window.setTimeout(function () {
-        stateIndex = (stateIndex + 1) % displayStates.length;
-        animateText(displayStates[stateIndex], scheduleNext);
-      }, 7000);
+    updateNameWidths();
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(scheduleNameWidthUpdate);
     }
 
-    scheduleNext();
+    if ("ResizeObserver" in window) {
+      var nameResizeObserver = new ResizeObserver(scheduleNameWidthUpdate);
+      nameResizeObserver.observe(nameValue.closest(".about-teaser__inner") || nameValue);
+    }
+
+    window.addEventListener("resize", scheduleNameWidthUpdate, { passive: true });
+    window.addEventListener("orientationchange", scheduleNameWidthUpdate);
+
+    var timings = {
+      initialHold: 5000,
+      strike: 2000,
+      eraseAndPause: 1300,
+      letterDrop: 900,
+      beat: 500,
+      horizontalMove: 1200,
+      finalHold: 10000,
+      strikeReset: 200,
+      textRestore: 950
+    };
+
+    function runForwardTransition() {
+      nameValue.classList.add("is-striking");
+
+      window.setTimeout(function () {
+        nameValue.classList.add("is-erasing");
+
+        window.setTimeout(function () {
+          nameValue.classList.add("is-morphing");
+
+          window.setTimeout(function () {
+            nameValue.setAttribute("aria-label", finalText);
+            nameValue.classList.add("is-morphed");
+
+            window.setTimeout(function () {
+              nameValue.classList.add("is-collapsing");
+
+              window.setTimeout(function () {
+                nameValue.classList.add("is-complete");
+                window.setTimeout(runReturnTransition, timings.finalHold);
+              }, timings.horizontalMove);
+            }, timings.beat);
+          }, timings.letterDrop);
+        }, timings.eraseAndPause);
+      }, timings.strike);
+    }
+
+    function runReturnTransition() {
+      nameValue.classList.add("is-returning");
+
+      window.setTimeout(function () {
+        nameValue.classList.add("is-returned");
+
+        window.setTimeout(function () {
+          nameValue.classList.add("is-reversing");
+
+          window.setTimeout(function () {
+            nameValue.classList.add("is-restoring");
+            nameValue.classList.remove("is-striking");
+
+            window.setTimeout(function () {
+              nameValue.classList.add("is-revealing");
+              nameValue.classList.remove("is-erasing");
+              nameValue.setAttribute("aria-label", originalText);
+
+              window.setTimeout(function () {
+                nameValue.classList.remove(
+                  "is-morphing",
+                  "is-morphed",
+                  "is-collapsing",
+                  "is-complete",
+                  "is-returning",
+                  "is-returned",
+                  "is-reversing",
+                  "is-restoring",
+                  "is-revealing"
+                );
+                updateNameWidths();
+                window.setTimeout(runForwardTransition, timings.initialHold);
+              }, timings.textRestore);
+            }, timings.strikeReset);
+          }, timings.letterDrop);
+        }, timings.beat);
+      }, timings.horizontalMove);
+    }
+
+    window.setTimeout(runForwardTransition, timings.initialHold);
   }
 
   setupPressFeedback();
-  setupThemeSwitcher();
   setupOpticalAlignment();
   setupScrollReveal();
   setupMediaSkeletons();
   setupScrollVideos();
   setupHomeSegmentedControl();
-  setupNameScramble();
+  setupNameTransition();
   setupInvertingCursor();
 })();

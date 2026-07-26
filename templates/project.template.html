@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,21 +17,14 @@
     <meta name="twitter:description" content="{{OG_DESCRIPTION}}" />
     <meta name="twitter:image" content="{{OG_IMAGE}}" />
 
-    <script>
-      (function () {
-        document.documentElement.dataset.theme = "dark";
-      })();
-    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ASSET_PREFIX}}/assets/styles.css?v={{ASSET_VERSION}}" />
     <script defer src="{{ASSET_PREFIX}}/assets/app.js?v={{ASSET_VERSION}}"></script>
     <script type="application/ld+json">{{JSON_LD}}</script>
   </head>
   <body class="swiss-page page-detail">
-    <a class="project-close" href="{{HOME_URL}}" aria-label="Home へ戻る">
-      <svg class="project-close__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M6 6l12 12M18 6L6 18" />
-      </svg>
-    </a>
     <div class="site-shell site-shell--project swiss-wrap">
       <main class="project-layout project-layout--detail">
         <section class="card detail-module" aria-labelledby="detail-module-title">
@@ -67,9 +60,12 @@
           </div>
         </section>
       </main>
-      <div class="project-floating-nav">
-        {{PROJECT_NAV}}
-      </div>
+      <nav class="home-segmented-control project-floating-nav" aria-label="Project navigation">
+        <div class="home-segmented-control__inner">
+          <a class="home-segmented-control__logo" href="{{HOME_URL}}">chashi.</a>
+          {{PROJECT_NAV}}
+        </div>
+      </nav>
     </div>
   </body>
 </html>

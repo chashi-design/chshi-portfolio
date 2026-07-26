@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,13 +17,11 @@
     <meta name="twitter:description" content="UI/UX デザインとフロントエンド実装のケーススタディを Bento Grid で紹介するポートフォリオ。" />
     <meta name="twitter:image" content="https://chashi-design.github.io/assets/img/og-default.svg" />
 
-    <script>
-      (function () {
-        document.documentElement.dataset.theme = "dark";
-      })();
-    </script>
-    <link rel="stylesheet" href="/assets/styles.css?v=4cce34684753" />
-    <script defer src="/assets/app.js?v=4cce34684753"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/styles.css?v=be21d89a82b6" />
+    <script defer src="/assets/app.js?v=be21d89a82b6"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","name":"Takanori Hirohashi","url":"https://chashi-design.github.io/chshi-portfolio/"},{"@type":"WebSite","name":"Takanori Hirohashi Portfolio","description":"UI/UX デザインとフロントエンド実装のケーススタディを Bento Grid で紹介するポートフォリオ。","url":"https://chashi-design.github.io/"}]}</script>
   </head>
   <body class="swiss-page page-home">
@@ -33,11 +31,10 @@
           <div class="about-teaser__inner">
             <h2 id="about-teaser-title" class="about-teaser__title">
               <span class="about-teaser__name"><span class="about-teaser__name-prefix">Hello, I'm</span> <span class="about-teaser__name-value">Takanori Hirohashi.</span></span>
-              <span class="about-teaser__role">Digital Product Designer</span>
             </h2>
             <div class="about-teaser__description">
-              <p class="profile-description__body"><span>広島生まれのデジタルプロダクトデザイナー。</span><span>現在は <a href="https://www.lycorp.co.jp/" target="_blank" rel="noreferrer noopener">LINE ヤフー</a>にてデザイン業務に従事しています。</span></p>
-<p class="profile-description__body"><span>ユーザー中心設計と、</span><span>シンプルで心地よく使えるインターフェースを軸に、</span><span>関係者との合意形成を図りながら、</span><span>ユーザー体験と事業目的を結びつける</span><span>プロダクトづくりを得意としています。</span></p>
+              <p class="profile-description__body"><span>広島生まれの</span><span>デジタルプロダクトデザイナー。</span><span>現在は <a href="https://www.lycorp.co.jp/" target="_blank" rel="noreferrer noopener">LINE ヤフー</a></span><span>にてデザイン業務に</span><span>従事しています。</span></p>
+<p class="profile-description__body"><span>ユーザー中心設計と、</span><span>シンプルで</span><span>心地よく使える</span><span>インターフェースを軸に、</span><span>関係者との</span><span>合意形成を図りながら、</span><span>ユーザー体験と</span><span>事業目的を結びつける</span><span>プロダクトづくりを</span><span>得意としています。</span></p>
             </div>
             <section class="about-teaser__career" aria-labelledby="home-career-title">
               <h3 id="home-career-title" class="about-teaser__career-title">Work Experience</h3>
@@ -177,7 +174,7 @@
             </div>
           </section>
           <section class="home-speaking" id="speaking" aria-labelledby="home-speaking-title">
-            <h3 id="home-speaking-title" class="home-speaking__heading">Speaking</h3>
+            <h3 id="home-speaking-title" class="home-speaking__heading">Speak</h3>
             <div class="home-speaking__list bento-grid">
               <a class="card bento-card home-speaking__item clothoid-corner" href="https://www.designsystems.com/schema-tokyo-2022/" target="_blank" rel="noreferrer noopener">
   <div class="bento-card__body">
@@ -233,9 +230,14 @@
 
     </div>
     <nav class="home-segmented-control" aria-label="Home section navigation">
-      <button class="home-segmented-control__button" type="button" data-home-segment-target="#about">About</button>
-      <button class="home-segmented-control__button" type="button" data-home-segment-target="#works">Work</button>
-      <button class="home-segmented-control__button" type="button" data-home-segment-target="#speaking">Speaking</button>
+      <div class="home-segmented-control__inner">
+        <a class="home-segmented-control__logo" href="#about">chashi.</a>
+        <div class="home-segmented-control__items">
+          <button class="home-segmented-control__button" type="button" data-home-segment-target="#about">About</button>
+          <button class="home-segmented-control__button" type="button" data-home-segment-target="#works">Work</button>
+          <button class="home-segmented-control__button" type="button" data-home-segment-target="#speaking">Speak</button>
+        </div>
+      </div>
     </nav>
   </body>
 </html>

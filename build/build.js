@@ -772,7 +772,7 @@ function toDescriptionLines(value) {
     .filter(Boolean);
 }
 
-const DESCRIPTION_SPAN_MAX_LENGTH = 18;
+const DESCRIPTION_SPAN_MAX_LENGTH = 24;
 
 function getInlineTextLength(value) {
   return Array.from(stripMarkdownLinks(value)).length;
@@ -848,8 +848,13 @@ function splitLongDescriptionText(value, maxLength = DESCRIPTION_SPAN_MAX_LENGTH
 
 function splitDescriptionText(value) {
   const source = String(value == null ? "" : value);
-  const units = source.match(/[^、。！？：；]+[、。！？：；]?/g) || [];
-  return units.flatMap((unit) => splitLongDescriptionText(unit));
+  if (!source) {
+    return [];
+  }
+
+  // Keep conjugated Japanese words together and split only at punctuation,
+  // particles, or natural boundaries when a span becomes too long.
+  return splitLongDescriptionText(source, DESCRIPTION_SPAN_MAX_LENGTH);
 }
 
 function getDescriptionSpanSegments(line) {
@@ -871,37 +876,9 @@ function getDescriptionSpanSegments(line) {
     tokens.push({ value: source.slice(cursor), atomic: false });
   }
 
-  const segments = [];
-  let current = "";
-
-  function pushCurrent() {
-    if (current) {
-      segments.push(current);
-      current = "";
-    }
-  }
-
-  tokens.forEach((token) => {
-    const pieces = token.atomic ? [token.value] : splitDescriptionText(token.value);
-
-    pieces.forEach((piece) => {
-      if (!piece) {
-        return;
-      }
-
-      if (current && getInlineTextLength(current) + getInlineTextLength(piece) > DESCRIPTION_SPAN_MAX_LENGTH) {
-        pushCurrent();
-      }
-
-      current += piece;
-
-      if (/[、。！？：；]$/.test(piece)) {
-        pushCurrent();
-      }
-    });
-  });
-
-  pushCurrent();
+  const segments = tokens.flatMap((token) =>
+    token.atomic ? [token.value] : splitDescriptionText(token.value)
+  );
   return segments.length > 0 ? segments : [source];
 }
 
@@ -911,7 +888,7 @@ function getManualDescriptionSpanSegments(line, spanLines, index) {
     : [];
 
   return candidate.map(stripMarkdownLinks).join("") === stripMarkdownLinks(line)
-    ? candidate
+    ? candidate.flatMap((segment) => getDescriptionSpanSegments(segment))
     : getDescriptionSpanSegments(line);
 }
 
