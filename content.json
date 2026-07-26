@@ -18,7 +18,7 @@
     "personUrl": "https://chashi-design.github.io/chshi-portfolio/",
     "profile": {
       "description": [
-        "広島生まれのデジタルプロダクトデザイナー。現在は LINE ヤフー にてデザイン業務に従事しています。",
+        "広島生まれのデジタルプロダクトデザイナー。現在は LINEヤフー にてデザイン業務に従事しています。",
         "ユーザー中心設計と、シンプルで心地よく使えるインターフェースを軸に、関係者との合意形成を図りながら、ユーザー体験と事業目的を結びつけるプロダクトづくりを得意としています。"
       ],
       "descriptionSpans": [
@@ -27,7 +27,7 @@
           "生まれの",
           "デジタルプロダクトデザイナー。",
           "現在は ",
-          "[LINE ヤフー](https://www.lycorp.co.jp/)",
+          "[LINEヤフー](https://www.lycorp.co.jp/)",
           " にて",
           "デザイン業務",
           "に",
@@ -70,7 +70,7 @@
       "career": [
         {
           "period": "2017 -",
-          "title": "LINE ヤフー株式会社（旧ヤフー株式会社）",
+          "title": "LINEヤフー株式会社（旧ヤフー株式会社）",
           "url": "https://www.lycorp.co.jp"
         },
         {
@@ -85,7 +85,7 @@
         },
         {
           "period": "2018",
-          "title": "株式会社 Ginco",
+          "title": "株式会社Ginco",
           "url": "https://www.ginco.co.jp/"
         }
       ]
@@ -103,7 +103,7 @@
         "title": "Designship 2021 Open Session",
         "date": "2021",
         "url": "https://design-ship.jp/2021/open-session/#about",
-        "image": "/assets/img/speaking/designship-2021.webp",
+        "image": "/assets/img/speaking/designship-2021.png",
         "imageWidth": 1200,
         "imageHeight": 630
       },
@@ -156,7 +156,7 @@
       "slug": "maply",
       "title": "Maply",
       "date": "2026",
-      "company": "LINE ヤフー株式会社",
+      "company": "LINEヤフー株式会社",
       "category": "UI Design",
       "featured": false,
       "order": 4,
@@ -243,11 +243,11 @@
             {
               "type": "text",
               "body": [
-                "LY ヤフーが提供する、「ガイド」を選び、目的に応じて地図上の情報や検索体験が切り替わるマップアプリ「Maply」の開発に携わりました。"
+                "LINEヤフーが提供する、「ガイド」を選び、目的に応じて地図上の情報や検索体験が切り替わるマップアプリ「Maply」の開発に携わりました。"
               ],
               "bodySpans": [
                 [
-                  "LY ヤフー",
+                  "LINEヤフー",
                   "が",
                   "提供する、",
                   "「ガイド」",
@@ -533,14 +533,13 @@
               "type": "text",
               "heading": "地図上で価格を比較しながら給油先を選択",
               "body": [
-                "Yahoo! カーナビを担当した経験から、給油先を選ぶ際には詳細画面を開いて価格を確認するのではなく、地図上で価格を比較しながら判断したいというニーズがあると考えました。",
+                "Yahoo!カーナビを担当した経験から、給油先を選ぶ際には詳細画面を開いて価格を確認するのではなく、地図上で価格を比較しながら判断したいというニーズがあると考えました。",
                 "そこで、油種（レギュラー・ハイオク・軽油など）や価格種別（現金価格・会員価格）を切り替えると、地図上に表示される価格も連動して切り替わる UI を設計しました。",
                 "ユーザーが比較したい条件に応じた価格を地図上で一覧できるようにすることで、複数の詳細画面を行き来することなく、給油先を判断できる体験を実現しました。"
               ],
               "bodySpans": [
                 [
-                  "Yahoo! ",
-                  "カーナビ",
+                  "Yahoo!カーナビ",
                   "を",
                   "担当",
                   "した",
@@ -654,13 +653,13 @@
               "type": "text",
               "heading": "利用条件に合う駐車場を地図上で比較",
               "body": [
-                "これまで Yahoo! カーナビを担当した経験から、駐車場選びでは現在地からの距離だけでなく、満空状況、料金、最大料金、収容台数、支払い方法、駐車形式など、複数の条件を比較しながら判断することが多いと考えました。",
+                "これまで Yahoo!カーナビを担当した経験から、駐車場選びでは現在地からの距離だけでなく、満空状況、料金、最大料金、収容台数、支払い方法、駐車形式など、複数の条件を比較しながら判断することが多いと考えました。",
                 "そこで、ユーザーが最も重視する満空状況と料金を地図上で一目で比較できる情報設計を行いました。",
                 "満空状況は吹き出し内に「空車・混雑・満車」の状態を色とテキストで表示し、その下に料金を配置することで、詳細画面を開かなくても地図を見るだけで候補を比較・判断できる UI を設計しました。",
                 "さらに、収容台数や支払い方法、駐車形式などの詳細条件も確認できるようにし、利用目的に応じて候補を効率よく探せる体験を実現しました。"
               ],
               "bodySpans": [
-                ["これまで ", "Yahoo! ", "カーナビ", "を", "担当", "した", "経験", "から、", "駐車場", "選び", "では", "現在地", "からの", "距離", "だけでなく、", "満空", "状況、", "料金、", "最大", "料金、", "収容", "台数、", "支払い", "方法、", "駐車", "形式", "など、", "複数", "の", "条件", "を", "比較", "しながら", "判断", "する", "こと", "が", "多い", "と", "考えました。"],
+                ["これまで ", "Yahoo!カーナビ", "を", "担当", "した", "経験", "から、", "駐車場", "選び", "では", "現在地", "からの", "距離", "だけでなく、", "満空", "状況、", "料金、", "最大", "料金、", "収容", "台数、", "支払い", "方法、", "駐車", "形式", "など、", "複数", "の", "条件", "を", "比較", "しながら", "判断", "する", "こと", "が", "多い", "と", "考えました。"],
                 ["そこで、", "ユーザー", "が", "最も", "重視", "する", "満空", "状況", "と", "料金", "を", "地図上", "で", "一目", "で", "比較", "できる", "情報", "設計", "を", "行いました。"],
                 ["満空", "状況", "は", "吹き出し", "内に", "「空車・", "混雑・", "満車」", "の", "状態", "を", "色", "と", "テキスト", "で", "表示し、", "その下に", "料金", "を", "配置", "する", "ことで、", "詳細", "画面", "を", "開かなくても", "地図", "を", "見るだけ", "で", "候補", "を", "比較・", "判断", "できる", " UI ", "を", "設計", "しました。"],
                 ["さらに、", "収容", "台数", "や", "支払い", "方法、", "駐車", "形式", "など", "の", "詳細", "条件", "も", "確認", "できる", "ようにし、", "利用", "目的", "に", "応じて", "候補", "を", "効率", "よく", "探せる", "体験", "を", "実現", "しました。"]
@@ -714,7 +713,7 @@
       "slug": "riff",
       "title": "RIFF Design System",
       "date": "2020 - 2026",
-      "company": "LINE ヤフー株式会社",
+      "company": "LINEヤフー株式会社",
       "category": "UI Design",
       "featured": false,
       "order": 5,
@@ -1172,7 +1171,7 @@
             {
               "type": "text",
               "body": [
-                "デザインシステムで提供するアイコンは、社内のアイコン管理基盤「LAICON」と連携しています。詳しい仕組みは、[LINE ヤフー公式記事](https://lydesign.jp/n/ned7535234106?utm_source=chatgpt.com)で紹介されています。",
+                "デザインシステムで提供するアイコンは、社内のアイコン管理基盤「LAICON」と連携しています。詳しい仕組みは、[LINEヤフー公式記事](https://lydesign.jp/n/ned7535234106?utm_source=chatgpt.com)で紹介されています。",
                 "また、Figma を活用したデザインシステムの運用フローについて、登壇動画で詳しく紹介しています。"
               ],
               "bodySpans": [
@@ -1195,7 +1194,7 @@
                   "います。",
                   "詳しい",
                   "仕組みは、",
-                  "[LINE ヤフー公式記事](https://lydesign.jp/n/ned7535234106?utm_source=chatgpt.com)",
+                  "[LINEヤフー公式記事](https://lydesign.jp/n/ned7535234106?utm_source=chatgpt.com)",
                   "で",
                   "紹介",
                   "されて",
@@ -1234,9 +1233,9 @@
     },
     {
       "slug": "yahoo-carnavi",
-      "title": "Yahoo! カーナビ",
+      "title": "Yahoo!カーナビ",
       "date": "2025",
-      "company": "LINE ヤフー株式会社",
+      "company": "LINEヤフー株式会社",
       "category": "UI Design",
       "featured": false,
       "order": 1,
@@ -1278,13 +1277,13 @@
             {
               "type": "text",
               "body": [
-                "約 1 年間、Yahoo! カーナビ の [10 周年リニューアル](https://www.lycorp.co.jp/ja/news/release/009081/) と、CarPlay ／ Android Auto の 改善に携わりました。",
+                "約 1 年間、Yahoo!カーナビ の [10 周年リニューアル](https://www.lycorp.co.jp/ja/news/release/009081/) と、CarPlay ／ Android Auto の 改善に携わりました。",
                 "リニューアルでは 10 人弱のチームのデザインリードとして、コンセプト策定から体験設計、UI 方針の決定、デザインレビューまでを担当。CarPlay ／ Android Auto では 4 人チームの PdM を務め、ナビ利用者数を半期で前年比約 150％ に伸ばしました。"
               ],
               "bodySpans": [
                 [
                   "約 1 年間、",
-                  "Yahoo! カーナビ ",
+                  "Yahoo!カーナビ ",
                   "の ",
                   "[10 周年リニューアル](https://www.lycorp.co.jp/ja/news/release/009081/)",
                   " と、",
@@ -1450,7 +1449,7 @@
             {
               "type": "image",
               "src": "/assets/img/carnavi/carnavi-renewal-concept.png",
-              "alt": "Yahoo! カーナビ リニューアルコンセプト",
+              "alt": "Yahoo!カーナビ リニューアルコンセプト",
               "aspect": "16 / 9",
               "fit": "contain"
             },
@@ -1527,14 +1526,14 @@
             {
               "type": "image",
               "src": "/assets/img/carnavi/carnavi-renewal-top.png",
-              "alt": "Yahoo! カーナビ リニューアルトップ画面",
+              "alt": "Yahoo!カーナビ リニューアルトップ画面",
               "aspect": "16 / 9",
               "fit": "contain"
             },
             {
               "type": "image",
               "src": "/assets/img/carnavi/carnavi-renewal-drive-mode.png",
-              "alt": "Yahoo! カーナビ リニューアルドライブモード",
+              "alt": "Yahoo!カーナビ リニューアルドライブモード",
               "aspect": "16 / 9",
               "fit": "contain"
             },
@@ -1542,7 +1541,7 @@
               "type": "text",
               "heading": "ルート選択画面",
               "body": [
-                "ルート候補を比較しやすい情報設計と操作性、地図の表示領域、さらに事業上重要なマイカー登録・Yahoo! カーナビプラスへの導線を両立できるよう、表示情報の優先順位を設計しました。"
+                "ルート候補を比較しやすい情報設計と操作性、地図の表示領域、さらに事業上重要なマイカー登録・Yahoo!カーナビプラスへの導線を両立できるよう、表示情報の優先順位を設計しました。"
               ],
               "bodySpans": [
                 [
@@ -1563,8 +1562,7 @@
                   "重要な",
                   "マイカー",
                   "登録・",
-                  "Yahoo! ",
-                  "カーナビ",
+                  "Yahoo!カーナビ",
                   "プラス",
                   "への",
                   "導線",
@@ -1584,7 +1582,7 @@
             {
               "type": "image",
               "src": "/assets/img/carnavi/carnavi-renewal-route.png",
-              "alt": "Yahoo! カーナビ リニューアルルート選択画面",
+              "alt": "Yahoo!カーナビ リニューアルルート選択画面",
               "aspect": "16 / 9",
               "fit": "contain"
             },
@@ -1672,14 +1670,14 @@
             {
               "type": "image",
               "src": "/assets/img/carnavi/carnavi-renewal-navi.png",
-              "alt": "Yahoo! カーナビ リニューアルナビ画面",
+              "alt": "Yahoo!カーナビ リニューアルナビ画面",
               "aspect": "16 / 9",
               "fit": "contain"
             },
             {
               "type": "instagram",
               "url": "https://www.instagram.com/reel/DKgq7N5qnB3/",
-              "label": "Yahoo! カーナビの Instagram 投稿を見る"
+              "label": "Yahoo!カーナビの Instagram 投稿を見る"
             },
             {
               "type": "text",
@@ -1726,7 +1724,7 @@
             {
               "type": "image",
               "src": "/assets/img/carnavi/carnavi-renewal-map.png",
-              "alt": "Yahoo! カーナビ リニューアル地図スタイル",
+              "alt": "Yahoo!カーナビ リニューアル地図スタイル",
               "aspect": "16 / 9",
               "fit": "contain"
             }
@@ -1838,14 +1836,14 @@
             {
               "type": "image",
               "src": "/assets/img/carnavi/carnavi-carplay-001.png",
-              "alt": "Yahoo! カーナビ CarPlay ナビ案内中の iPhone 道路情報",
+              "alt": "Yahoo!カーナビ CarPlay ナビ案内中の iPhone 道路情報",
               "aspect": "16 / 9",
               "fit": "contain"
             },
             {
               "type": "image",
               "src": "/assets/img/carnavi/carnavi-carplay-002.png",
-              "alt": "Yahoo! カーナビ CarPlay ナビ案内中の iPhone 道路情報 2",
+              "alt": "Yahoo!カーナビ CarPlay ナビ案内中の iPhone 道路情報 2",
               "aspect": "16 / 9",
               "fit": "contain"
             },
@@ -1886,14 +1884,14 @@
             {
               "type": "image",
               "src": "/assets/img/carnavi/carnavi-androidauto-001.png",
-              "alt": "Yahoo! カーナビ Android Auto 検索メニュー",
+              "alt": "Yahoo!カーナビ Android Auto 検索メニュー",
               "aspect": "16 / 9",
               "fit": "contain"
             },
             {
               "type": "image",
               "src": "/assets/img/carnavi/carnavi-androidauto-002.png",
-              "alt": "Yahoo! カーナビ Android Auto 検索メニュー 2",
+              "alt": "Yahoo!カーナビ Android Auto 検索メニュー 2",
               "aspect": "16 / 9",
               "fit": "contain"
             }
@@ -1904,9 +1902,9 @@
     },
     {
       "slug": "yahoo-transit",
-      "title": "Yahoo! 乗換案内",
+      "title": "Yahoo!乗換案内",
       "date": "2023",
-      "company": "LINE ヤフー株式会社",
+      "company": "LINEヤフー株式会社",
       "category": "UI Design",
       "featured": false,
       "order": 2,
@@ -1948,12 +1946,12 @@
             {
               "type": "text",
               "body": [
-                "Yahoo! 乗換案内のサービス開始 15 周年企画として、「[トレインキャスト](https://blog-transit.yahoo.co.jp/info/20230831_train_cast.html)」と「[運行情報キャスト](https://blog-transit.yahoo.co.jp/info/20240806_train-info.html)」のデザインに約 1 年間取り組みました。",
+                "Yahoo!乗換案内のサービス開始 15 周年企画として、「[トレインキャスト](https://blog-transit.yahoo.co.jp/info/20230831_train_cast.html)」と「[運行情報キャスト](https://blog-transit.yahoo.co.jp/info/20240806_train-info.html)」のデザインに約 1 年間取り組みました。",
                 "PdM1 名、デザイナー 3 名、開発 2 名のチームで、主にデザインコンセプトの策定、主要画面の UI 検討、デザインレビューを担当しました。"
               ],
               "bodySpans": [
                 [
-                  "Yahoo! 乗換案内",
+                  "Yahoo!乗換案内",
                   "の",
                   "サービス",
                   "開始",
@@ -2014,13 +2012,13 @@
             {
               "type": "text",
               "body": [
-                "Yahoo! 乗換案内は、公共交通での移動を支援するサービスです。",
+                "Yahoo!乗換案内は、公共交通での移動を支援するサービスです。",
                 "15 周年を機に、経路を調べるためだけではなく、鉄道ファンや列車に興味を持つ子どもなどが、全国を走る列車を眺めて楽しめる体験を検討しました。",
                 "プロジェクトでは、列車の現在地を地図上で確認できる体験を目指し、[Flightradar24](https://www.flightradar24.com/) をベンチマークとし、サービスの方向性を UI・ビジュアルへ展開するためのデザインコンセプトを作成しました。"
               ],
               "bodySpans": [
                 [
-                  "Yahoo! 乗換案内",
+                  "Yahoo!乗換案内",
                   "は、",
                   "公共交通",
                   "での",
@@ -2566,7 +2564,7 @@
       "slug": "yahoo-maps",
       "title": "Yahoo! Maps",
       "date": "2017, 2022",
-      "company": "LINE ヤフー株式会社",
+      "company": "LINEヤフー株式会社",
       "category": "UI Design",
       "featured": false,
       "order": 3,
@@ -3978,7 +3976,7 @@
       "slug": "ginco",
       "title": "Ginco",
       "date": "2018",
-      "company": "株式会社 Ginco",
+      "company": "株式会社Ginco",
       "category": "UI Design",
       "featured": false,
       "order": 7,
@@ -4020,9 +4018,9 @@
             {
               "type": "text",
               "body": [
-                "[株式会社 Ginco](https://www.ginco.co.jp/) が提供する暗号資産ウォレットアプリの初期立ち上げに参画。ウォレット、ポートフォリオ、サインアップ、バックアップを中心に、フロー設計、情報設計、UI デザインを担当しました。"
+                "[株式会社Ginco](https://www.ginco.co.jp/) が提供する暗号資産ウォレットアプリの初期立ち上げに参画。ウォレット、ポートフォリオ、サインアップ、バックアップを中心に、フロー設計、情報設計、UI デザインを担当しました。"
               ],
-              "bodySpans": [["[株式会社 Ginco](https://www.ginco.co.jp/)", " が", "提供", "する", "暗号資産", "ウォレット", "アプリ", "の", "初期", "立ち上げ", "に", "参画。", "ウォレット、", "ポートフォリオ、", "サインアップ、", "バックアップ", "を", "中心に、", "フロー", "設計、", "情報", "設計、", "UI ", "デザイン", "を", "担当", "しました。"]]
+              "bodySpans": [["[株式会社Ginco](https://www.ginco.co.jp/)", " が", "提供", "する", "暗号資産", "ウォレット", "アプリ", "の", "初期", "立ち上げ", "に", "参画。", "ウォレット、", "ポートフォリオ、", "サインアップ、", "バックアップ", "を", "中心に、", "フロー", "設計、", "情報", "設計、", "UI ", "デザイン", "を", "担当", "しました。"]]
             },
             {
               "type": "image",

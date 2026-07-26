@@ -261,7 +261,6 @@
     document.documentElement.classList.add("has-inverting-cursor");
 
     var closeTargetSelector = [
-      ".project-close",
       ".project-detail-nav__link:not(.project-detail-nav__link--disabled)",
       ".home-segmented-control__logo",
       ".home-segmented-control__button",
@@ -272,7 +271,6 @@
     var textLinkSelector = [
       "a:not(.card)",
       ":not(.description-link-card)",
-      ":not(.project-close)",
       ":not(.project-detail-nav__link)"
     ].join("");
 
@@ -333,13 +331,13 @@
       cursor.style.borderRadius = isWorkCardTarget
         ? [
             "12px 12px ",
-            closeRadiusX,
+            closeRadiusX + 4,
             "px ",
-            closeRadiusX,
+            closeRadiusX + 4,
             "px / 12px 12px ",
-            closeRadiusY,
+            closeRadiusY + 4,
             "px ",
-            closeRadiusY,
+            closeRadiusY + 4,
             "px"
           ].join("")
         : [
