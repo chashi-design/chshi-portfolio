@@ -152,6 +152,7 @@
 
     if (body.classList.contains("page-home")) {
       selectors = [
+        ".page-home .home-segmented-control",
         ".about-teaser__title",
         ".about-teaser__name",
         ".about-teaser__description",
@@ -190,14 +191,20 @@
 
     elements.forEach(function (element, index) {
       element.classList.add("scroll-reveal", "is-reveal-preparing");
-      element.style.setProperty("--reveal-delay", Math.min(index % 6, 5) * 45 + "ms");
+      var revealIndex = element.matches(".home-segmented-control") ? 0 : Math.max(0, index - 1);
+      element.style.setProperty("--reveal-delay", Math.min(revealIndex % 6, 5) * 45 + "ms");
     });
 
     var pendingElements = elements.slice();
     var ticking = false;
+    var initialRevealReady = false;
 
     function updateVisibility() {
       ticking = false;
+
+      if (!initialRevealReady) {
+        return;
+      }
 
       if (!pendingElements.length) {
         window.removeEventListener("scroll", requestUpdate);
@@ -228,13 +235,37 @@
       window.requestAnimationFrame(updateVisibility);
     }
 
+    var initialRevealStarted = false;
+
+    function startInitialReveal() {
+      if (initialRevealStarted || document.visibilityState === "hidden") {
+        return;
+      }
+
+      initialRevealStarted = true;
+
+      // Wait until the page is visibly presented before starting the shared entrance motion.
+      window.requestAnimationFrame(function () {
+        window.requestAnimationFrame(function () {
+          elements.forEach(function (element) {
+            element.classList.remove("is-reveal-preparing");
+          });
+          void body.offsetWidth;
+          initialRevealReady = true;
+          window.setTimeout(updateVisibility, 120);
+        });
+      });
+    }
+
     // Commit the hidden state without animating from the page's default visible state.
     void body.offsetWidth;
-    elements.forEach(function (element) {
-      element.classList.remove("is-reveal-preparing");
-    });
-    void body.offsetWidth;
-    window.setTimeout(updateVisibility, 32);
+    if (document.readyState === "complete") {
+      startInitialReveal();
+    } else {
+      window.addEventListener("load", startInitialReveal, { once: true });
+    }
+    window.addEventListener("pageshow", startInitialReveal, { once: true });
+    document.addEventListener("visibilitychange", startInitialReveal);
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate);
     window.setTimeout(requestUpdate, 120);
