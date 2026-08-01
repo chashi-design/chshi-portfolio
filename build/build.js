@@ -582,7 +582,10 @@ function normalizeMetaItems(value) {
 
 function buildDetailMetaList(value) {
   const items = normalizeMetaItems(value);
-  return escapeHtml(items.join(", "));
+  return escapeHtmlPreserveWhitespace(items.join(", ")).replace(
+    /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+    (_match, label, url) => `<a href="${escapeAttr(url)}" target="_blank" rel="noreferrer noopener">${escapeHtmlPreserveWhitespace(label)}</a>`
+  );
 }
 
 function pickScreen(project, index) {
@@ -719,6 +722,7 @@ function normalizeDetailBlock(block) {
   return {
     type: "text",
     title: toText(block.heading),
+    titleSpans: Array.isArray(block.headingSpans) ? block.headingSpans : null,
     body: block.body,
     bodySpans: block.bodySpans,
     list: block.list === true
@@ -1275,7 +1279,9 @@ function buildDescriptionBlockMarkup(block, project, sectionTitle, context, bloc
 
   return [
     '<section class="description-block description-block--text">',
-    block.title ? `  <h3 class="description-block__title">${escapeHtml(block.title)}</h3>` : "",
+    block.title
+      ? `  <h3 class="description-block__title">${Array.isArray(block.titleSpans) ? block.titleSpans.map((span) => `<span>${escapeHtmlPreserveWhitespace(span)}</span>`).join("") : escapeHtml(block.title)}</h3>`
+      : "",
     bodyLines.length > 0 ? `  ${buildDescriptionBodyMarkup(block.body, { list: block.list, spanLines: block.bodySpans })}` : "",
     "</section>"
   ]

@@ -1315,6 +1315,14 @@ picture.media-skeleton.is-loaded {
   font-size: clamp(1rem, 2.1vw, 1.2rem);
 }
 
+.description-subtitle > span {
+  display: inline-block;
+}
+
+.description-block__title > span {
+  display: inline-block;
+}
+
 .description-body-group {
   display: grid;
   gap: var(--space-1);
