@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "node build/build.js",
-    "build:pages": "SITE_BASE_PATH=/chshi-portfolio node build/build.js",
+    "build:pages": "node build/build.js",
     "dev:remote": "node build/dev-remote.js",
     "optimize:images": "python3 build/optimize-images.py assets"
   },
